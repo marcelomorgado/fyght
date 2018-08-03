@@ -8,7 +8,14 @@ After which victory, your fighter gains +1 XP and <b>become stronger</b>.
 | | Level | Description | Unlock |
 | ------ | ------ | ------ | ------ |
 | <img src="/ui/img/naked.png" alt="naked" width="100px"/> | Naked | You are ready to begin your journey when you let go all of material stuffs | - |
-
+| <img src="/ui/img/normal_guy.png" alt="normal_guy" width="100px"/> | Normal Guy | You are a new man now | 10 XP |
+| <img src="/ui/img/karate_kid.png" alt="karate_kid" width="100px"/> | Karate Kid | Now people respect you | 15 XP |
+| <img src="/ui/img/japonese.png" alt="japonese" width="100px"/> | Japonese | In the land of the rising sun new knowledges are discovered | 25 XP |
+| <img src="/ui/img/monk.png" alt="monk" width="100px"/> | Monk | Secret powers and wisdoms are achieve | 40 XP or 30 XP + 30 Qi |
+| <img src="/ui/img/ninja.png" alt="ninja" width="100px"/> | Ninja | Light as the wind | 50 XP |
+| <img src="/ui/img/no_one.png" alt="no_one" width="100px"/> | No One | Valar dohaeris | 80 XP |
+| <img src="/ui/img/daemon.png" alt="daemon" width="100px"/> | Daemon | Anyone means anyone | 80 XP |
+| <img src="/ui/img/master.png" alt="master" width="100px"/> | Master | Try not, do or do not | 100 XP + 100 Qi |
 
 
 ## Play
