@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Fyght</title>
+    <script language="javascript" type="text/javascript" src="js/lib/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/lib/web3.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/lib/bootstrap-notify.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/fyght_abi.js"></script>
+    <link rel="stylesheet" href="css/lib/bootstrap.min.css" >
+    <style>
+    body {
+      font-family: 'Courier New', sans-serif !important;
+    }
+    .modal {
+      background: rgba(0,0,0,0.5);
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row ">
+        <div style="margin: 0px auto;" class="mt-5 mb-5">
+          <h1>FyGHT! - A karate crypto game</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3" id="myFighters"></div>
+        <div class="col-md-5" >
+          <h1>About & Rules</h1>
+          <p>Your journey to became a master starts now.</p>
+          <p>Train with your master and challenge another players to see who is the best.</p>
+          <p>After which victory, your fighter gains +1 XP and <b><a href="#skins">become stronger</a></b>.</p>
+        </div>
+        <div class="col-md-3" >
+          <div class="card" >
+            <div class="card-header pb-3">
+              &nbsp;
+            </div>
+            <img class="card-img-top" src="img/master.png" >
+            <div class="card-body">
+              <h5 class="card-title">Train w/ Master</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Improve your Qi!</h6>
+              <p class="card-text"></p>
+              <button name="btnTrainingSend" class="btn btn-primary">+1 Qi &#926;<span id="currentTrainingCost"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row " style="margin-bottom: 10px; margin-top: 15px;">
+        <h1 style="margin: 0px auto; text-align: center" class="mt-5 mb-5 ">Challenge another player!</h1>
+      </div>
+      <div id="noEnimiesAlert" class="bd-example">
+        <div class="alert alert-warning" role="alert">No enimies to fight yet. <strong>Invite your friends!</strong></div>
+      </div>
+      <div class="row">
+        <div id="enimiesFighters" class="card-group col-md-12"></div>
+      </div>
+      <div class="row" style="margin-bottom: 10px; margin-top: 15px;">
+        <h1  style="margin: 0px auto;" class="mt-5 mb-5"><a id="skins">Experience Journey</a></h1>
+      </div>
+      <div class="row mb-5">
+          <table class="table">
+            <thead style="">
+              <tr>
+                <th style="width: 100px; text-align: center"></th>
+                <th scope="col">Level</th>
+                <th scope="col" style="width: 600px;">Description</th>
+                <th scope="col">Unlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="img/naked.png" style="width: 100px"></td>
+                <td>Naked</td>
+                <td>You are ready to begin your journey when you let go all of material stuffs</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td><img src="img/normal_guy.png" style="width: 100px"></td>
+                <td>Normal Guy</td>
+                <td>You are a new man now</td>
+                <td>10 XP</td>
+              </tr>
+              <tr>
+                <td><img src="img/karate_kid.png" style="width: 100px"></td>
+                <td>Karate Kid</td>
+                <td>Now people respect you</td>
+                <td>15 XP</td>
+              </tr>
+              <tr>
+                <td><img src="img/japonese.png" style="width: 100px"></td>
+                <td>Japonese</td>
+                <td>In the land of the rising sun new knowledges are discovered</td>
+                <td>25 XP</td>
+              </tr>
+              <tr>
+                <td><img src="img/monk.png" style="width: 100px"></td>
+                <td>Monk</td>
+                <td>Secret powers and wisdoms are achieve</td>
+                <td>40 XP<br/> or<br/> 30 XP + 30 Qi </td>
+              </tr>
+              <tr>
+                <td><img src="img/ninja.png" style="width: 100px"></td>
+                <td>Ninja</td>
+                <td>Light as the wind</td>
+                <td>50 XP</td>
+              </tr>
+              <tr>
+                <td><img src="img/no_one.png" style="width: 100px"></td>
+                <td>No One</td>
+                <td>Valar dohaeris</td>
+                <td>80 XP</td>
+              </tr>
+              <tr>
+                <td><img src="img/daemon.png" style="width: 100px"></td>
+                <td>Daemon</td>
+                <td>Anyone means anyone</td>
+                <td>80 XP</td>
+              </tr>
+              <tr>
+                <td><img src="img/master.png" style="width: 100px"></td>
+                <td>Master</td>
+                <td>Try not, do or do not</td>
+                <td>100 XP + 100 Qi</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+
+    <!-- Creation Modal -->
+    <div class="modal fade" id="createCharacterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create a character</h5>
+          </div>
+          <div class="modal-body">
+            <input class="form-control input-large" type="text" name="creationName" placeholder="Give a name to your character" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btnCreateSend" class="btn btn-primary">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rename Modal -->
+    <div class="modal fade" id="renameCharacterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Rename your character</h5>
+          </div>
+          <div class="modal-body">
+            <input class="form-control input-large" type="text" name="editionName" placeholder="Give a new name to your character" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btnRenameSend" class="btn btn-primary">Rename</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skins Modal -->
+    <div class="modal fade" id="changeSkinModelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body" >
+            <div class="modal-header">
+              <h5 class="modal-title">Chose your new skin</h5>
+            </div>
+            <div class="card-group">
+              <div class="card">
+                <button class="naked"><img class="card-img-top" src="img/naked.png" ></button>
+              </div>
+              <div class="card">
+                <button class="normal_guy"><img class="card-img-top" src="img/normal_guy.png" ></button>
+              </div>
+              <div class="card">
+                <button class="karate_kid"><img class="card-img-top" src="img/karate_kid.png" ></button>
+              </div>
+            </div>
+            <div class="card-group">
+              <div class="card">
+                <button class="japonese"><img class="card-img-top" src="img/japonese.png" ></button>
+              </div>
+              <div class="card">
+                <button class="monk"><img class="card-img-top" src="img/monk.png" ></button>
+              </div>
+              <div class="card">
+                <button class="ninja"><img class="card-img-top" src="img/ninja.png" ></button>
+              </div>
+            </div>
+            <div class="card-group">
+              <div class="card">
+                <button class="no_one"><img class="card-img-top" src="img/no_one.png" ></button>
+              </div>
+              <div class="card">
+                <button class="daemon"><img class="card-img-top" src="img/daemon.png" ></button>
+              </div>
+              <div class="card">
+                <button class="master"><img class="card-img-top" src="img/master.png" ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warn Modal -->
+    <div class="modal fade" id="alertsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body" style="margin: 0px auto">
+          </div>
+        </div>
+      </div>
+    </div>
+    <script language="javascript" type="text/javascript" src="js/fyght.js"></script>
+  </body>
+</html>
