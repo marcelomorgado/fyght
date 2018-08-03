@@ -7,7 +7,7 @@ After which victory, your fighter gains +1 XP and <b>become stronger</b>.
 
 | | Level | Description | Unlock |
 | ------ | ------ | ------ | ------ |
-| <img src="/ui/img/naked.png" alt="naked" width="50px"/> | Naked | You are ready to begin your journey when you let go all of material stuffs | - |
+| <img src="/ui/img/naked.png" alt="naked" width="75px"/> | Naked | You are ready to begin your journey when you let go all of material stuffs | - |
 
 
 
