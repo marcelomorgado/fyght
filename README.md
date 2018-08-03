@@ -1,6 +1,16 @@
 # FyGHT
 A karate crypto game
 
+Your journey to became a master starts now.
+Train with your master and challenge another players to see who is the best.
+After which victory, your fighter gains +1 XP and <b>become stronger</b>.
+
+| | Level | Description | Unlock |
+| ------ | ------ | ------ | ------ |
+| ![naked](/ui/images/naked.png) | Naked | You are ready to begin your journey when you let go all of material stuffs | - |
+
+
+
 ## Play
 
 The game has already deployed at Ethereum ropsten network.
