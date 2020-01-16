@@ -1,0 +1,25 @@
+{
+  "extends": "airbnb-base",
+  "globals": {
+    "artifacts": true,
+    "contract": true,
+    "web3": true,
+    "assert": true,
+    "it": true,
+    "before": true,
+    "beforeEach": true,
+    "after": true,
+    "afterEach": true,
+    "describe": true,
+    "expect": true
+  },
+  "rules": {
+    "no-unused-expressions": "off",
+    "func-names": "off",
+    "no-else-return": "off",
+    "space-before-function-paren": "off",
+    "no-plusplus": "off",
+    "max-len": ["warn", 120],
+    "quotes": ["error", "double"]
+  }
+}
