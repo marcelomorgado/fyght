@@ -1,6 +1,6 @@
 {
   "name": "contracts",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "> TODO: description",
   "author": "Marcelo Morgado <cmarcelom@gmail.com>",
   "homepage": "https://github.com/marcelomorgado/fyght/tree/master/packages/contracts#readme",
@@ -14,13 +14,18 @@
     "url": "git+https://github.com/marcelomorgado/fyght.git"
   },
   "scripts": {
-    "test": "npx truffle test"
+    "start": "npm run ganache:stop && npm run ganache:start && npm run truffle:migrate",
+    "test": "npx --no-install truffle test",
+    "ganache:start": "npx --no-install ganache-cli --mnemonic fyght --networkId 1234 > ganache.log 2>&1 &",
+    "ganache:stop": "kill `ps ax | grep ganache-cli | grep -v grep | awk '{print $1}'` 2> /dev/null; exit 0",
+    "truffle:migrate": "npx --no-install truffle migrate"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
   },
   "dependencies": {
     "fs": "0.0.1-security",
+    "ganache-cli": "6.8.2",
     "jquery": "^3.3.1",
     "openzeppelin-solidity": "1.12.0-rc.1",
     "truffle": "5.1.8",

@@ -1,17 +1,19 @@
 {
   "name": "fyght",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
   },
   "devDependencies": {
-    "ganache-cli": "6.8.2",
     "lerna": "3.20.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "stop:blockchain": "npx --no-install lerna run ganache:stop --scope contracts",
+    "start:blockchain": "npm run stop:blockchain && npx --no-install lerna run start --scope contracts",
+    "start:app": "npx --no-install lerna run start --scope app",
+    "start": "npm run start:blockchain && npm run start:app"
   },
   "repository": {
     "type": "git",
