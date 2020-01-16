@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.5.12;
 
 import "./FighterFactory.sol";
 
@@ -12,7 +12,7 @@ contract FighterHelper is FighterFactory {
   }
 
   function withdraw() external onlyOwner {
-    owner.transfer(this.balance);
+    owner.transfer(address(this).balance);
   }
 
   function _checkForSkinUpdate(uint _fighterId) internal {
@@ -40,10 +40,10 @@ contract FighterHelper is FighterFactory {
     }
   }
 
-  function changeSkin(uint _fighterId, string _newSkin) external {
+  function changeSkin(uint _fighterId, string calldata _newSkin) external {
     require(fighters[_fighterId].xp >= 80);
 
-    bytes32 newSkinHash = keccak256(_newSkin);
+    bytes32 newSkinHash = keccak256(abi.encodePacked(_newSkin));
     require(
       newSkinHash == keccak256('naked') ||
       newSkinHash == keccak256('normal_guy') ||
@@ -74,11 +74,11 @@ contract FighterHelper is FighterFactory {
     _checkForSkinUpdate(_fighterId);
   }
 
-  function renameFighter(uint _fighterId, string _newName) external onlyOwnerOf(_fighterId) {
+  function renameFighter(uint _fighterId, string calldata _newName) external onlyOwnerOf(_fighterId) {
     fighters[_fighterId].name = _newName;
   }
 
-  function getFightersByOwner(address _owner) external view returns(uint[]) {
+  function getFightersByOwner(address _owner) external view returns(uint[] memory) {
     uint[] memory result = new uint[](ownerFighterCount[_owner]);
     uint counter = 0;
     for (uint i = 0; i < fighters.length; i++) {

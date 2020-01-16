@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.5.12;
 
 import "./FighterHelper.sol";
 
@@ -9,7 +9,7 @@ contract FighterAttack is FighterHelper {
 
   function randMod(uint _modulus) internal returns(uint) {
     randNonce++;
-    return uint(keccak256(now, msg.sender, randNonce)) % _modulus;
+    return uint(keccak256(abi.encodePacked(now, msg.sender, randNonce))) % _modulus;
   }
 
   function calculateAttackerProbability(uint _fighterId, uint _targetId) external view returns (uint) {
@@ -17,8 +17,8 @@ contract FighterAttack is FighterHelper {
   }
 
   function _calculateAttackerProbability(uint _fighterId, uint _targetId) internal view returns (uint) {
-    Fighter attacker = fighters[_fighterId];
-    Fighter target = fighters[_targetId];
+    Fighter memory attacker = fighters[_fighterId];
+    Fighter memory target = fighters[_targetId];
 
     uint aPoints = (attacker.xp*3 + attacker.qi*2)/5;
     uint tPoints = (target.xp*3 + target.qi*2)/5;

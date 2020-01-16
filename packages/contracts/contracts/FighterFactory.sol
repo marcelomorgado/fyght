@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.5.12;
 
 import "./Ownable.sol";
 import "./SafeMath.sol";
@@ -24,7 +24,7 @@ contract FighterFactory is Ownable {
   mapping (uint => address) public fighterToOwner;
   mapping (address => uint) ownerFighterCount;
 
-  function createFighter(string _name) public {
+  function createFighter(string memory _name) public {
     require(ownerFighterCount[msg.sender] == 0);
     uint id = fighters.length;
     fighters.push(Fighter(id, _name, 'naked', 1, 1, 0, 0));

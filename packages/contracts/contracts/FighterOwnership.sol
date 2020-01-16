@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.5.12;
 
 import "./FighterAttack.sol";
 import "./ERC721.sol";
