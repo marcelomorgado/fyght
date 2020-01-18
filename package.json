@@ -2,10 +2,7 @@
   "name": "fyght",
   "version": "0.0.1",
   "description": "",
-  "main": "truffle-config.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "index.js",
   "devDependencies": {
     "lerna": "3.20.2"
   },
