@@ -1,8 +1,3 @@
-#
-# Note: This config was based on https://github.com/labs42io/circleci-monorepo/blob/master/.circleci/config.yml
-# See more: https://medium.com/labs42/monorepo-with-circleci-conditional-workflows-69e65d3f1bd0
-#
-
 version: 2.1
 
 parameters:

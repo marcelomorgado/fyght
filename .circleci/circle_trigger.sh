@@ -1,8 +1,4 @@
 #!/bin/bash
-#
-# Note: That script was based from https://github.com/labs42io/circleci-monorepo/blob/master/.circleci/circle_trigger.sh
-# See more: https://medium.com/labs42/monorepo-with-circleci-conditional-workflows-69e65d3f1bd0
-#
 set -e
 
 # The root directory of packages.
