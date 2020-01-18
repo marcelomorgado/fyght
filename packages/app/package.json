@@ -18,6 +18,7 @@
   },
   "scripts": {
     "test": "echo \"No tests yet but OK\" && exit 0",
+    "lint": "echo \"No lint script yet but OK\" && exit 0",
     "start": "npx --no-install light-server -s src/ -p 8080 -o"
   },
   "bugs": {
