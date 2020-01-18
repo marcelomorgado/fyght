@@ -118,7 +118,7 @@ contract("FighterOwnership", (accounts) => {
     assert.isTrue(loserBefore.xp === loserAfter.xp, "loser's xp changed ");
   });
 
-  it("skins should changed correctly", async function() {
+  it.skip("skins should changed correctly", async function() {
     const aliceFighterId = (await this.fighterOwnership.getFightersByOwner(alice))[0];
     const bobFighterId = (await this.fighterOwnership.getFightersByOwner(bob))[0];
     const { fighterOwnership } = this;

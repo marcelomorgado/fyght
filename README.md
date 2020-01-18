@@ -1,4 +1,4 @@
-# FyGHT
+# FyGHT &middot; [![CircleCI](https://circleci.com/gh/marcelomorgado/fyght/tree/master.svg?style=svg)](https://circleci.com/gh/marcelomorgado/fyght/tree/master)
 
 A karate crypto game
 
