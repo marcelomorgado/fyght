@@ -23,6 +23,7 @@ After each victory, your fyghter gains +1 XP and <b>become stronger</b>.
 To play the game locally, just run:
 
 ```js
+npm i
 npm start
 ```
 
