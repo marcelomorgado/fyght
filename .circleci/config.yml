@@ -1,0 +1,136 @@
+#
+# Note: This config was based on https://github.com/labs42io/circleci-monorepo/blob/master/.circleci/config.yml
+# See more: https://medium.com/labs42/monorepo-with-circleci-conditional-workflows-69e65d3f1bd0
+#
+
+version: 2.1
+
+parameters:
+  # This parameter is used to trigger the main workflow
+  trigger:
+    type: boolean
+    default: true
+
+  # A parameter per package
+  contracts:
+    type: boolean
+    default: false
+  app:
+    type: boolean
+    default: false
+
+executors:
+  node:
+    docker:
+      - image: circleci/node
+
+jobs:
+  trigger-workflows:
+    executor: node
+    steps:
+      - checkout
+      - run:
+          name: Trigger workflows
+          command: chmod +x .circleci/circle_trigger.sh && .circleci/circle_trigger.sh
+
+  build:
+    parameters:
+      package_name:
+        type: string
+
+    executor: node
+    working_directory: ~/project/packages/<< parameters.package_name >>
+
+    steps:
+      - checkout:
+          path: ~/project
+      # This step is added only to show that we are in the package directory
+      - run:
+          name: Content
+          command: |
+            cat README.md 
+            echo "<< parameters.package_name >> built." > build.txt
+      - run:
+          name: Build
+          command: echo "Build << parameters.package_name >> ..."
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - packages/<< parameters.package_name >>
+
+  deploy:
+    parameters:
+      package_name:
+        type: string
+
+    executor: node
+    working_directory: ~/project/packages/<< parameters.package_name >>
+
+    steps:
+      - attach_workspace:
+          at: ~/project
+      # This step is added to show that files are available from the build job.
+      - run:
+          name: Content to deploy
+          command: ls && cat build.txt
+      - deploy:
+          name: Deploy
+          command: echo "Deploying << parameters.package_name >> ..."
+
+workflows:
+  version: 2
+
+  # The main workflow responsible for triggering all other workflows
+  # in which changes are detected.
+  ci:
+    when: << pipeline.parameters.trigger >>
+    jobs:
+      - trigger-workflows
+
+  # Workflows defined for each package.
+
+  contracts:
+    when: << pipeline.parameters.contracts >>
+    jobs:
+      - build:
+          name: contracts-build
+          package_name: contracts
+          docker:
+            - image: circleci/node:10.13
+            working_directory: ~/openzeppelin
+            
+            steps:
+              - checkout
+            
+              # Install root dependencies
+              - restore_cache:
+                  key: dependency-cache-v1-root-{{ checksum "package.json" }}
+              - run:
+                  name: Install root dependencies
+                  command: npm install
+              - save_cache:
+                  key: dependency-cache-v1-root-{{ checksum "package.json" }}
+                  paths: ['./node_modules']
+              
+              # Run tests
+              - run:
+                  name: Test
+                  command: npm test
+                  
+      - deploy:
+          name: contracts-deploy
+          package_name: contracts
+          requires:
+            - contracts-build
+
+  app:
+    when: << pipeline.parameters.app >>
+    jobs:
+      - build:
+          name: app-build
+          package_name: app
+      - deploy:
+          name: app-deploy
+          package_name: app
+          requires:
+            - app-build
