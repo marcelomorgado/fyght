@@ -95,28 +95,6 @@ workflows:
       - build:
           name: contracts-build
           package_name: contracts
-          docker:
-            - image: circleci/node:10.13
-            working_directory: ~/openzeppelin
-            
-            steps:
-              - checkout
-            
-              # Install root dependencies
-              - restore_cache:
-                  key: dependency-cache-v1-root-{{ checksum "package.json" }}
-              - run:
-                  name: Install root dependencies
-                  command: npm install
-              - save_cache:
-                  key: dependency-cache-v1-root-{{ checksum "package.json" }}
-                  paths: ['./node_modules']
-              
-              # Run tests
-              - run:
-                  name: Test
-                  command: npm test
-                  
       - deploy:
           name: contracts-deploy
           package_name: contracts
