@@ -1,9 +1,7 @@
-import * as React from "react";
+import React from "react";
 
-const Count: React.FunctionComponent<{
+type Props = {
   count: number;
-}> = props => {
-  return <h1>{props.count}</h1>;
 };
 
-export default Count;
+export const Count = ({ count }: Props) => <h1>{count}</h1>;
