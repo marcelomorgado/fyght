@@ -14,8 +14,9 @@
     "url": "git+https://github.com/marcelomorgado/fyght.git"
   },
   "scripts": {
-    "start": "npm run ganache:stop && npm run ganache:start && npm run truffle:migrate",
-    "test": "npx --no-install truffle test",
+    "clean": "npx --no-install rimraf build",
+    "start": "npm run clean && npm run ganache:stop && npm run ganache:start && npm run truffle:migrate",
+    "test": "npm run clean && npx --no-install truffle test",
     "ganache:start": "npx --no-install ganache-cli --mnemonic fyght --networkId 1234 > ganache.log 2>&1 &",
     "ganache:stop": "kill `ps ax | grep ganache-cli | grep -v grep | awk '{print $1}'` 2> /dev/null; exit 0",
     "truffle:migrate": "npx --no-install truffle migrate --network local",
@@ -28,13 +29,14 @@
   "dependencies": {
     "@openzeppelin/contracts": "2.4.0",
     "ganache-cli": "6.8.2",
-    "truffle": "5.1.8",
+    "truffle": "5.1.9",
     "truffle-hdwallet-provider": "1.0.17"
   },
   "devDependencies": {
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.20.0",
-    "prettier": "1.19.1"
+    "prettier": "1.19.1",
+    "rimraf": "3.0.0"
   }
 }
