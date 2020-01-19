@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
 
-import Counter from "./components/stateful/Counter";
+import FyghtScreen from "./components/stateful/FyghtScreen";
 
-render(<Counter />, document.getElementById("main"));
+render(<FyghtScreen />, document.getElementById("main"));
