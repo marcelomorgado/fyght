@@ -13,15 +13,14 @@ module.exports = {
   },
   settings: {
     react: {
-      version: "detect" // React version. "detect" automatically picks the version you have installed.
-      // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
-      // default to latest and warns if missing
-      // It will default to "detect" in the future
+      version: "16.12"
     }
   },
-  plugins: ["react", "jest", "@typescript-eslint"],
+  plugins: ["react", "prettier", "jest", "@typescript-eslint"],
   extends: [
     "eslint:recommended",
+    "prettier",
+    "prettier/react",
     "plugin:react/recommended",
     "plugin:jest/recommended"
   ],
@@ -29,7 +28,6 @@ module.exports = {
     react: true
   },
   rules: {
-    quotes: [2, "double"],
     "react/jsx-filename-extension": [2, { extensions: [".tsx"] }]
   }
 };
