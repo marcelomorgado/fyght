@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Count } from "./Count";
+import { Count } from "../presentational/Count";
 
 export const Counter = () => {
   const [count, setCount] = useState(0);
