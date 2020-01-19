@@ -16,7 +16,7 @@ module.exports = {
       version: "16.12"
     }
   },
-  plugins: ["react", "prettier", "jest", "@typescript-eslint"],
+  plugins: ["react", "prettier", "jest", "@typescript-eslint", "react-hooks"],
   extends: [
     "eslint:recommended",
     "prettier",
@@ -28,6 +28,8 @@ module.exports = {
     react: true
   },
   rules: {
-    "react/jsx-filename-extension": [2, { extensions: [".tsx"] }]
+    "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 };

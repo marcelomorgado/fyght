@@ -1,30 +1,16 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Count } from "./Count";
 
-export default class Counter extends React.Component {
-  state = {
-    count: 0
-  };
+export const Counter = () => {
+  const [count, setCount] = useState(0);
 
-  increment = () => {
-    this.setState({
-      count: this.state.count + 1
-    });
-  };
+  return (
+    <div>
+      <Count count={count} />
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
+    </div>
+  );
+};
 
-  decrement = () => {
-    this.setState({
-      count: this.state.count - 1
-    });
-  };
-
-  render() {
-    return (
-      <div>
-        <Count count={this.state.count} />
-        <button onClick={this.increment}>Increment</button>
-        <button onClick={this.decrement}>Decrement</button>
-      </div>
-    );
-  }
-}
+export default Counter;
