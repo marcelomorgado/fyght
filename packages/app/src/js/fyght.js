@@ -244,7 +244,7 @@ function renameFighter(fighterId, name) {
 
 function training(fighterId) {
   var notify;
-  var fee = web3js.utils.toWei(currentTrainingCost.toString(), "ether");
+  var fee = web3.utils.toWei(currentTrainingCost.toString(), "ether");
 
   return fyght.methods
     .training(fighterId)
@@ -306,11 +306,11 @@ function wait() {
 }
 
 function startApp() {
-  fyght = new web3js.eth.Contract(fyghtABI, fyghtAddress);
+  fyght = new web3.eth.Contract(fyghtABI, fyghtAddress);
 
   var accountInterval = setInterval(function() {
     // Check if account has changed
-    web3js.eth.getAccounts().then(function(accounts) {
+    web3.eth.getAccounts().then(function(accounts) {
       if (accounts[0] !== userAccount) {
         userAccount = accounts[0];
         // Call a function to update the UI with the new account
@@ -323,55 +323,88 @@ function startApp() {
   }, 100);
 }
 
-window.addEventListener("load", function() {
-  // If web3 is not injected (modern browsers)...
-  if (typeof web3 === "undefined") {
-    // Listen for provider injection
-    window.addEventListener("message", ({ data }) => {
-      if (data && data.type && data.type === "ETHEREUM_PROVIDER_SUCCESS") {
-        // Use injected provider, start dapp...
-        web3js = new Web3(ethereum);
-      }
-    });
-    // Request provider
-    window.postMessage({ type: "ETHEREUM_PROVIDER_REQUEST" }, "*");
+window.addEventListener("load", async () => {
+  // Modern dapp browsers...
+  if (window.ethereum) {
+    window.web3 = new Web3(ethereum);
+    try {
+      // Request account access if needed
+      await ethereum.enable();
+      // Acccounts now exposed
+      // web3.eth.sendTransaction({/* ... */});
+      startApp();
+    } catch (error) {
+      // User denied account access...
+    }
   }
-  // If web3 is injected (legacy browsers)...
-  else {
-    // Use injected provider, start dapp
-    web3js = new Web3(web3.currentProvider);
-  }
-
-  if (typeof web3js !== "undefined") {
-    web3.version.getNetwork((err, netId) => {
-      switch (netId) {
-        case "1":
-          break;
-        case "2":
-          break;
-        case "3":
-          break;
-        case "4":
-          break;
-        case "42":
-          break;
-        default:
-          msToWait = 10000;
-      }
-    });
-
+  // Legacy dapp browsers...
+  else if (window.web3) {
+    window.web3 = new Web3(web3.currentProvider);
+    // Acccounts always exposed
+    // web3.eth.sendTransaction({/* ... */});
     startApp();
-  } else {
-    let msg =
-      "Install <a href='https://metamask.io' target='_blank'>Metamask wallet<a/> to proceed";
-    $("#alertsModal")
-      .find(".modal-body")
-      .html(msg);
-    $("#alertsModal").modal({
-      show: true,
-      keyboard: false,
-      backdrop: false,
-      focus: true
-    });
+  }
+  // Non-dapp browsers...
+  else {
+    console.log(
+      "Non-Ethereum browser detected. You should consider trying MetaMask!"
+    );
   }
 });
+
+//
+// Note: Old code that works with legacy web3 1.0.0 beta
+// TODO: Remove
+//
+// window.addEventListener("load", function() {
+//   // If web3 is not injected (modern browsers)...
+//   if (typeof web3 === "undefined") {
+//     // Listen for provider injection
+//     window.addEventListener("message", ({ data }) => {
+//       if (data && data.type && data.type === "ETHEREUM_PROVIDER_SUCCESS") {
+//         // Use injected provider, start dapp...
+//         web3 = new Web3(ethereum);
+//       }
+//     });
+//     // Request provider
+//     window.postMessage({ type: "ETHEREUM_PROVIDER_REQUEST" }, "*");
+//   }
+//   // If web3 is injected (legacy browsers)...
+//   else {
+//     // Use injected provider, start dapp
+//     web3 = new Web3(web3.currentProvider);
+//   }
+
+//   if (typeof web3 !== "undefined") {
+//     web3.version.getNetwork((err, netId) => {
+//       switch (netId) {
+//         case "1":
+//           break;
+//         case "2":
+//           break;
+//         case "3":
+//           break;
+//         case "4":
+//           break;
+//         case "42":
+//           break;
+//         default:
+//           msToWait = 10000;
+//       }
+//     });
+
+//     startApp();
+//   } else {
+//     let msg =
+//       "Install <a href='https://metamask.io' target='_blank'>Metamask wallet<a/> to proceed";
+//     $("#alertsModal")
+//       .find(".modal-body")
+//       .html(msg);
+//     $("#alertsModal").modal({
+//       show: true,
+//       keyboard: false,
+//       backdrop: false,
+//       focus: true
+//     });
+//   }
+// });

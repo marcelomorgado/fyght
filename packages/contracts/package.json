@@ -26,18 +26,15 @@
     "url": "https://github.com/marcelomorgado/fyght/issues"
   },
   "dependencies": {
-    "fs": "0.0.1-security",
+    "@openzeppelin/contracts": "2.4.0",
     "ganache-cli": "6.8.2",
-    "jquery": "^3.3.1",
-    "openzeppelin-solidity": "1.12.0-rc.1",
     "truffle": "5.1.8",
-    "truffle-hdwallet-provider": "0.0.6",
-    "web3": "^1.0.0-beta.35"
+    "truffle-hdwallet-provider": "1.0.17"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.0",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.20.0",
     "prettier": "1.19.1"
   }
 }
