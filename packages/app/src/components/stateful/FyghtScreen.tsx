@@ -1,28 +1,7 @@
-// import React from "react";
-import MyFyghter from "../presentational/MyFyghter";
-
-// export const FyghtScreen = () => {
-//   return (
-//     <div>
-//       <MyFyghter
-//         fygher={{
-//           id: 1,
-//           name: "Marcelo",
-//           skin: "naked",
-//           xp: 1,
-//           qi: 2,
-//           winCount: 3,
-//           lossCount: 4,
-//         }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default FyghtScreen;
 import React from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
+import MyFyghter from "../presentational/MyFyghter";
 
 const { Header, Content, Footer } = Layout;
 
@@ -62,4 +41,5 @@ export const FyghtScreen = () => {
     </Layout>
   );
 };
+
 export default FyghtScreen;
