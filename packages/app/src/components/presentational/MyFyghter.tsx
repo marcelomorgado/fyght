@@ -1,5 +1,10 @@
 import React from "react";
-// import skinImage from "../../assets/img/naked.png";
+import { Card, Icon } from "antd";
+// TODO: Import image dynamically
+// TODO: Edit fyghter name
+import skinImage from "../../assets/img/naked.png";
+
+const { Meta } = Card;
 
 type Props = {
   fygher: {
@@ -16,38 +21,22 @@ type Props = {
 export const MyFyghter = ({
   fygher: { skin, name, xp, qi, winCount, lossCount },
 }: Props) => {
-  const skinImage = "../../assets/img/${skin}.png";
-
   return (
-    <div className="card fighter-id-fighterId">
-      <div className="card-header ">
-        <button
-          className="btn-clipboard btnRename"
-          title=""
-          data-original-title=""
-        >
-          <img src="../../assets/img/pencil.png" />
-        </button>
-        <button
-          className="btn-clipboard btnChangeSkin"
-          title=""
-          data-original-title=""
-        >
-          <img src="../../assets/img/no_one.png" />
-        </button>
-      </div>
-      <img className="card-img-top" src={skinImage} />
-      <div className="card-body">
-        <h5 className="card-title">{name}</h5>
-        <h6 className="card-subtitle mb-2 text-muted">
-          XP: {xp} / Qi: {qi}
-        </h6>
-        <p className="card-text">
-          {winCount} wins / {lossCount} losses
-        </p>
-        <p></p>
-      </div>
-    </div>
+    <Card
+      hoverable
+      type="inner"
+      style={{ width: 240 }}
+      cover={<img alt="example" src={skinImage} />}
+      title="Inner Card title"
+      extra={<Icon type="edit" />}
+    >
+      <Meta
+        title={name}
+        description={`wins: ${winCount} / losses: ${lossCount}`}
+      />
+      <p></p>
+      <p>{`XP: ${xp} / Qi: ${qi}`}</p>
+    </Card>
   );
 };
 
