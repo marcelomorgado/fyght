@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Icon } from "antd";
 // TODO: Import image dynamically
-// TODO: Edit fyghter name
 import skinImage from "../../assets/img/naked.png";
 
 const { Meta } = Card;
@@ -18,6 +17,7 @@ type Props = {
   };
 };
 
+// TODO: Edit fyghter name
 export const MyFyghter = ({
   fygher: { skin, name, xp, qi, winCount, lossCount },
 }: Props) => {
@@ -25,9 +25,8 @@ export const MyFyghter = ({
     <Card
       hoverable
       type="inner"
-      style={{ width: 240 }}
       cover={<img alt="example" src={skinImage} />}
-      title="Inner Card title"
+      title=""
       extra={<Icon type="edit" />}
     >
       <Meta
