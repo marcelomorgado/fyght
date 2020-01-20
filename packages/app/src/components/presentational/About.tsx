@@ -9,7 +9,7 @@ export const About = () => {
         Train with your master and challenge another players to see who is the
         best.
       </p>
-      <p>After which victory, your fighter gains +1 XP and become stronger.</p>
+      <p>After each victory, your fighter gains +1 XP and become stronger.</p>
     </Card>
   );
 };
