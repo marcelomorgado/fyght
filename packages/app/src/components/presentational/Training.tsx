@@ -11,7 +11,6 @@ type Props = {
 export const Training = ({ trainingCost }: Props) => {
   return (
     <Card
-      hoverable
       type="inner"
       cover={<img alt="example" src={masterImage} />}
       title="Train w/ Master"

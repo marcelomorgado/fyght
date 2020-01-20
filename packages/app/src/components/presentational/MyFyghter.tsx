@@ -23,7 +23,6 @@ export const MyFyghter = ({
 }: Props) => {
   return (
     <Card
-      hoverable
       type="inner"
       cover={<img alt="example" src={skinImage} />}
       title=""

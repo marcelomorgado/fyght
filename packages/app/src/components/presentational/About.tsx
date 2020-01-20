@@ -3,7 +3,7 @@ import { Card } from "antd";
 
 export const About = () => {
   return (
-    <Card hoverable type="inner" title="About & Rules">
+    <Card type="inner" title="About & Rules">
       <p>Your journey to became a master starts now.</p>
       <p>
         Train with your master and challenge another players to see who is the
