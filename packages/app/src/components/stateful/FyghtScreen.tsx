@@ -1,9 +1,9 @@
 import React from "react";
-import { Layout, Menu, Row, Col } from "antd";
+import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
-import MyFyghter from "../presentational/MyFyghter";
-import Training from "../presentational/Training";
-import About from "../presentational/About";
+import MyFighterContainer from "../presentational/MyFygherContainer";
+import EnimiesContainer from "../presentational/EnemiesContainer";
+import JourneyTable from "../presentational/JourneyTable";
 
 const { Header, Content, Footer } = Layout;
 
@@ -26,27 +26,9 @@ export const FyghtScreen = () => {
       <Content style={{ padding: "0 50px", marginTop: 64 }}>
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
-          <Row gutter={16}>
-            <Col span={3}>
-              <MyFyghter
-                fygher={{
-                  id: 1,
-                  name: "Marcelo",
-                  skin: "naked",
-                  xp: 1,
-                  qi: 2,
-                  winCount: 3,
-                  lossCount: 4,
-                }}
-              />
-            </Col>
-            <Col span={18}>
-              <About />
-            </Col>
-            <Col span={3}>
-              <Training trainingCost={0.25} />
-            </Col>
-          </Row>
+          <MyFighterContainer />
+          <EnimiesContainer />
+          <JourneyTable />
         </div>
       </Content>
       <Footer style={{ textAlign: "center" }}>fyght - a crypto game</Footer>

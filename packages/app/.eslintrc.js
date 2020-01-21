@@ -1,20 +1,20 @@
 module.exports = {
   env: {
     browser: true,
-    es6: true
+    es6: true,
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
     ecmaVersion: 2018,
-    sourceType: "module"
+    sourceType: "module",
   },
   settings: {
     react: {
-      version: "16.12"
-    }
+      version: "16.12",
+    },
   },
   plugins: ["react", "prettier", "jest", "@typescript-eslint", "react-hooks"],
   extends: [
@@ -22,14 +22,15 @@ module.exports = {
     "prettier",
     "prettier/react",
     "plugin:react/recommended",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
   ],
   globals: {
-    react: true
+    react: true,
   },
   rules: {
     "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
-  }
+    "react-hooks/exhaustive-deps": "warn",
+    "react/display-name": "off",
+  },
 };
