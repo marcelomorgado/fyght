@@ -1,22 +1,11 @@
 import React from "react";
 import { Row, Col, Table } from "antd";
 import { Typography } from "antd";
-
-const images = new Map();
-
-// TODO: Import images dunamically
-images.set("naked", require("../../assets/img/naked.png"));
-images.set("normal_guy", require("../../assets/img/normal_guy.png"));
-images.set("karate_kid", require("../../assets/img/karate_kid.png"));
-images.set("japonese", require("../../assets/img/japonese.png"));
-images.set("monk", require("../../assets/img/monk.png"));
-images.set("ninja", require("../../assets/img/ninja.png"));
-images.set("no_one", require("../../assets/img/no_one.png"));
-images.set("daemon", require("../../assets/img/daemon.png"));
-images.set("master", require("../../assets/img/master.png"));
+// Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
+import images from "../../assets/img/*.png";
 
 const getImageFromSkinName = (skinName: string) => (
-  <img alt={skinName} src={images.get(skinName)} width={100} />
+  <img alt={skinName} src={images[skinName]} width={100} />
 );
 
 const { Title } = Typography;

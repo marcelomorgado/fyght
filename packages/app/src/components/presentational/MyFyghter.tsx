@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Icon } from "antd";
-// TODO: Import image dynamically
-import skinImage from "../../assets/img/naked.png";
+// Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
+import images from "../../assets/img/*.png";
 
 const { Meta } = Card;
 
@@ -24,7 +24,7 @@ export const MyFyghter = ({
   return (
     <Card
       type="inner"
-      cover={<img alt="example" src={skinImage} />}
+      cover={<img alt="example" src={images[skin]} />}
       title=""
       extra={<Icon type="edit" />}
     >
