@@ -9,7 +9,7 @@ export const MyFighterContainer = () => {
     <Row gutter={16}>
       <Col span={3}>
         <MyFyghter
-          fygher={{
+          fyghter={{
             id: 1,
             name: "Marcelo",
             skin: "naked",

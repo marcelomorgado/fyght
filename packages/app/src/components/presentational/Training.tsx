@@ -12,7 +12,7 @@ export const Training = ({ trainingCost }: Props) => {
   return (
     <Card
       type="inner"
-      cover={<img alt="example" src={masterImage} />}
+      cover={<img alt="master" src={masterImage} />}
       title="Train w/ Master"
     >
       <Meta
