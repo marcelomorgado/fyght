@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyFyghter should render the component 1`] = `
+<Card
+  cover={
+    <Unknown
+      size="medium"
+      skin="naked"
+    />
+  }
+  title="John"
+  type="inner"
+>
+  <p />
+  <p>
+    wins: 4 / losses: 5
+  </p>
+  <p>
+    XP: 2 / Qi: 3
+  </p>
+  <FyghterRenamingModal />
+  <p />
+  <FyghterChangeSkinModal />
+</Card>
+`;

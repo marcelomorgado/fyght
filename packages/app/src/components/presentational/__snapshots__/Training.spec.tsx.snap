@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Training should render the component 1`] = `
+<Card
+  cover={
+    <img
+      alt="master"
+      src="test-file-stub"
+    />
+  }
+  title="Train w/ Master"
+  type="inner"
+>
+  <Meta
+    description=""
+    style={
+      Object {
+        "textAlign": "center",
+      }
+    }
+    title="Improve your Qi!"
+  />
+  <p />
+  <Button
+    block={true}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    type="primary"
+  >
+    +1 Qi Ξ 
+    1
+  </Button>
+</Card>
+`;

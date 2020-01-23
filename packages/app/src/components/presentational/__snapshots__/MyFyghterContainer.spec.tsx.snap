@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyFyghterContainer should render the component 1`] = `
+<Row
+  gutter={16}
+>
+  <Col
+    span={3}
+  >
+    <Component
+      fyghter={
+        Object {
+          "id": 1,
+          "lossCount": 4,
+          "name": "Marcelo",
+          "qi": 2,
+          "skin": "naked",
+          "winCount": 3,
+          "xp": 1,
+        }
+      }
+    />
+  </Col>
+  <Col
+    span={18}
+  >
+    <Component />
+  </Col>
+  <Col
+    span={3}
+  >
+    <Component
+      trainingCost={0.25}
+    />
+  </Col>
+</Row>
+`;

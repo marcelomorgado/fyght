@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FyghterRenamingModal should render the component 1`] = `
+<div>
+  <Button
+    block={true}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    onClick={[Function]}
+    type="primary"
+  >
+    Rename
+  </Button>
+  <Form(class_1)
+    onCancel={[Function]}
+    onCreate={[Function]}
+    visible={false}
+    wrappedComponentRef={[Function]}
+  />
+</div>
+`;

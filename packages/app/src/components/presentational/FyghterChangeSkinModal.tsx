@@ -3,10 +3,14 @@ import { Button, Modal, Form, Radio } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 
-const FyghterChangeSkinForm = Form.create({ name: "form_in_modal" })(
+// TODO: To use the correct type
+// See more: https://github.com/ant-design/ant-design/issues/19773#issuecomment-562487419
+const FyghterChangeSkinForm: any = Form.create({
+  name: "form_in_modal",
+})(
   class extends React.Component<any> {
     render() {
-      const { visible, onCancel, onCreate, onChange } = this.props;
+      const { visible, onCancel, onCreate /*, onChange*/ } = this.props;
       return (
         <Modal
           visible={visible}

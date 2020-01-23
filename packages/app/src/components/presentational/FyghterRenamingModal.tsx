@@ -1,7 +1,9 @@
 import React from "react";
 import { Button, Modal, Form, Input } from "antd";
 
-const FyghterRenamingForm = Form.create({ name: "form_in_modal" })(
+// TODO: To use the correct type
+// See more: https://github.com/ant-design/ant-design/issues/19773#issuecomment-562487419
+const FyghterRenamingForm: any = Form.create({ name: "form_in_modal" })(
   class extends React.Component<any> {
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
