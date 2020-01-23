@@ -1,9 +1,8 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card } from "antd";
 import FyghterRenamingModal from "./FyghterRenamingModal";
-
-// Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
-import images from "../../assets/img/*.png";
+import FyghterChangeSkinModal from "./FyghterChangeSkinModal";
+import { SkinAvatar } from "./SkinAvatar";
 
 type Props = {
   fyghter: {
@@ -24,7 +23,7 @@ export const MyFyghter = ({
   return (
     <Card
       type="inner"
-      cover={<img alt={skin} src={images[skin]} />}
+      cover={<SkinAvatar skin={skin} size="medium" />}
       title={name}
     >
       <p></p>
@@ -32,9 +31,7 @@ export const MyFyghter = ({
       <p>{`XP: ${xp} / Qi: ${qi}`}</p>
       <FyghterRenamingModal />
       <p></p>
-      <Button block={true} type="primary">
-        Change skin
-      </Button>
+      <FyghterChangeSkinModal />
     </Card>
   );
 };
