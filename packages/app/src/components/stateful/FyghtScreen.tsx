@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
-import MyFighterContainer from "../presentational/MyFygherContainer";
+import MyFighterContainer from "../presentational/MyFyghterContainer";
 import EnimiesContainer from "../presentational/EnemiesContainer";
 import JourneyTable from "../presentational/JourneyTable";
 

@@ -6,7 +6,7 @@ import FyghterRenamingModal from "./FyghterRenamingModal";
 import images from "../../assets/img/*.png";
 
 type Props = {
-  fygher: {
+  fyghter: {
     id: number;
     skin: string;
     name: string;
@@ -19,7 +19,7 @@ type Props = {
 
 // TODO: Edit fyghter name
 export const MyFyghter = ({
-  fygher: { skin, name, xp, qi, winCount, lossCount },
+  fyghter: { skin, name, xp, qi, winCount, lossCount },
 }: Props) => {
   return (
     <Card
