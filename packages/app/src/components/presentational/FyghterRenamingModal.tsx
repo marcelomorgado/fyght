@@ -32,7 +32,7 @@ const FyghterRenamingForm = Form.create({ name: "form_in_modal" })(
   }
 );
 
-export default class FyghterRenamingModal extends React.Component {
+export class FyghterRenamingModal extends React.Component {
   state = {
     visible: false,
   };

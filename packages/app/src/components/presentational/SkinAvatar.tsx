@@ -4,8 +4,8 @@ import React from "react";
 import images from "../../assets/img/*.png";
 
 type Props = {
-  skin: string; // TODO: To enum
-  size: string;
+  skin: string;
+  size: string; // TODO: To enum
 };
 
 export const SkinAvatar = ({ skin, size }: Props) => {

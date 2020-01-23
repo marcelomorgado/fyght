@@ -1,9 +1,9 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
-import MyFighterContainer from "../presentational/MyFyghterContainer";
-import EnimiesContainer from "../presentational/EnemiesContainer";
-import JourneyTable from "../presentational/JourneyTable";
+import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
+import { EnemiesContainer } from "../presentational/EnemiesContainer";
+import { JourneyTable } from "../presentational/JourneyTable";
 
 const { Header, Content, Footer } = Layout;
 
@@ -26,8 +26,8 @@ export const FyghtScreen = () => {
       <Content style={{ padding: "0 50px", marginTop: 64 }}>
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
-          <MyFighterContainer />
-          <EnimiesContainer />
+          <MyFyghterContainer />
+          <EnemiesContainer />
           <JourneyTable />
         </div>
       </Content>

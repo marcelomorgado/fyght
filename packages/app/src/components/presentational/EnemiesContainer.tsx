@@ -4,7 +4,7 @@ import { Typography } from "antd";
 
 const { Title } = Typography;
 
-export const EnimiesContainer = () => {
+export const EnemiesContainer = () => {
   return (
     <>
       <Row type="flex" justify="center">
@@ -13,14 +13,12 @@ export const EnimiesContainer = () => {
       <Row gutter={16} type="flex" justify="center">
         <Col span={16}>
           <Alert
-            message="No enimies to fight yet. Invite your friends!"
+            message="No enemies to fight yet. Invite your friends!"
             type="warning"
             showIcon
           />
         </Col>
-      </Row>{" "}
+      </Row>
     </>
   );
 };
-
-export default EnimiesContainer;

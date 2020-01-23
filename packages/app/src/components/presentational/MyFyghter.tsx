@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "antd";
-import FyghterRenamingModal from "./FyghterRenamingModal";
-import FyghterChangeSkinModal from "./FyghterChangeSkinModal";
+import { FyghterRenamingModal } from "./FyghterRenamingModal";
+import { FyghterChangeSkinModal } from "./FyghterChangeSkinModal";
 import { SkinAvatar } from "./SkinAvatar";
 
 type Props = {
@@ -35,5 +35,3 @@ export const MyFyghter = ({
     </Card>
   );
 };
-
-export default MyFyghter;

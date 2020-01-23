@@ -1,10 +1,10 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import { Count } from "./Count";
+import { Header } from "./Header";
 
-describe("Count", () => {
+describe("Header", () => {
   test("should render the component", () => {
-    expect(shallow(<Count count={1} />)).toMatchSnapshot();
+    expect(shallow(<Header />)).toMatchSnapshot();
   });
 });

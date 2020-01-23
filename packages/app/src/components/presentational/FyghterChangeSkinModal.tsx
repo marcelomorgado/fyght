@@ -32,7 +32,7 @@ const FyghterChangeSkinForm = Form.create({ name: "form_in_modal" })(
   }
 );
 
-export default class FyghterChangeSkinModal extends React.Component {
+export class FyghterChangeSkinModal extends React.Component {
   state = {
     visible: false,
   };

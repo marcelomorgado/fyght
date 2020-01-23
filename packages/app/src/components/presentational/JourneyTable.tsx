@@ -4,10 +4,6 @@ import { Typography } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 
-const getImageFromSkinName = (skinName: string) => (
-  <SkinAvatar skin={skinName} size="small" />
-);
-
 const { Title } = Typography;
 
 const dataSource = skins.map((skin: any, i: number) => ({
@@ -20,7 +16,7 @@ const columns = [
     title: "",
     dataIndex: "skin",
     key: "skin",
-    render: (text: string) => getImageFromSkinName(text),
+    render: (text: string) => <SkinAvatar skin={text} size="small" />,
   },
   {
     title: "Level",
@@ -53,5 +49,3 @@ export const JourneyTable = () => {
     </>
   );
 };
-
-export default JourneyTable;

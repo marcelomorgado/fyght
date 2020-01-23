@@ -1,10 +1,10 @@
 import React from "react";
 import { Row, Col } from "antd";
-import MyFyghter from "./MyFyghter";
+import { MyFyghter } from "./MyFyghter";
 import About from "./About";
 import Training from "./Training";
 
-export const MyFighterContainer = () => {
+export const MyFyghterContainer = () => {
   return (
     <Row gutter={16}>
       <Col span={3}>
@@ -29,5 +29,3 @@ export const MyFighterContainer = () => {
     </Row>
   );
 };
-
-export default MyFighterContainer;
