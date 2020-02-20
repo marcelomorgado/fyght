@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Count } from "../presentational/Count";
+
+type Props = {
+  count: number;
+};
+
+export const Count = ({ count }: Props) => <h1>{count}</h1>;
 
 export const Counter = () => {
   const [count, setCount] = useState(0);
