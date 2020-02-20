@@ -19,12 +19,20 @@ exports[`EnemiesContainer should render the component 1`] = `
     type="flex"
   >
     <Col
-      span={16}
+      span={3}
     >
-      <Alert
-        message="No enemies to fight yet. Invite your friends!"
-        showIcon={true}
-        type="warning"
+      <Component
+        enemy={
+          Object {
+            "id": 2,
+            "lossCount": 4,
+            "name": "Charlie",
+            "qi": 2,
+            "skin": "normal_guy",
+            "winCount": 3,
+            "xp": 1,
+          }
+        }
       />
     </Col>
   </Row>

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Enemy should render the component 1`] = `
+<Card
+  cover={
+    <Unknown
+      size="medium"
+      skin="normal_guy"
+    />
+  }
+  title="Charlie"
+  type="inner"
+>
+  <p />
+  <p>
+    wins: 4 / losses: 5
+  </p>
+  <p>
+    XP: 2 / Qi: 3
+  </p>
+  <AttackModal />
+</Card>
+`;
