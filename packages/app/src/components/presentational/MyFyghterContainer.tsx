@@ -2,7 +2,10 @@ import React from "react";
 import { Row, Col } from "antd";
 import { MyFyghter } from "./MyFyghter";
 import About from "./About";
+import { FyghtConsumer } from '../../FyghtContext'
 
+
+//https://www.taniarascia.com/using-context-api-in-react/
 export const MyFyghterContainer = () => {
   return (
     <Row gutter={16}>
@@ -20,7 +23,7 @@ export const MyFyghterContainer = () => {
       </Col>
       <Col span={21}>
         <About />
-      </Col>  
+      </Col>
     </Row>
   );
 };
