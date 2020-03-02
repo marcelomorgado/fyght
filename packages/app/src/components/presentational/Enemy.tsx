@@ -9,7 +9,6 @@ type Props = {
     skin: string;
     name: string;
     xp: number;
-    qi: number;
     winCount: number;
     lossCount: number;
   };
@@ -17,7 +16,7 @@ type Props = {
 
 // TODO: Edit fyghter name
 export const Enemy = ({
-  enemy: { skin, name, xp, qi, winCount, lossCount },
+  enemy: { skin, name, xp, winCount, lossCount },
 }: Props) => {
   return (
     <Card
@@ -27,7 +26,7 @@ export const Enemy = ({
     >
       <p></p>
       <p>{`wins: ${winCount} / losses: ${lossCount}`}</p>
-      <p>{`XP: ${xp} / Qi: ${qi}`}</p>
+      <p>{`XP: ${xp}`}</p>
       <AttackModal />
     </Card>
   );

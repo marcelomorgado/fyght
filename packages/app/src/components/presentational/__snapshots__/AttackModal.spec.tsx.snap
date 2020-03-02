@@ -10,7 +10,7 @@ exports[`AttackModal should render the component 1`] = `
     onClick={[Function]}
     type="primary"
   >
-    Rename
+    Attack
   </Button>
   <class_1
     onCancel={[Function]}

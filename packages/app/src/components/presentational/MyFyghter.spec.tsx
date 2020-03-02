@@ -13,7 +13,6 @@ describe("MyFyghter", () => {
             name: "John",
             skin: "naked",
             xp: 2,
-            qi: 3,
             winCount: 4,
             lossCount: 5,
           }}

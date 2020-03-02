@@ -28,7 +28,6 @@ export const EnemiesContainer = () => {
               // TODO: Skin as constant (?)
               skin: "normal_guy",
               xp: 1,
-              qi: 2,
               winCount: 3,
               lossCount: 4,
             }}

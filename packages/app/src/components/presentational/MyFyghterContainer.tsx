@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col } from "antd";
 import { MyFyghter } from "./MyFyghter";
 import About from "./About";
-import Training from "./Training";
 
 export const MyFyghterContainer = () => {
   return (
@@ -14,18 +13,14 @@ export const MyFyghterContainer = () => {
             name: "Marcelo",
             skin: "naked",
             xp: 1,
-            qi: 2,
             winCount: 3,
             lossCount: 4,
           }}
         />
       </Col>
-      <Col span={18}>
+      <Col span={21}>
         <About />
-      </Col>
-      <Col span={3}>
-        <Training trainingCost={0.25} />
-      </Col>
+      </Col>  
     </Row>
   );
 };

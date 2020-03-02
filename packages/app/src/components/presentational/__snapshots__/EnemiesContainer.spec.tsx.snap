@@ -27,7 +27,6 @@ exports[`EnemiesContainer should render the component 1`] = `
             "id": 2,
             "lossCount": 4,
             "name": "Charlie",
-            "qi": 2,
             "skin": "normal_guy",
             "winCount": 3,
             "xp": 1,

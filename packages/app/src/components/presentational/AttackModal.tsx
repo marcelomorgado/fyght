@@ -39,7 +39,7 @@ export class AttackModal extends React.Component {
     return (
       <div>
         <Button type="primary" block={true} onClick={this.showModal}>
-          Rename
+          Attack
         </Button>
         <EnamyAttackView
           visible={this.state.visible}

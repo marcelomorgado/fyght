@@ -16,7 +16,7 @@ exports[`MyFyghter should render the component 1`] = `
     wins: 4 / losses: 5
   </p>
   <p>
-    XP: 2 / Qi: 3
+    XP: 2
   </p>
   <FyghterRenamingModal />
   <p />

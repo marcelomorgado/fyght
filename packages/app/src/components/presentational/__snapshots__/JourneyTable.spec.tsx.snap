@@ -82,7 +82,7 @@ exports[`JourneyTable should render the component 1`] = `
               "key": "5",
               "level": "Monk",
               "skin": "monk",
-              "unlock": "40 XP or 30 XP + 30 Qi",
+              "unlock": "40 XP",
             },
             Object {
               "description": "Secret powers and wisdoms are achieve",
@@ -110,7 +110,7 @@ exports[`JourneyTable should render the component 1`] = `
               "key": "9",
               "level": "Master",
               "skin": "master",
-              "unlock": "100 XP + 100 Qi",
+              "unlock": "100 XP",
             },
           ]
         }

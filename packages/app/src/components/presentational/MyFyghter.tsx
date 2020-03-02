@@ -10,7 +10,6 @@ type Props = {
     skin: string;
     name: string;
     xp: number;
-    qi: number;
     winCount: number;
     lossCount: number;
   };
@@ -18,7 +17,7 @@ type Props = {
 
 // TODO: Edit fyghter name
 export const MyFyghter = ({
-  fyghter: { skin, name, xp, qi, winCount, lossCount },
+  fyghter: { skin, name, xp, winCount, lossCount },
 }: Props) => {
   return (
     <Card
@@ -28,7 +27,7 @@ export const MyFyghter = ({
     >
       <p></p>
       <p>{`wins: ${winCount} / losses: ${lossCount}`}</p>
-      <p>{`XP: ${xp} / Qi: ${qi}`}</p>
+      <p>{`XP: ${xp}`}</p>
       <FyghterRenamingModal />
       <p></p>
       <FyghterChangeSkinModal />

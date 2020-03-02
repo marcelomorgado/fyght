@@ -28,7 +28,7 @@ export const skins = [
     skin: "monk",
     level: "Monk",
     description: "Secret powers and wisdoms are achieve",
-    unlock: "40 XP or 30 XP + 30 Qi",
+    unlock: "40 XP",
   },
   {
     skin: "ninja",
@@ -52,6 +52,6 @@ export const skins = [
     skin: "master",
     level: "Master",
     description: "Try not, do or do not",
-    unlock: "100 XP + 100 Qi",
+    unlock: "100 XP",
   },
 ];
