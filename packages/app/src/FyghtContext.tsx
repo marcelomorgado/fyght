@@ -1,7 +1,16 @@
 import React from "react";
 
-const FyghtContext = React.createContext({});
+interface FyghtContextInterface {
+  myFyghter: Fyghter;
+  enemies: Array<Fyghter>;
+}
 
-export const FyghtProvider = FyghtContext.Provider;
-export const FyghtConsumer = FyghtContext.Consumer;
+const FyghtContext = React.createContext<FyghtContextInterface | null>(null);
+export const {
+  Provider: FyghtProvider,
+  Consumer: FyghtConsumer,
+} = FyghtContext;
+
+// export const FyghtProvider = FyghtContext.Provider;
+// export const FyghtConsumer = FyghtContext.Consumer;
 export default FyghtContext;

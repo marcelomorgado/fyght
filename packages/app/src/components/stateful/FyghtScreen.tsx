@@ -8,17 +8,25 @@ import { FyghtProvider } from "../../FyghtContext";
 
 const { Header, Content, Footer } = Layout;
 
-// TODO: Prettier isn't working heres
 export const FyghtScreen = () => {
   const fyght = {
-    myFyghters: [
+    myFyghter: {
+      id: 1,
+      name: "John",
+      skin: "naked",
+      xp: 2,
+      winCount: 4,
+      lossCount: 5,
+    },
+    enemies: [
       {
-        id: 1,
-        name: "John",
-        skin: "naked",
-        xp: 2,
-        winCount: 4,
-        lossCount: 5,
+        id: 2,
+        name: "Charlie",
+        // TODO: Skin as constant (?)
+        skin: "normal_guy",
+        xp: 1,
+        winCount: 3,
+        lossCount: 4,
       },
     ],
   };

@@ -5,14 +5,7 @@ import { FyghterChangeSkinModal } from "./FyghterChangeSkinModal";
 import { SkinAvatar } from "./SkinAvatar";
 
 type Props = {
-  fyghter: {
-    id: number;
-    skin: string;
-    name: string;
-    xp: number;
-    winCount: number;
-    lossCount: number;
-  };
+  fyghter: Fyghter;
 };
 
 // TODO: Edit fyghter name

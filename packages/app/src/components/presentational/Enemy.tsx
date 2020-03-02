@@ -4,14 +4,7 @@ import { AttackModal } from "./AttackModal";
 import { SkinAvatar } from "./SkinAvatar";
 
 type Props = {
-  enemy: {
-    id: number;
-    skin: string;
-    name: string;
-    xp: number;
-    winCount: number;
-    lossCount: number;
-  };
+  enemy: Fyghter;
 };
 
 // TODO: Edit fyghter name
