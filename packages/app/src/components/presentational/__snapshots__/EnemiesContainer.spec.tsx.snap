@@ -1,39 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnemiesContainer should render the component 1`] = `
-<Fragment>
-  <Row
-    gutter={0}
-    justify="center"
-    type="flex"
-  >
-    <Title
-      level={2}
-    >
-      Challenge another player!
-    </Title>
-  </Row>
-  <Row
-    gutter={16}
-    justify="center"
-    type="flex"
-  >
-    <Col
-      span={3}
-    >
-      <Component
-        enemy={
-          Object {
-            "id": 2,
-            "lossCount": 4,
-            "name": "Charlie",
-            "skin": "normal_guy",
-            "winCount": 3,
-            "xp": 1,
-          }
-        }
-      />
-    </Col>
-  </Row>
-</Fragment>
+<ContextConsumer>
+  <Component />
+</ContextConsumer>
 `;
