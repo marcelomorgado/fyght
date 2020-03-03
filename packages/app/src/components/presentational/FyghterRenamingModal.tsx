@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
+import FyghtContext from "../../FyghtContext";
 
 // TODO: To use the correct type
 // See more: https://github.com/ant-design/ant-design/issues/19773#issuecomment-562487419
@@ -34,50 +35,50 @@ const FyghterRenamingForm: any = Form.create({ name: "form_in_modal" })(
   }
 );
 
-export class FyghterRenamingModal extends React.Component {
-  state = {
-    visible: false,
-  };
-  formRef: any;
+export const FyghterRenamingModal = () => {
+  const [isVisible, setVisible] = useState(false);
+  const [formRef, setFormRef] = useState(null);
+  const { dispatch } = useContext(FyghtContext);
 
-  showModal = () => {
-    this.setState({ visible: true });
-  };
-
-  handleCancel = () => {
-    this.setState({ visible: false });
+  const showModal = () => {
+    setVisible(true);
   };
 
-  handleCreate = () => {
-    const { form } = this.formRef.props;
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handleCreate = () => {
+    const { form } = formRef.props;
     form.validateFields((err: Error, values: any) => {
       if (err) {
         return;
       }
 
-      console.log("Received values of form: ", values);
+      const { name } = values;
+
+      dispatch({ type: "RENAME", payload: { name } });
+
       form.resetFields();
-      this.setState({ visible: false });
+      setVisible(false);
     });
   };
 
-  saveFormRef = (formRef: any) => {
-    this.formRef = formRef;
+  const saveFormRef = (formRef: any) => {
+    setFormRef(formRef);
   };
 
-  render() {
-    return (
-      <div>
-        <Button type="primary" block={true} onClick={this.showModal}>
-          Rename
-        </Button>
-        <FyghterRenamingForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Button type="primary" block={true} onClick={showModal}>
+        Rename
+      </Button>
+      <FyghterRenamingForm
+        wrappedComponentRef={saveFormRef}
+        visible={isVisible}
+        onCancel={handleCancel}
+        onCreate={handleCreate}
+      />
+    </div>
+  );
+};

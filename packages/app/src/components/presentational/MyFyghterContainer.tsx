@@ -1,24 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Row, Col } from "antd";
 import { MyFyghter } from "./MyFyghter";
 import About from "./About";
-import { FyghtConsumer } from "../../FyghtContext";
+import FyghtContext from "../../FyghtContext";
 
 export const MyFyghterContainer = () => {
+  const { state, dispatch } = useContext(FyghtContext);
   return (
-    <FyghtConsumer>
-      {fyghtContext =>
-        fyghtContext && (
-          <Row gutter={16}>
-            <Col span={3}>
-              <MyFyghter fyghter={fyghtContext.myFyghter} />
-            </Col>
-            <Col span={21}>
-              <About />
-            </Col>
-          </Row>
-        )
-      }
-    </FyghtConsumer>
+    <Row gutter={16}>
+      <Col span={3}>
+        <MyFyghter fyghter={state.myFyghter} />
+      </Col>
+      <Col span={21}>
+        <About />
+      </Col>
+    </Row>
   );
 };
