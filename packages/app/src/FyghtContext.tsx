@@ -75,8 +75,16 @@ const FyghtProvider = ({ children }: any) => {
 
   const dispatch = React.useCallback(asyncer(baseDispatch, state), []);
 
+  const renameMyFyghter = (name: string) =>
+    dispatch({ type: "RENAME", payload: { name } });
+
+  const changeMyFyghterSkin = (skin: string) =>
+    dispatch({ type: "CHANGE_SKIN", payload: { skin } });
+
   return (
-    <FyghtContext.Provider value={{ state, dispatch }}>
+    <FyghtContext.Provider
+      value={{ state, renameMyFyghter, changeMyFyghterSkin }}
+    >
       {children}
     </FyghtContext.Provider>
   );

@@ -8,11 +8,6 @@ import { FyghtProvider } from "../../FyghtContext";
 
 const { Header, Content, Footer } = Layout;
 
-// const [myFyghter, dispatch] = useReducer(
-//   myFighterReducer,
-//   initialState.myFyghter
-// );
-
 export const FyghtScreen = () => {
   return (
     <FyghtProvider>

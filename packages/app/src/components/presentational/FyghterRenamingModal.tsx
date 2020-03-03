@@ -3,39 +3,6 @@ import React, { useContext, useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import FyghtContext from "../../FyghtContext";
 
-// TODO: To use the correct type
-// See more: https://github.com/ant-design/ant-design/issues/19773#issuecomment-562487419
-// const FyghterRenamingForm: any = Form.create({ name: "form_in_modal" })(
-//   class extends React.Component<any> {
-//     render() {
-//       const { visible, onCancel, onCreate, form } = this.props;
-//       const { getFieldDecorator } = form;
-//       return (
-//         <Modal
-//           visible={visible}
-//           title="Rename fyghter"
-//           okText="Save"
-//           onCancel={onCancel}
-//           onOk={onCreate}
-//         >
-//           <Form layout="vertical">
-//             <Form.Item label="Name">
-//               {getFieldDecorator("name", {
-//                 rules: [
-//                   {
-//                     required: true,
-//                     message: "Please input the name of the fyghter!",
-//                   },
-//                 ],
-//               })(<Input />)}
-//             </Form.Item>
-//           </Form>
-//         </Modal>
-//       );
-//     }
-//   }
-// );
-
 interface Values {}
 
 interface FyghterRenamingFormProps {
@@ -90,10 +57,10 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
 export const FyghterRenamingModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { dispatch } = useContext(FyghtContext);
+  const { renameMyFyghter } = useContext(FyghtContext);
 
   const onSave = ({ name }: { name: string }) => {
-    dispatch({ type: "RENAME", payload: { name } });
+    renameMyFyghter(name);
     setVisible(false);
   };
 

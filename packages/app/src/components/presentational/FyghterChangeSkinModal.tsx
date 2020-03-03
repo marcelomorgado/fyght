@@ -70,10 +70,10 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
 export const FyghterChangeSkinModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { state, dispatch } = useContext(FyghtContext);
+  const { changeMyFyghterSkin } = useContext(FyghtContext);
 
   const onSave = ({ skin }: { skin: string }) => {
-    dispatch({ type: "CHANGE_SKIN", payload: { skin } });
+    changeMyFyghterSkin(skin);
     setVisible(false);
   };
 

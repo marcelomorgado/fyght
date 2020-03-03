@@ -7,10 +7,8 @@ import FyghtContext from "../../FyghtContext";
 
 const { Title } = Typography;
 
-export const useGlobalStore = () => useContext(FyghtContext);
-
 export const EnemiesContainer = () => {
-  const { state, dispatch } = useGlobalStore();
+  const { state } = useContext(FyghtContext);
   return (
     <>
       <Row type="flex" justify="center">
