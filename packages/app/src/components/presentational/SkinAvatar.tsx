@@ -12,7 +12,7 @@ export const SkinAvatar = ({ skin, size }: Props) => {
   let px = null;
 
   if (size === "small") px = 100;
-  if (size === "medium") px = 200;
+  if (size === "medium") px = 160;
 
   return <img alt={skin} src={images[skin]} width={px} />;
 };

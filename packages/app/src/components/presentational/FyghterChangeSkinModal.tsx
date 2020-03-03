@@ -22,6 +22,11 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
   onCreate,
 }) => {
   const [form] = Form.useForm();
+  const {
+    state: {
+      myFyghter: { skin: currentSkin },
+    },
+  } = useContext(FyghtContext);
 
   return (
     <Modal
@@ -46,8 +51,7 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
         form={form}
         layout="vertical"
         name="form_in_modal"
-        // TODO: Get from state
-        initialValues={{ skin: "naked" }}
+        initialValues={{ skin: currentSkin }}
       >
         <Form.Item name="skin" label="">
           <Radio.Group>
@@ -66,10 +70,10 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
 export const FyghterChangeSkinModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  //const { dispatch } = useContext(FyghtContext);
+  const { state, dispatch } = useContext(FyghtContext);
 
-  const onSave = (values: any) => {
-    console.log("Received values of form: ", values);
+  const onSave = ({ skin }: { skin: string }) => {
+    dispatch({ type: "CHANGE_SKIN", payload: { skin } });
     setVisible(false);
   };
 

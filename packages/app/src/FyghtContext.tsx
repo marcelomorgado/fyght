@@ -48,10 +48,12 @@ const myFyghterReducer = (
   action: { type: string; payload?: any }
 ): Fyghter => {
   const { type, payload } = action;
-  const { name } = payload;
+  const { name, skin } = payload;
   switch (type) {
     case "RENAME":
       return { ...state, name };
+    case "CHANGE_SKIN":
+      return { ...state, skin };
     default:
       return state;
   }

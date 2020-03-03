@@ -13,11 +13,8 @@ export const MyFyghter = ({
   fyghter: { skin, name, xp, winCount, lossCount },
 }: Props) => {
   return (
-    <Card
-      type="inner"
-      cover={<SkinAvatar skin={skin} size="medium" />}
-      title={name}
-    >
+    <Card type="inner" title={name} hoverable={true}>
+      <SkinAvatar skin={skin} size="medium" />
       <p></p>
       <p>{`wins: ${winCount} / losses: ${lossCount}`}</p>
       <p>{`XP: ${xp}`}</p>
