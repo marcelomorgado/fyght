@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Row, Col } from "antd";
 import { MyFyghter } from "./MyFyghter";
 import About from "./About";
-import FyghtContext from "../../FyghtContext";
+import { useFyghtContext } from "../../FyghtContext";
 
 export const MyFyghterContainer = () => {
   const {
     state: { myFyghter },
-  } = useContext(FyghtContext);
+  } = useFyghtContext();
 
   return (
     <Row gutter={16}>

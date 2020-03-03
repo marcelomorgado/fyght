@@ -2,15 +2,14 @@
 
 exports[`MyFyghter should render the component 1`] = `
 <Card
-  cover={
-    <Unknown
-      size="medium"
-      skin="naked"
-    />
-  }
+  hoverable={true}
   title="John"
   type="inner"
 >
+  <Component
+    size="medium"
+    skin="naked"
+  />
   <p />
   <p>
     wins: 4 / losses: 5
@@ -18,8 +17,8 @@ exports[`MyFyghter should render the component 1`] = `
   <p>
     XP: 2
   </p>
-  <FyghterRenamingModal />
+  <Component />
   <p />
-  <FyghterChangeSkinModal />
+  <Component />
 </Card>
 `;

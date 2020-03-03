@@ -12,11 +12,10 @@ exports[`FyghterChangeSkinModal should render the component 1`] = `
   >
     Change skin
   </Button>
-  <Form(class_1)
+  <FyghterChangeSkinForm
     onCancel={[Function]}
     onCreate={[Function]}
     visible={false}
-    wrappedComponentRef={[Function]}
   />
 </div>
 `;

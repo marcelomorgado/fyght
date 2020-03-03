@@ -1,4 +1,5 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
+import { stateMocks } from "./testHelpers";
 
 interface FyghtContextInterface {
   myFyghter: Fyghter;
@@ -8,25 +9,8 @@ interface FyghtContextInterface {
 const FyghtContext = React.createContext<any | null>(null);
 
 const initialState: FyghtContextInterface = {
-  myFyghter: {
-    id: 1,
-    name: "John",
-    skin: "naked",
-    xp: 2,
-    winCount: 4,
-    lossCount: 5,
-  },
-  enemies: [
-    {
-      id: 2,
-      name: "Charlie",
-      // TODO: Skin as constant (?)
-      skin: "normal_guy",
-      xp: 1,
-      winCount: 3,
-      lossCount: 4,
-    },
-  ],
+  myFyghter: stateMocks.myFyghter,
+  enemies: stateMocks.enemies,
 };
 
 const enemiesReducer = (
@@ -94,5 +78,8 @@ const asyncer = (dispatch: any, state: any) => (action: any) =>
   typeof action === "function" ? action(dispatch, state) : dispatch(action);
 
 const { Consumer: FyghtConsumer } = FyghtContext;
-export { FyghtProvider, FyghtConsumer };
+const useFyghtContext = () => useContext(FyghtContext);
+
+export { FyghtProvider, FyghtConsumer, useFyghtContext };
+
 export default FyghtContext;

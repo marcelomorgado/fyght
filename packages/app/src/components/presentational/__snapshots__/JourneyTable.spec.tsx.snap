@@ -5,7 +5,6 @@ exports[`JourneyTable should render the component 1`] = `
   <Row
     gutter={0}
     justify="center"
-    type="flex"
   >
     <Title
       level={2}
@@ -16,12 +15,11 @@ exports[`JourneyTable should render the component 1`] = `
   <Row
     gutter={16}
     justify="center"
-    type="flex"
   >
     <Col
       span={16}
     >
-      <withStore(Table)
+      <Table
         columns={
           Array [
             Object {
@@ -115,6 +113,7 @@ exports[`JourneyTable should render the component 1`] = `
           ]
         }
         pagination={false}
+        rowKey="key"
       />
     </Col>
   </Row>

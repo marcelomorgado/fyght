@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal, Form, Radio } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
-import FyghtContext from "../../FyghtContext";
+import { useFyghtContext } from "../../FyghtContext";
 
 interface Values {
   skin: string;
@@ -26,7 +26,7 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
     state: {
       myFyghter: { skin: currentSkin },
     },
-  } = useContext(FyghtContext);
+  } = useFyghtContext();
 
   return (
     <Modal
@@ -70,7 +70,7 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
 export const FyghterChangeSkinModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { changeMyFyghterSkin } = useContext(FyghtContext);
+  const { changeMyFyghterSkin } = useFyghtContext();
 
   const onSave = ({ skin }: { skin: string }) => {
     changeMyFyghterSkin(skin);

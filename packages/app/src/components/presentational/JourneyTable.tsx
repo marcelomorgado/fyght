@@ -38,10 +38,10 @@ const columns = [
 export const JourneyTable = () => {
   return (
     <>
-      <Row type="flex" justify="center">
+      <Row justify="center">
         <Title level={2}>Experience Journey</Title>
       </Row>
-      <Row gutter={16} type="flex" justify="center">
+      <Row gutter={16} justify="center">
         <Col span={16}>
           <Table dataSource={dataSource} columns={columns} pagination={false} />
         </Col>

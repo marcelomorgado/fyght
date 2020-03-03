@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
-import FyghtContext from "../../FyghtContext";
+import { useFyghtContext } from "../../FyghtContext";
 
 interface Values {}
 
@@ -57,7 +57,7 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
 export const FyghterRenamingModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { renameMyFyghter } = useContext(FyghtContext);
+  const { renameMyFyghter } = useFyghtContext();
 
   const onSave = ({ name }: { name: string }) => {
     renameMyFyghter(name);

@@ -2,15 +2,14 @@
 
 exports[`Enemy should render the component 1`] = `
 <Card
-  cover={
-    <Unknown
-      size="medium"
-      skin="normal_guy"
-    />
-  }
+  hoverable={true}
   title="Charlie"
   type="inner"
 >
+  <Component
+    size="medium"
+    skin="normal_guy"
+  />
   <p />
   <p>
     wins: 4 / losses: 5

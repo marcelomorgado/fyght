@@ -12,11 +12,10 @@ exports[`FyghterRenamingModal should render the component 1`] = `
   >
     Rename
   </Button>
-  <Form(class_1)
+  <FyghterRenamingForm
     onCancel={[Function]}
     onCreate={[Function]}
     visible={false}
-    wrappedComponentRef={[Function]}
   />
 </div>
 `;
