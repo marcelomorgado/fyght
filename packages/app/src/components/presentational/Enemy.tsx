@@ -7,9 +7,8 @@ type Props = {
   enemy: Fyghter;
 };
 
-// TODO: Edit fyghter name
 export const Enemy = ({
-  enemy: { skin, name, xp, winCount, lossCount },
+  enemy: { id, skin, name, xp, winCount, lossCount },
 }: Props) => {
   return (
     <Card type="inner" title={name} hoverable={true}>
@@ -17,7 +16,7 @@ export const Enemy = ({
       <p></p>
       <p>{`wins: ${winCount} / losses: ${lossCount}`}</p>
       <p>{`XP: ${xp}`}</p>
-      <AttackModal />
+      <AttackModal enemyId={id} />
     </Card>
   );
 };

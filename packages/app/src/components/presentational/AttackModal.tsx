@@ -1,52 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal } from "antd";
+import { useFyghtContext } from "../../FyghtContext";
+
+// Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
+import gifs from "../../assets/img/*.gif";
 
 const EnamyAttackView: any = class extends React.Component<any> {
   render() {
     const { visible, onCancel, onOk } = this.props;
     return (
       <Modal
+        width={370}
         visible={visible}
-        title="Attack an enemy"
+        title="Attacking in progress..."
         okText="OK"
         onCancel={onCancel}
         onOk={onOk}
       >
-        <p>attacking...</p>
+        <img alt="loading..." src={gifs["loading"]} width={320} />
       </Modal>
     );
   }
 };
 
-export class AttackModal extends React.Component {
-  state = {
-    visible: false,
+type Props = {
+  enemyId: number;
+};
+
+export const AttackModal = ({ enemyId }: Props) => {
+  const [isVisible, setVisible] = useState(false);
+
+  const { attackAnEnemy } = useFyghtContext();
+
+  const onAttack = () => {
+    setVisible(true);
+    const secondsToGo = 2;
+    setTimeout(() => {
+      attackAnEnemy(enemyId);
+      setVisible(false);
+    }, secondsToGo * 1000);
   };
 
-  showModal = () => {
-    this.setState({ visible: true });
-  };
-
-  handleCancel = () => {
-    this.setState({ visible: false });
-  };
-
-  handleOk = () => {
-    this.setState({ visible: false });
-  };
-
-  render() {
-    return (
-      <div>
-        <Button type="primary" block={true} onClick={this.showModal}>
-          Attack
-        </Button>
-        <EnamyAttackView
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onOk={this.handleOk}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Button type="primary" block={true} onClick={onAttack}>
+        Attack
+      </Button>
+      <EnamyAttackView
+        visible={isVisible}
+        onCancel={() => {
+          setVisible(false);
+        }}
+        onOk={() => {
+          setVisible(false);
+        }}
+      />
+    </div>
+  );
+};
