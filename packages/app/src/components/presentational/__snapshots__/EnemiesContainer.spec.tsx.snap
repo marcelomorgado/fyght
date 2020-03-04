@@ -2,22 +2,29 @@
 
 exports[`EnemiesContainer should render the component 1`] = `
 <Fragment>
-  <Row
-    gutter={0}
-    justify="center"
+  <Divider
+    orientation="left"
+    style={
+      Object {
+        "color": "#333",
+        "fontWeight": "normal",
+      }
+    }
   >
-    <Title
-      level={2}
-    >
-      Challenge another player!
-    </Title>
-  </Row>
+    Enemies
+  </Divider>
   <Row
-    gutter={16}
-    justify="center"
+    gutter={
+      Array [
+        16,
+        24,
+      ]
+    }
   >
     <Col
-      span={3}
+      className="gutter-row"
+      key="0"
+      span={4}
     >
       <Component
         enemy={
@@ -25,12 +32,119 @@ exports[`EnemiesContainer should render the component 1`] = `
             "id": 2,
             "lossCount": 4,
             "name": "Charlie",
-            "skin": "normal_guy",
-            "winCount": 3,
+            "skin": "naked",
+            "winCount": 10,
             "xp": 1,
           }
         }
-        key="0"
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="1"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 3,
+            "lossCount": 2,
+            "name": "Saul",
+            "skin": "ninja",
+            "winCount": 30,
+            "xp": 10,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="2"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 4,
+            "lossCount": 0,
+            "name": "Julian",
+            "skin": "naked",
+            "winCount": 0,
+            "xp": 1,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="3"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 5,
+            "lossCount": 2,
+            "name": "Brad",
+            "skin": "master",
+            "winCount": 99,
+            "xp": 89,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="4"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 6,
+            "lossCount": 2,
+            "name": "Frank",
+            "skin": "no_one",
+            "winCount": 30,
+            "xp": 71,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="5"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 7,
+            "lossCount": 2,
+            "name": "Brian",
+            "skin": "monk",
+            "winCount": 30,
+            "xp": 30,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="6"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 8,
+            "lossCount": 2,
+            "name": "Fred",
+            "skin": "karate_kid",
+            "winCount": 30,
+            "xp": 10,
+          }
+        }
       />
     </Col>
   </Row>

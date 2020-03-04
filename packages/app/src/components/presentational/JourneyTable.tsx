@@ -1,10 +1,8 @@
 import React from "react";
 import { Row, Col, Table } from "antd";
-import { Typography } from "antd";
+
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
-
-const { Title } = Typography;
 
 const dataSource = skins.map((skin: any, i: number) => ({
   key: `${i + 1}`,

@@ -3,6 +3,11 @@
 exports[`Enemy should render the component 1`] = `
 <Card
   hoverable={true}
+  style={
+    Object {
+      "height": 405,
+    }
+  }
   title="Charlie"
   type="inner"
 >
@@ -17,6 +22,8 @@ exports[`Enemy should render the component 1`] = `
   <p>
     XP: 2
   </p>
-  <AttackModal />
+  <Component
+    enemyId={1}
+  />
 </Card>
 `;

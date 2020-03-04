@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Card, Divider } from "antd";
+import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
 import { useFyghtContext } from "../../FyghtContext";
 

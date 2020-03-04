@@ -3,23 +3,14 @@
 exports[`JourneyTable should render the component 1`] = `
 <Fragment>
   <Row
-    gutter={0}
-    justify="center"
-  >
-    <Title
-      level={2}
-    >
-      Experience Journey
-    </Title>
-  </Row>
-  <Row
     gutter={16}
     justify="center"
   >
     <Col
-      span={16}
+      span={24}
     >
       <Table
+        bordered={true}
         columns={
           Array [
             Object {

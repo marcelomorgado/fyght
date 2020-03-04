@@ -1,13 +1,12 @@
 import React from "react";
-import { Layout, Menu, Row, Col } from "antd";
+import { Layout, Row, Col } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
-import { JourneyTable } from "../presentational/JourneyTable";
-import { FyghtProvider } from "../../FyghtContext";
-import About from "../presentational/About";
 
-const { Header, Content, Footer } = Layout;
+import { FyghtProvider } from "../../FyghtContext";
+
+const { Content, Footer } = Layout;
 
 export const FyghtScreen = () => {
   return (
