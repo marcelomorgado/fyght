@@ -38,12 +38,14 @@ const columns = [
 export const JourneyTable = () => {
   return (
     <>
-      <Row justify="center">
-        <Title level={2}>Experience Journey</Title>
-      </Row>
       <Row gutter={16} justify="center">
-        <Col span={16}>
-          <Table dataSource={dataSource} columns={columns} pagination={false} />
+        <Col span={24}>
+          <Table
+            dataSource={dataSource}
+            bordered={true}
+            columns={columns}
+            pagination={false}
+          />
         </Col>
       </Row>
     </>

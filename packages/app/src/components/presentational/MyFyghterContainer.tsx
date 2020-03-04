@@ -1,7 +1,6 @@
 import React from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Divider } from "antd";
 import { MyFyghter } from "./MyFyghter";
-import About from "./About";
 import { useFyghtContext } from "../../FyghtContext";
 
 export const MyFyghterContainer = () => {
@@ -10,13 +9,18 @@ export const MyFyghterContainer = () => {
   } = useFyghtContext();
 
   return (
-    <Row gutter={16}>
-      <Col span={3}>
-        <MyFyghter fyghter={myFyghter} />
-      </Col>
-      <Col span={21}>
-        <About />
-      </Col>
-    </Row>
+    <>
+      <Divider
+        orientation="left"
+        style={{ color: "#333", fontWeight: "normal" }}
+      >
+        My Fyghter
+      </Divider>
+      <Row gutter={[16, 24]}>
+        <Col span={24}>
+          <MyFyghter fyghter={myFyghter} />
+        </Col>
+      </Row>
+    </>
   );
 };

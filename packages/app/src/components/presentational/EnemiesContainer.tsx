@@ -1,24 +1,24 @@
 import React from "react";
-import { Row, Col } from "antd";
-import { Typography } from "antd";
+import { Row, Col, Card, Divider } from "antd";
 import { Enemy } from "./Enemy";
 import { useFyghtContext } from "../../FyghtContext";
-
-const { Title } = Typography;
 
 export const EnemiesContainer = () => {
   const { state } = useFyghtContext();
   return (
     <>
-      <Row justify="center">
-        <Title level={2}>Challenge another player!</Title>
-      </Row>
-      <Row gutter={16} justify="center">
-        <Col span={3}>
-          {state.enemies.map((enemy: Fyghter, i: number) => (
-            <Enemy key={i} enemy={enemy} />
-          ))}
-        </Col>
+      <Divider
+        orientation="left"
+        style={{ color: "#333", fontWeight: "normal" }}
+      >
+        Enemies
+      </Divider>
+      <Row gutter={[16, 24]}>
+        {state.enemies.map((enemy: Fyghter, i: number) => (
+          <Col key={i} className="gutter-row" span={4}>
+            <Enemy enemy={enemy} />
+          </Col>
+        ))}
       </Row>
     </>
   );

@@ -11,7 +11,7 @@ export const Enemy = ({
   enemy: { id, skin, name, xp, winCount, lossCount },
 }: Props) => {
   return (
-    <Card type="inner" title={name} hoverable={true}>
+    <Card type="inner" title={name} hoverable={true} style={{ height: 405 }}>
       <SkinAvatar skin={skin} size="medium" />
       <p></p>
       <p>{`wins: ${winCount} / losses: ${lossCount}`}</p>
