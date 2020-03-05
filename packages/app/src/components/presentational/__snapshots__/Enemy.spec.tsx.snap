@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Enemy should render the component 1`] = `
+<Card
+  hoverable={true}
+  style={
+    Object {
+      "height": 405,
+    }
+  }
+  title="Charlie"
+  type="inner"
+>
+  <Component
+    size="medium"
+    skin="naked"
+  />
+  <p />
+  <p>
+    XP: 1
+  </p>
+  <Component
+    enemyId={2}
+  />
+</Card>
+`;

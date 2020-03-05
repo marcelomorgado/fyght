@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyFyghter should render the component 1`] = `
+<Card
+  hoverable={true}
+  title="John"
+  type="inner"
+>
+  <Component
+    size="medium"
+    skin="normal_guy"
+  />
+  <p />
+  <p>
+    XP: 5
+  </p>
+  <Component />
+  <p />
+  <Component />
+</Card>
+`;

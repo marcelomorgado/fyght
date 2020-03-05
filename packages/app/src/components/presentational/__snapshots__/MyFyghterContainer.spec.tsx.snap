@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyFyghterContainer should render the component 1`] = `
+<Fragment>
+  <Divider
+    orientation="left"
+    style={
+      Object {
+        "color": "#333",
+        "fontWeight": "normal",
+      }
+    }
+  >
+    My Fyghter
+  </Divider>
+  <Row
+    gutter={
+      Array [
+        16,
+        24,
+      ]
+    }
+  >
+    <Col
+      span={24}
+    >
+      <Component
+        fyghter={
+          Object {
+            "id": 1,
+            "name": "John",
+            "skin": "normal_guy",
+            "xp": 5,
+          }
+        }
+      />
+    </Col>
+  </Row>
+</Fragment>
+`;

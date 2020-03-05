@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EnemiesContainer should render the component 1`] = `
+<Fragment>
+  <Divider
+    orientation="left"
+    style={
+      Object {
+        "color": "#333",
+        "fontWeight": "normal",
+      }
+    }
+  >
+    Enemies
+  </Divider>
+  <Row
+    gutter={
+      Array [
+        16,
+        24,
+      ]
+    }
+  >
+    <Col
+      className="gutter-row"
+      key="0"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 2,
+            "name": "Charlie",
+            "skin": "naked",
+            "xp": 1,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="1"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 3,
+            "name": "Saul",
+            "skin": "ninja",
+            "xp": 10,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="2"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 4,
+            "name": "Julian",
+            "skin": "naked",
+            "xp": 1,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="3"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 5,
+            "name": "Brad",
+            "skin": "master",
+            "xp": 89,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="4"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 6,
+            "name": "Frank",
+            "skin": "no_one",
+            "xp": 71,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="5"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 7,
+            "name": "Brian",
+            "skin": "monk",
+            "xp": 30,
+          }
+        }
+      />
+    </Col>
+    <Col
+      className="gutter-row"
+      key="6"
+      span={4}
+    >
+      <Component
+        enemy={
+          Object {
+            "id": 8,
+            "name": "Fred",
+            "skin": "karate_kid",
+            "xp": 10,
+          }
+        }
+      />
+    </Col>
+  </Row>
+</Fragment>
+`;

@@ -1,4 +1,4 @@
-var fyghtAddress = "0xFC87B1322Dd81Cf6332dC7F70b59727aAe2ec08A";
+var fyghtAddress = "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
 var fyght;
 var userAccount;
 var trainingFee = 0.005;
