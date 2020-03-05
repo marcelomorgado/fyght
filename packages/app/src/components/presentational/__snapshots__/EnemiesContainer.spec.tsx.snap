@@ -30,10 +30,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 2,
-            "lossCount": 4,
             "name": "Charlie",
             "skin": "naked",
-            "winCount": 10,
             "xp": 1,
           }
         }
@@ -48,10 +46,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 3,
-            "lossCount": 2,
             "name": "Saul",
             "skin": "ninja",
-            "winCount": 30,
             "xp": 10,
           }
         }
@@ -66,10 +62,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 4,
-            "lossCount": 0,
             "name": "Julian",
             "skin": "naked",
-            "winCount": 0,
             "xp": 1,
           }
         }
@@ -84,10 +78,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 5,
-            "lossCount": 2,
             "name": "Brad",
             "skin": "master",
-            "winCount": 99,
             "xp": 89,
           }
         }
@@ -102,10 +94,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 6,
-            "lossCount": 2,
             "name": "Frank",
             "skin": "no_one",
-            "winCount": 30,
             "xp": 71,
           }
         }
@@ -120,10 +110,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 7,
-            "lossCount": 2,
             "name": "Brian",
             "skin": "monk",
-            "winCount": 30,
             "xp": 30,
           }
         }
@@ -138,10 +126,8 @@ exports[`EnemiesContainer should render the component 1`] = `
         enemy={
           Object {
             "id": 8,
-            "lossCount": 2,
             "name": "Fred",
             "skin": "karate_kid",
-            "winCount": 30,
             "xp": 10,
           }
         }

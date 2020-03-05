@@ -28,10 +28,8 @@ exports[`MyFyghterContainer should render the component 1`] = `
         fyghter={
           Object {
             "id": 1,
-            "lossCount": 5,
             "name": "John",
             "skin": "normal_guy",
-            "winCount": 4,
             "xp": 5,
           }
         }

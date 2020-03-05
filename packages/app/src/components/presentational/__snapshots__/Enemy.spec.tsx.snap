@@ -13,17 +13,14 @@ exports[`Enemy should render the component 1`] = `
 >
   <Component
     size="medium"
-    skin="normal_guy"
+    skin="naked"
   />
   <p />
   <p>
-    wins: 4 / losses: 5
-  </p>
-  <p>
-    XP: 2
+    XP: 1
   </p>
   <Component
-    enemyId={1}
+    enemyId={2}
   />
 </Card>
 `;

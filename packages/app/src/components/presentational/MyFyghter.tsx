@@ -9,14 +9,11 @@ type Props = {
 };
 
 // TODO: Edit fyghter name
-export const MyFyghter = ({
-  fyghter: { skin, name, xp, winCount, lossCount },
-}: Props) => {
+export const MyFyghter = ({ fyghter: { skin, name, xp } }: Props) => {
   return (
     <Card type="inner" title={name} hoverable={true}>
       <SkinAvatar skin={skin} size="medium" />
       <p></p>
-      <p>{`wins: ${winCount} / losses: ${lossCount}`}</p>
       <p>{`XP: ${xp}`}</p>
       <FyghterRenamingModal />
       <p></p>

@@ -8,14 +8,11 @@ exports[`MyFyghter should render the component 1`] = `
 >
   <Component
     size="medium"
-    skin="naked"
+    skin="normal_guy"
   />
   <p />
   <p>
-    wins: 4 / losses: 5
-  </p>
-  <p>
-    XP: 2
+    XP: 5
   </p>
   <Component />
   <p />

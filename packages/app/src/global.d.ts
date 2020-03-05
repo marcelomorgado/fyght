@@ -3,6 +3,4 @@ interface Fyghter {
   skin: string;
   name: string;
   xp: number;
-  winCount: number;
-  lossCount: number;
 }

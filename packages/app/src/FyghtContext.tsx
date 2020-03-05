@@ -8,9 +8,11 @@ interface FyghtContextInterface {
 
 const FyghtContext = React.createContext<any | null>(null);
 
+const { myFyghter, enemies } = storeMocks;
+
 const initialState: FyghtContextInterface = {
-  myFyghter: storeMocks.myFyghter,
-  enemies: storeMocks.enemies,
+  myFyghter,
+  enemies,
 };
 
 //
