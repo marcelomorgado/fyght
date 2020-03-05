@@ -1,9 +1,9 @@
-const FighterOwnership = artifacts.require("FighterOwnership");
+const FighterOwnership = artifacts.require("Fyght");
 const FyghtTestUtils = require("./utils/FyghtTestUtils.js");
 /*
   TODO: Test training with incorrect amount of ethers
 */
-contract("FighterOwnership", (accounts) => {
+contract("Fyght", (accounts) => {
   const alice = accounts[0];
   const bob = accounts[1];
   const carl = accounts[2];
@@ -41,11 +41,7 @@ contract("FighterOwnership", (accounts) => {
     const fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterIds[0]));
 
     assert.equal(fighter.name, "Bruce lee", "name != Bruce lee");
-    assert.equal(fighter.xp, 1, "xp != 1");
-    assert.equal(fighter.qi, 1, "qi != 1");
     assert.equal(fighter.skin, "naked", "skin != naked");
-    assert.equal(fighter.winCount, 0, "winCount != 0");
-    assert.equal(fighter.lossCount, 0, "lossCount != 0");
   });
 
   it("rename character should works", async function() {
@@ -59,28 +55,6 @@ contract("FighterOwnership", (accounts) => {
 
     fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterId));
     assert.equal(fighter.name, "Jackie Chan", "name != Jackie Chan");
-  });
-
-  // TODO: TEST FREE TRAINING
-  it("training should increment qi force and became more expensive", async function() {
-    const trainingFee = await this.fighterOwnership.trainingFee.call(); // .toString();//web3.toWei(, 'ether');
-
-    let fighter;
-    const fighterIds = await this.fighterOwnership.getFightersByOwner(alice);
-    const fighterId = fighterIds[0];
-
-    fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterId));
-    assert.equal(fighter.qi, 1, "qi != 1");
-
-    await this.fighterOwnership.training(fighterId, { from: alice, value: trainingFee * fighter.qi });
-
-    fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterId));
-    assert.equal(fighter.qi, 2, "qi != 2");
-
-    await this.fighterOwnership.training(fighterId, { from: alice, value: trainingFee * fighter.qi });
-
-    fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterId));
-    assert.equal(fighter.qi, 3, "qi != 3");
   });
 
   it.skip("after fight winner and losses counter should be upgrated and winner should gains xp", async function() {
