@@ -29,14 +29,8 @@ contract Fyght is ERC721 {
         uint8 xpNeeded;
     }
 
-    uint256 randNonce = 0;
     Fighter[] public fighters;
     Skin[] public skins;
-
-    mapping(uint256 => address) public fighterToOwner;
-    mapping(address => uint256) ownerFighterCount;
-
-    mapping(string => uint8) neededXpOfSkin;
 
     modifier onlyOwnerOf(uint256 _fighterId) {
         require(msg.sender == ownerOf(_fighterId), "This operaction only can be done by the owner.");
@@ -69,19 +63,16 @@ contract Fyght is ERC721 {
     }
 
     function attack(uint256 _fighterId, uint256 _targetId) external onlyOwnerOf(_fighterId) {
-        Fighter storage myFighter = fighters[_fighterId];
-        Fighter storage enemyFighter = fighters[_targetId];
-
         uint256 attackVictoryProbability = calculateAttackerProbability(_fighterId, _targetId);
 
-        Fighter memory winner;
+        uint256 winnerId;
 
-        if (_random() <= attackVictoryProbability) winner = myFighter;
-        else winner = enemyFighter;
+        if (_random() <= attackVictoryProbability) winnerId = _fighterId;
+        else winnerId = _targetId;
 
-        winner.xp++;
-        _checkForSkinUpdate(winner.id);
-        emit Attack(_fighterId, _targetId, winner.id);
+        fighters[winnerId].xp++;
+        _checkForSkinUpdate(winnerId);
+        emit Attack(_fighterId, _targetId, winnerId);
     }
 
     function changeSkin(uint256 _fighterId, string calldata _newSkin) external onlyOwnerOf(_fighterId) {
@@ -120,7 +111,7 @@ contract Fyght is ERC721 {
 
     function _checkForSkinUpdate(uint256 _fighterId) internal view returns (string memory newSkin) {
         Fighter storage fighter = fighters[_fighterId];
-        for (uint256 i = skins.length; i >= 0; i--) {
+        for (uint256 i = skins.length - 1; i >= 0; i--) {
             if (fighter.xp >= skins[i].xpNeeded) {
                 newSkin = skins[i].skin;
                 break;
