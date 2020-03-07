@@ -1,79 +1,150 @@
-const FighterOwnership = artifacts.require("Fyght");
+const Fyght = artifacts.require("Fyght");
 const FyghtTestUtils = require("./utils/FyghtTestUtils.js");
-/*
-  TODO: Test training with incorrect amount of ethers
-*/
+const { BN, expectEvent, expectRevert } = require("./helpers");
+
+const ALICES_FYGHTER_ID = new BN("0");
+const BOBS_FYGHTER_ID = new BN("1");
+
 contract("Fyght", (accounts) => {
-  const alice = accounts[0];
-  const bob = accounts[1];
-  const carl = accounts[2];
+  const [alice, bob, carl] = accounts;
+  let fyght;
 
-  before(async function() {
-    // runs before all tests in this block
-    this.fighterOwnership = await FighterOwnership.new();
-    // this.fighterOwnership = await FighterOwnership.at('0x4a57ee84a884846ce1db676e4726041168e1c4c8');
+  beforeEach(async () => {
+    fyght = await Fyght.new();
   });
 
-  after(() => {
-    // runs after all tests in this block
+  beforeEach(async () => {
+    // given
+    const fyghterName = "Bruce lee";
+    const balanceBefore = await fyght.balanceOf(alice);
+    expect(`${balanceBefore}`).to.be.equal("0");
+
+    // when
+    const tx = await fyght.createFighter(fyghterName, { from: alice });
+
+    // then
+    const balanceAfter = await fyght.balanceOf(alice);
+    expect(`${balanceAfter}`).to.be.equal("1");
+    expectEvent(tx, "NewFighter", {
+      id: ALICES_FYGHTER_ID,
+      name: fyghterName,
+    });
+
+    await fyght.createFighter("Chuck", { from: bob });
   });
 
-  beforeEach(() => {
-    // runs before each test in this block
+  describe("createFighter", () => {
+    it("shouldn't have more than one fyghter", async () => {
+      // when
+      const tx = fyght.createFighter("Second fyghter", { from: alice });
+
+      // then
+      await expectRevert(tx, "Each user can have just one fyghter.");
+    });
   });
 
-  afterEach(() => {
-    // runs after each test in this block
+  describe("renameFighter", () => {
+    it("should change skin", async () => {
+      // given
+      const newName = "Charlie";
+
+      // when
+      const tx = await fyght.renameFighter(ALICES_FYGHTER_ID, newName, { from: alice });
+
+      // then
+      const { name } = await fyght.fighters(ALICES_FYGHTER_ID);
+      expect(name).to.equal(newName);
+      expectEvent(tx, "FyghterRenamed", {
+        id: ALICES_FYGHTER_ID,
+        newName,
+      });
+    });
+
+    it("shouldn't change sking if isn't the owner", async () => {
+      // when
+      const tx = fyght.renameFighter(ALICES_FYGHTER_ID, "Never", { from: bob });
+
+      // then
+      await expectRevert(tx, "This operaction only can be done by the owner.");
+    });
   });
 
-  it("should create a new fighter for first account", async function() {
-    const fightersBefore = await this.fighterOwnership.getFightersByOwner(alice);
-    assert.equal(fightersBefore.length, 0, "account has fighter in a new deployed contract");
+  describe.only("calculateAttackerProbability", () => {
+    it("should calculate the win probability", async () => {
+      // given
+      const aliceFyghter = await fyght.fighters(ALICES_FYGHTER_ID);
+      const bobFyghter = await fyght.fighters(BOBS_FYGHTER_ID);
+      expect(`${aliceFyghter.xp}`).to.equal("1");
+      expect(`${bobFyghter.xp}`).to.equal("1");
 
-    await this.fighterOwnership.createFighter("Bruce lee", { from: alice });
+      // when
+      const prob = await fyght.calculateAttackerProbability(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID);
 
-    const fightersAfter = await this.fighterOwnership.getFightersByOwner(alice);
-    assert.equal(fightersAfter.length, 1, "account has no fighter");
+      // then
+      expect(`${prob}`).to.equal(`${new BN("50").mul(new BN(`${1e18}`))}`);
+    });
   });
 
-  it("fresh new fighter should have correct attributes", async function() {
-    const fighterIds = await this.fighterOwnership.getFightersByOwner(alice);
-    const fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterIds[0]));
+  describe.skip("changeSkin", () => {
+    it("shouldn't change skin if hasn't enough xp", async () => {
+      // when
+      const tx = fyght.changeSkin(ALICES_FYGHTER_ID, "normal_guy", { from: alice });
+
+      // then
+      await expectRevert(tx, "The fyghter has no enough XP to change skin.");
+    });
+
+    it("should change skin", async () => {
+      // given
+      const tx = await fyght.createFighter("Chuck", { from: bob });
+      console.log(tx);
+
+      for (let i = 0; i < 200; ++i) {
+        // TODO: Attack
+      }
+    });
+
+    it("shouldn't change sking if isn't the owner", async () => {});
+  });
+
+  it("fresh new fighter should have correct attributes", async () => {
+    const fighterIds = await fyght.balanceOf(alice);
+    const fighter = FyghtTestUtils.fighterToObject(await fyght.fighters(fighterIds[0]));
 
     assert.equal(fighter.name, "Bruce lee", "name != Bruce lee");
     assert.equal(fighter.skin, "naked", "skin != naked");
   });
 
-  it("rename character should works", async function() {
-    const fighterIds = await this.fighterOwnership.getFightersByOwner(alice);
+  it("rename character should works", async () => {
+    const fighterIds = await fyght.balanceOf(alice);
     const fighterId = fighterIds[0];
-    let fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterId));
+    let fighter = FyghtTestUtils.fighterToObject(await fyght.fighters(fighterId));
 
     assert.equal(fighter.name, "Bruce lee", "name != Bruce lee");
 
-    await this.fighterOwnership.renameFighter(fighterId, "Jackie Chan", { from: alice });
+    await fyght.renameFighter(fighterId, "Jackie Chan", { from: alice });
 
-    fighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(fighterId));
+    fighter = FyghtTestUtils.fighterToObject(await fyght.fighters(fighterId));
     assert.equal(fighter.name, "Jackie Chan", "name != Jackie Chan");
   });
 
-  it.skip("after fight winner and losses counter should be upgrated and winner should gains xp", async function() {
-    await this.fighterOwnership.createFighter("Chuck Norris", { from: bob });
+  it.skip("after fight winner and losses counter should be upgrated and winner should gains xp", async () => {
+    await fyght.createFighter("Chuck Norris", { from: bob });
 
-    const aliceFighterId = (await this.fighterOwnership.getFightersByOwner(alice))[0];
-    const bobFighterId = (await this.fighterOwnership.getFightersByOwner(bob))[0];
+    const aliceFighterId = (await fyght.balanceOf(alice))[0];
+    const bobFighterId = (await fyght.balanceOf(bob))[0];
 
-    // let p = await this.fighterOwnership.calculateAttackerProbability(aliceFighterId, bobFighterId);
+    // let p = await fyght.calculateAttackerProbability(aliceFighterId, bobFighterId);
 
-    const aliceFighterBefore = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(aliceFighterId));
-    const bobFighterBefore = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(bobFighterId));
+    const aliceFighterBefore = FyghtTestUtils.fighterToObject(await fyght.fighters(aliceFighterId));
+    const bobFighterBefore = FyghtTestUtils.fighterToObject(await fyght.fighters(bobFighterId));
 
-    const receipt = await this.fighterOwnership.attack(bobFighterId, aliceFighterId, { from: bob });
+    const receipt = await fyght.attack(bobFighterId, aliceFighterId, { from: bob });
     const winnerId = receipt.logs[0].args.winnerId.toNumber();
     // let winnerId = receipt.logs[receipt.logs.length-1].args.winnerId.toNumber();
 
-    const aliceFighterAfter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(aliceFighterId));
-    const bobFighterAfter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(bobFighterId));
+    const aliceFighterAfter = FyghtTestUtils.fighterToObject(await fyght.fighters(aliceFighterId));
+    const bobFighterAfter = FyghtTestUtils.fighterToObject(await fyght.fighters(bobFighterId));
 
     assert.isTrue(winnerId === aliceFighterId || winnerId === bobFighterId, "invalid winner");
 
@@ -93,14 +164,14 @@ contract("Fyght", (accounts) => {
   });
 
   it.skip("skins should changed correctly", async function() {
-    const aliceFighterId = (await this.fighterOwnership.getFightersByOwner(alice))[0];
-    const bobFighterId = (await this.fighterOwnership.getFightersByOwner(bob))[0];
+    const aliceFighterId = (await fyght.balanceOf(alice))[0];
+    const bobFighterId = (await fyght.balanceOf(bob))[0];
     const { fighterOwnership } = this;
 
     let attacks = [];
     for (let i = 0; i < 10; ++i) {
-      attacks.push(this.fighterOwnership.attack(aliceFighterId, bobFighterId, { from: alice }));
-      attacks.push(this.fighterOwnership.attack(bobFighterId, aliceFighterId, { from: bob }));
+      attacks.push(fyght.attack(aliceFighterId, bobFighterId, { from: alice }));
+      attacks.push(fyght.attack(bobFighterId, aliceFighterId, { from: bob }));
     }
 
     Promise.all(attacks).then(async () => {
@@ -121,8 +192,8 @@ contract("Fyght", (accounts) => {
 
     attacks = [];
     for (let i = 0; i < 100; ++i) {
-      attacks.push(this.fighterOwnership.attack(aliceFighterId, bobFighterId, { from: alice }));
-      attacks.push(this.fighterOwnership.attack(bobFighterId, aliceFighterId, { from: bob }));
+      attacks.push(fyght.attack(aliceFighterId, bobFighterId, { from: alice }));
+      attacks.push(fyght.attack(bobFighterId, aliceFighterId, { from: bob }));
     }
 
     Promise.all(attacks).then(async () => {
@@ -145,21 +216,21 @@ contract("Fyght", (accounts) => {
     });
   });
 
-  it.skip("skin changed should works", async function() {
-    await this.fighterOwnership.createFighter("Mr. Miyagi", { from: carl });
-    // const carlFighterId = (await this.fighterOwnership.getFightersByOwner(carl))[0];
-    // const carlFighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(carlFighterId));
+  it.skip("skin changed should works", async () => {
+    await fyght.createFighter("Mr. Miyagi", { from: carl });
+    // const carlFighterId = (await fyght.balanceOf(carl))[0];
+    // const carlFighter = FyghtTestUtils.fighterToObject(await fyght.fighters(carlFighterId));
 
-    const aliceFighterId = (await this.fighterOwnership.getFightersByOwner(alice))[0];
-    const bobFighterId = (await this.fighterOwnership.getFightersByOwner(bob))[0];
+    const aliceFighterId = (await fyght.balanceOf(alice))[0];
+    const bobFighterId = (await fyght.balanceOf(bob))[0];
 
-    const aliceFighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(aliceFighterId));
-    const bobFighter = FyghtTestUtils.fighterToObject(await this.fighterOwnership.fighters(bobFighterId));
+    const aliceFighter = FyghtTestUtils.fighterToObject(await fyght.fighters(aliceFighterId));
+    const bobFighter = FyghtTestUtils.fighterToObject(await fyght.fighters(bobFighterId));
 
     if (aliceFighter.xp >= 80) {
-      await this.fighterOwnership.changeSkin(aliceFighterId, "naked", { from: alice });
+      await fyght.changeSkin(aliceFighterId, "naked", { from: alice });
     } else if (bobFighter.xp >= 80) {
-      await this.fighterOwnership.changeSkin(bobFighterId, "naked", { from: bob });
+      await fyght.changeSkin(bobFighterId, "naked", { from: bob });
     } else {
       assert.fail("one of fighters must have xp >= 80");
     }

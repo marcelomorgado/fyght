@@ -6,137 +6,130 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract Fyght is ERC721 {
     using SafeMath for uint256;
 
-    event NewFighter(uint256 fighterId, string name);
+    uint8 constant ALL_SKINS_MIN_XP = 80;
+    uint8 constant MASTER_MIN_XP = 100;
+    string constant MASTER_SKIN = "master";
+
+    uint256 constant ONE = 1 * 10**18;
+
+    event NewFighter(uint256 id, string name);
+    event Attack(uint256 attackerId, uint256 targetId, uint256 winnerId);
+    event SkinChanged(uint256 fighterId, string newSkin);
+    event FyghterRenamed(uint256 id, string newName);
 
     struct Fighter {
         uint256 id;
         string name;
         string skin;
-        uint32 xp;
+        uint256 xp;
     }
 
+    struct Skin {
+        string skin;
+        uint8 xpNeeded;
+    }
+
+    uint256 randNonce = 0;
     Fighter[] public fighters;
+    Skin[] public skins;
 
     mapping(uint256 => address) public fighterToOwner;
     mapping(address => uint256) ownerFighterCount;
 
-    function createFighter(string memory _name) public {
-        require(ownerFighterCount[msg.sender] == 0);
-        uint256 id = fighters.length;
-        fighters.push(Fighter(id, _name, "naked", 1));
-        fighterToOwner[id] = msg.sender;
-        ownerFighterCount[msg.sender]++;
-        emit NewFighter(id, _name);
-    }
+    mapping(string => uint8) neededXpOfSkin;
 
     modifier onlyOwnerOf(uint256 _fighterId) {
-        require(msg.sender == fighterToOwner[_fighterId]);
+        require(msg.sender == ownerOf(_fighterId), "This operaction only can be done by the owner.");
         _;
     }
 
-    function _checkForSkinUpdate(uint256 _fighterId) internal {
-        Fighter storage fighter = fighters[_fighterId];
-        if (fighter.xp == 10) {
-            fighter.skin = "normal_guy";
-        } else if (fighter.xp == 15) {
-            fighter.skin = "karate_kid";
-        } else if (fighter.xp == 25) {
-            fighter.skin = "japonese";
-        } else if (fighter.xp == 40) {
-            fighter.skin = "monk";
-        } else if (fighter.xp == 50) {
-            fighter.skin = "ninja";
-        } else if (fighter.xp == 80) {
-            fighter.skin = "no_one";
-        } else if (fighter.xp == 100) {
-            fighter.skin = "master";
-        }
+    constructor() public {
+        skins.push(Skin({skin: "naked", xpNeeded: 0}));
+        skins.push(Skin({skin: "normal_guy", xpNeeded: 10}));
+        skins.push(Skin({skin: "karate_kid", xpNeeded: 15}));
+        skins.push(Skin({skin: "japonese", xpNeeded: 25}));
+        skins.push(Skin({skin: "monk", xpNeeded: 40}));
+        skins.push(Skin({skin: "ninja", xpNeeded: 50}));
+        skins.push(Skin({skin: "no_one", xpNeeded: ALL_SKINS_MIN_XP}));
+        skins.push(Skin({skin: "daemon", xpNeeded: 80}));
+        skins.push(Skin({skin: MASTER_SKIN, xpNeeded: MASTER_MIN_XP}));
     }
 
-    function changeSkin(uint256 _fighterId, string calldata _newSkin) external {
-        require(fighters[_fighterId].xp >= 80);
-
-        bytes32 newSkinHash = keccak256(abi.encodePacked(_newSkin));
-        require(
-            newSkinHash == keccak256("naked") ||
-                newSkinHash == keccak256("normal_guy") ||
-                newSkinHash == keccak256("karate_kid") ||
-                newSkinHash == keccak256("japonese") ||
-                newSkinHash == keccak256("monk") ||
-                newSkinHash == keccak256("ninja") ||
-                newSkinHash == keccak256("no_one") ||
-                newSkinHash == keccak256("daemon") ||
-                newSkinHash == keccak256("master")
-        );
-
-        if (newSkinHash == keccak256("master")) {
-            require(fighters[_fighterId].xp >= 100);
-        }
-
-        fighters[_fighterId].skin = _newSkin;
+    function createFighter(string calldata _name) external {
+        require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
+        uint256 _id = fighters.length;
+        fighters.push(Fighter({id: _id, name: _name, skin: skins[0].skin, xp: 1}));
+        _mint(msg.sender, _id);
+        emit NewFighter(_id, _name);
     }
 
     function renameFighter(uint256 _fighterId, string calldata _newName) external onlyOwnerOf(_fighterId) {
         fighters[_fighterId].name = _newName;
+        emit FyghterRenamed(_fighterId, _newName);
     }
 
-    function getFightersByOwner(address _owner) external view returns (uint256[] memory) {
-        uint256[] memory result = new uint256[](ownerFighterCount[_owner]);
-        uint256 counter = 0;
-        for (uint256 i = 0; i < fighters.length; i++) {
-            if (fighterToOwner[i] == _owner) {
-                result[counter] = i;
-                counter++;
-            }
-        }
-        return result;
-    }
-
-    function getFightersCount() external view returns (uint256) {
-        return fighters.length;
-    }
-
-    uint256 randNonce = 0;
-
-    event Attack(uint256 attackerId, uint256 targetId, uint256 winnerId);
-
-    function randMod(uint256 _modulus) internal returns (uint256) {
-        randNonce++;
-        return uint256(keccak256(abi.encodePacked(now, msg.sender, randNonce))) % _modulus;
-    }
-
-    function calculateAttackerProbability(uint256 _fighterId, uint256 _targetId) external view returns (uint256) {
-        return _calculateAttackerProbability(_fighterId, _targetId);
-    }
-
-    function _calculateAttackerProbability(uint256 _fighterId, uint256 _targetId) internal view returns (uint256) {
-        Fighter memory attacker = fighters[_fighterId];
-        Fighter memory target = fighters[_targetId];
-
-        uint256 aPoints = (attacker.xp * 3) / 5;
-        uint256 tPoints = (target.xp * 3) / 5;
-
-        return ((aPoints * 100) / (aPoints + tPoints)) + 5;
-    }
-
-    /*
-    const winProbability = myFyghter.xp / (myFyghter.xp + enemy.xp);
-    const random = Math.random();
-    */
     function attack(uint256 _fighterId, uint256 _targetId) external onlyOwnerOf(_fighterId) {
         Fighter storage myFighter = fighters[_fighterId];
         Fighter storage enemyFighter = fighters[_targetId];
-        uint256 rand = randMod(100);
-        uint256 attackVictoryProbability = _calculateAttackerProbability(_fighterId, _targetId);
-        if (rand <= attackVictoryProbability) {
-            myFighter.xp++;
-            _checkForSkinUpdate(_fighterId);
-            emit Attack(_fighterId, _targetId, _fighterId);
-        } else {
-            enemyFighter.xp++;
-            _checkForSkinUpdate(_targetId);
-            emit Attack(_fighterId, _targetId, _targetId);
+
+        uint256 attackVictoryProbability = calculateAttackerProbability(_fighterId, _targetId);
+
+        Fighter memory winner;
+
+        if (_random() <= attackVictoryProbability) winner = myFighter;
+        else winner = enemyFighter;
+
+        winner.xp++;
+        _checkForSkinUpdate(winner.id);
+        emit Attack(_fighterId, _targetId, winner.id);
+    }
+
+    function changeSkin(uint256 _fighterId, string calldata _newSkin) external onlyOwnerOf(_fighterId) {
+        Fighter storage fighter = fighters[_fighterId];
+        require(fighter.xp >= ALL_SKINS_MIN_XP, "The fyghter has no enough XP to change skin.");
+
+        bool isSkinValid = false;
+        for (uint256 i = 0; i < skins.length; i++) {
+            if (keccak256(abi.encodePacked(_newSkin)) == keccak256(abi.encodePacked(skins[i].skin))) {
+                isSkinValid = true;
+                break;
+            }
         }
+
+        require(isSkinValid, "Invalid skin.");
+
+        if (keccak256(abi.encodePacked(_newSkin)) == keccak256(abi.encodePacked(MASTER_SKIN))) {
+            require(fighter.xp >= MASTER_MIN_XP, "The fyghter should be a master to use the master skin.");
+        }
+
+        fighters[_fighterId].skin = _newSkin;
+
+        emit SkinChanged(_fighterId, _newSkin);
+    }
+
+    function calculateAttackerProbability(uint256 _fighterId, uint256 _targetId)
+        public
+        view
+        returns (uint256 winProbability)
+    {
+        Fighter memory attacker = fighters[_fighterId];
+        Fighter memory target = fighters[_targetId];
+
+        winProbability = attacker.xp.mul(ONE).div(attacker.xp.add(target.xp)).mul(100);
+    }
+
+    function _checkForSkinUpdate(uint256 _fighterId) internal view returns (string memory newSkin) {
+        Fighter storage fighter = fighters[_fighterId];
+        for (uint256 i = skins.length; i >= 0; i--) {
+            if (fighter.xp >= skins[i].xpNeeded) {
+                newSkin = skins[i].skin;
+                break;
+            }
+        }
+    }
+
+    function _random() internal view returns (uint256) {
+        return (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE;
     }
 
 }
