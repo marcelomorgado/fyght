@@ -115,6 +115,7 @@ contract("Fyghters", (accounts) => {
       await expectRevert(tx, "The fyghter has no enough XP to change skin.");
     });
 
+    // TODO: This test case is slow, to create a mock contract that will allow changing a fyghter xp
     it("should change the skin", async () => {
       // given
       const minXpNeeded = 80;
