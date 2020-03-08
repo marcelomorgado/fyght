@@ -6,7 +6,9 @@ import { storeMocks } from "../../testHelpers";
 
 describe("EnemiesContainer", () => {
   test("should render the component", () => {
-    const contextValues = { state: { enemies: storeMocks.enemies } };
+    const contextValues = {
+      state: { enemies: storeMocks.enemies, initialized: true },
+    };
 
     jest
       .spyOn(FyghterContext, "useFyghtContext")

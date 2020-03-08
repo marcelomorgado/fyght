@@ -27,10 +27,14 @@ exports[`MyFyghterContainer should render the component 1`] = `
       <Component
         fyghter={
           Object {
-            "id": 1,
+            "id": BigNumber {
+              "_hex": "0x01",
+            },
             "name": "John",
             "skin": "normal_guy",
-            "xp": 5,
+            "xp": BigNumber {
+              "_hex": "0x05",
+            },
           }
         }
       />

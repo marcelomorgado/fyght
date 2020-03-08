@@ -29,10 +29,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 2,
+            "id": BigNumber {
+              "_hex": "0x02",
+            },
             "name": "Charlie",
             "skin": "naked",
-            "xp": 1,
+            "xp": BigNumber {
+              "_hex": "0x01",
+            },
           }
         }
       />
@@ -45,10 +49,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 3,
+            "id": BigNumber {
+              "_hex": "0x03",
+            },
             "name": "Saul",
             "skin": "ninja",
-            "xp": 10,
+            "xp": BigNumber {
+              "_hex": "0x0a",
+            },
           }
         }
       />
@@ -61,10 +69,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 4,
+            "id": BigNumber {
+              "_hex": "0x04",
+            },
             "name": "Julian",
             "skin": "naked",
-            "xp": 1,
+            "xp": BigNumber {
+              "_hex": "0x01",
+            },
           }
         }
       />
@@ -77,10 +89,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 5,
+            "id": BigNumber {
+              "_hex": "0x05",
+            },
             "name": "Brad",
             "skin": "master",
-            "xp": 89,
+            "xp": BigNumber {
+              "_hex": "0x59",
+            },
           }
         }
       />
@@ -93,10 +109,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 6,
+            "id": BigNumber {
+              "_hex": "0x06",
+            },
             "name": "Frank",
             "skin": "no_one",
-            "xp": 71,
+            "xp": BigNumber {
+              "_hex": "0x47",
+            },
           }
         }
       />
@@ -109,10 +129,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 7,
+            "id": BigNumber {
+              "_hex": "0x07",
+            },
             "name": "Brian",
             "skin": "monk",
-            "xp": 30,
+            "xp": BigNumber {
+              "_hex": "0x1e",
+            },
           }
         }
       />
@@ -125,10 +149,14 @@ exports[`EnemiesContainer should render the component 1`] = `
       <Component
         enemy={
           Object {
-            "id": 8,
+            "id": BigNumber {
+              "_hex": "0x08",
+            },
             "name": "Fred",
             "skin": "karate_kid",
-            "xp": 10,
+            "xp": BigNumber {
+              "_hex": "0x0a",
+            },
           }
         }
       />
