@@ -1,8 +1,12 @@
+import { storeMocks } from "../testHelpers";
+const { enemies } = storeMocks;
+
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
 export const UPDATE_MY_FIGHTER_XP = "UPDATE_MY_FIGHTER_XP";
 export const UPDATE_ENEMY_XP = "UPDATE_ENEMY_XP";
-
+export const TOGGLE_INITIALIZED = "TOGGLE_INITIALIZED";
+export const LOAD_ENEMIES = "LOAD_ENEMIES";
 /*
 import { Fyghters } from "../../contracts/Fyghters";
 import { FyghtersFactory } from "../../contracts/FyghtersFactory";
@@ -43,9 +47,24 @@ export const createActions = (dispatch: any, state: any) => {
     }
   };
 
+  const setEnemies = (enemies: Fyghter[]) => {
+    dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
+  };
+
+  // Note: WIP
+  const loadEnemies = async () => {
+    const es = async () => {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return enemies;
+    };
+    setEnemies(await es());
+    dispatch({ type: TOGGLE_INITIALIZED, payload: {} });
+  };
+
   return {
     renameMyFyghter,
     changeMyFyghterSkin,
     attackAnEnemy,
+    loadEnemies,
   };
 };
