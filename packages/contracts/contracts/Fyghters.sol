@@ -3,7 +3,7 @@ pragma solidity 0.6.1;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract Fyght is ERC721 {
+contract Fyghters is ERC721 {
     using SafeMath for uint256;
 
     uint8 constant ALL_SKINS_MIN_XP = 80;
@@ -61,13 +61,10 @@ contract Fyght is ERC721 {
         emit FyghterRenamed(_fyghterId, _newName);
     }
 
-    function attack(uint256 _attackerId, uint256 _targetId) external onlyOwnerOf(_fyghterId) {
-        uint256 attackVictoryProbability = calculateAttackerProbability(_fyghterId, _targetId);
+    function attack(uint256 _attackerId, uint256 _targetId) external onlyOwnerOf(_attackerId) {
+        uint256 attackVictoryProbability = calculateAttackerProbability(_attackerId, _targetId);
 
-        uint256 winnerId;
-
-        if (_random() <= attackVictoryProbability) winnerId = _attackerId;
-        else winnerId = _targetId;
+        uint256 winnerId = (_random() <= attackVictoryProbability) ? _attackerId : _targetId;
 
         fyghters[winnerId].xp++;
         _checkForSkinUpdate(winnerId);

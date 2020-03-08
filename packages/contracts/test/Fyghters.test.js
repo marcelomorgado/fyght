@@ -1,15 +1,15 @@
-const Fyght = artifacts.require("Fyght");
+const Fyghters = artifacts.require("Fyghters");
 const { BN, expectEvent, expectRevert } = require("./helpers");
 
 const ALICES_FYGHTER_ID = new BN("0");
 const BOBS_FYGHTER_ID = new BN("1");
 
-contract("Fyght", (accounts) => {
+contract("Fyghters", (accounts) => {
   const [aliceAddress, bobAddress] = accounts;
   let fyght;
 
   beforeEach(async () => {
-    fyght = await Fyght.new();
+    fyght = await Fyghters.new();
   });
 
   beforeEach(async () => {
