@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Divider } from "antd";
 import { MyFyghter } from "./MyFyghter";
-import { useFyghtContext } from "../../FyghtContext";
+import { useFyghtContext } from "../../store";
 
 export const MyFyghterContainer = () => {
   const {

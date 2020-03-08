@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import { useFyghtContext } from "../../FyghtContext";
+import { useFyghtContext } from "../../store";
 
 // Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
 import gifs from "../../assets/img/*.gif";

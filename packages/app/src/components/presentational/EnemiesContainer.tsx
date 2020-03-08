@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
-import { useFyghtContext } from "../../FyghtContext";
+import { useFyghtContext } from "../../store";
 
 export const EnemiesContainer = () => {
   const { state } = useFyghtContext();

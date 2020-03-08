@@ -3,21 +3,11 @@ import { Layout, Row, Col } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
-import { FyghtProvider } from "../../FyghtContext";
-import { Fyghters } from "../../contracts/Fyghters";
-import { FyghtersFactory } from "../../contracts/FyghtersFactory";
-import { ethers } from "ethers";
+import { FyghtProvider } from "../../store";
 
 const { Content, Footer } = Layout;
 
 export const FyghtScreen = () => {
-  // TODO: Move to a setup/env config
-  const address: string = "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
-  const provider = new ethers.providers.JsonRpcProvider();
-  const fyghters: Fyghters = FyghtersFactory.connect(address, provider);
-
-  console.log(fyghters.balanceOf("0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659"));
-
   return (
     <FyghtProvider>
       <Layout>
