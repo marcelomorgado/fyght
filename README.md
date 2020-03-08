@@ -1,4 +1,4 @@
-# FyGHT &middot; [![CircleCI](https://circleci.com/gh/marcelomorgado/fyght/tree/master.svg?style=svg)](https://circleci.com/gh/marcelomorgado/fyght/tree/master) [![dependabot](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)
+# FyGHT &middot; ![](https://github.com/marcelomorgado/fyght/workflows/Node.js%20CI/badge.svg) [![dependabot](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)
 
 A karate crypto game
 
