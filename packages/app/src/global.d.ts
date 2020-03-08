@@ -1,6 +1,6 @@
 interface Fyghter {
-  id: number;
+  id: import("ethers/utils").BigNumber;
   skin: string;
   name: string;
-  xp: number;
+  xp: import("ethers/utils").BigNumber;
 }

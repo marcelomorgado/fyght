@@ -20,7 +20,11 @@ exports[`Enemy should render the component 1`] = `
     XP: 1
   </p>
   <Component
-    enemyId={2}
+    enemyId={
+      BigNumber {
+        "_hex": "0x02",
+      }
+    }
   />
 </Card>
 `;
