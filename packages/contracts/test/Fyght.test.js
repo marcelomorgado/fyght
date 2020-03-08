@@ -19,39 +19,39 @@ contract("Fyght", (accounts) => {
     expect(`${balanceBefore}`).to.be.equal("0");
 
     // when
-    const tx = await fyght.createFighter(fyghterName, { from: aliceAddress });
+    const tx = await fyght.create(fyghterName, { from: aliceAddress });
 
     // then
     const balanceAfter = await fyght.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
-    expectEvent(tx, "NewFighter", {
+    expectEvent(tx, "NewFyghter", {
       id: ALICES_FYGHTER_ID,
       name: fyghterName,
     });
 
-    await fyght.createFighter("Chuck", { from: bobAddress });
+    await fyght.create("Chuck", { from: bobAddress });
   });
 
-  describe("createFighter", () => {
+  describe("create", () => {
     it("shouldn't have more than one fyghter", async () => {
       // when
-      const tx = fyght.createFighter("Second fyghter", { from: aliceAddress });
+      const tx = fyght.create("Second fyghter", { from: aliceAddress });
 
       // then
       await expectRevert(tx, "Each user can have just one fyghter.");
     });
   });
 
-  describe("renameFighter", () => {
+  describe("rename", () => {
     it("should change skin", async () => {
       // given
       const newName = "Charlie";
 
       // when
-      const tx = await fyght.renameFighter(ALICES_FYGHTER_ID, newName, { from: aliceAddress });
+      const tx = await fyght.rename(ALICES_FYGHTER_ID, newName, { from: aliceAddress });
 
       // then
-      const { name } = await fyght.fighters(ALICES_FYGHTER_ID);
+      const { name } = await fyght.fyghters(ALICES_FYGHTER_ID);
       expect(name).to.equal(newName);
       expectEvent(tx, "FyghterRenamed", {
         id: ALICES_FYGHTER_ID,
@@ -61,7 +61,7 @@ contract("Fyght", (accounts) => {
 
     it("shouldn't change sking if isn't the owner", async () => {
       // when
-      const tx = fyght.renameFighter(ALICES_FYGHTER_ID, "Never", { from: bobAddress });
+      const tx = fyght.rename(ALICES_FYGHTER_ID, "Never", { from: bobAddress });
 
       // then
       await expectRevert(tx, "This operaction only can be done by the owner.");
@@ -71,8 +71,8 @@ contract("Fyght", (accounts) => {
   describe("calculateAttackerProbability", () => {
     it("should calculate the win probability", async () => {
       // given
-      const alice = await fyght.fighters(ALICES_FYGHTER_ID);
-      const bob = await fyght.fighters(BOBS_FYGHTER_ID);
+      const alice = await fyght.fyghters(ALICES_FYGHTER_ID);
+      const bob = await fyght.fyghters(BOBS_FYGHTER_ID);
       expect(`${alice.xp}`).to.equal("1");
       expect(`${bob.xp}`).to.equal("1");
 
@@ -87,8 +87,8 @@ contract("Fyght", (accounts) => {
   describe("attack", () => {
     it("should do an attack", async () => {
       // given
-      const alice = await fyght.fighters(ALICES_FYGHTER_ID);
-      const bob = await fyght.fighters(BOBS_FYGHTER_ID);
+      const alice = await fyght.fyghters(ALICES_FYGHTER_ID);
+      const bob = await fyght.fyghters(BOBS_FYGHTER_ID);
       expect(`${alice.xp}`).to.equal("1");
       expect(`${bob.xp}`).to.equal("1");
 
@@ -101,7 +101,7 @@ contract("Fyght", (accounts) => {
         args: { winnerId },
       } = attackEvent;
       expect([`${ALICES_FYGHTER_ID}`, `${BOBS_FYGHTER_ID}`]).to.include(`${winnerId}`);
-      const winner = await fyght.fighters(winnerId);
+      const winner = await fyght.fyghters(winnerId);
       expect(`${winner.xp}`).to.equal("2");
     });
   });
@@ -123,8 +123,8 @@ contract("Fyght", (accounts) => {
         await fyght.attack(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
       }
 
-      const alice = await fyght.fighters(ALICES_FYGHTER_ID);
-      const bob = await fyght.fighters(BOBS_FYGHTER_ID);
+      const alice = await fyght.fyghters(ALICES_FYGHTER_ID);
+      const bob = await fyght.fyghters(BOBS_FYGHTER_ID);
       const better = alice.xp.gt(bob.xp)
         ? { fyghter: alice, owner: aliceAddress }
         : { fyghter: bob, owner: bobAddress };
@@ -138,7 +138,7 @@ contract("Fyght", (accounts) => {
         newSkin,
       });
 
-      const { skin } = await fyght.fighters(better.fyghter.id);
+      const { skin } = await fyght.fyghters(better.fyghter.id);
       expect(skin).to.equal(newSkin);
     });
 

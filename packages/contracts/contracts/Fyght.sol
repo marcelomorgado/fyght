@@ -9,15 +9,14 @@ contract Fyght is ERC721 {
     uint8 constant ALL_SKINS_MIN_XP = 80;
     uint8 constant MASTER_MIN_XP = 100;
     string constant MASTER_SKIN = "master";
-
     uint256 constant ONE = 1 * 10**18;
 
-    event NewFighter(uint256 id, string name);
+    event NewFyghter(uint256 id, string name);
     event Attack(uint256 attackerId, uint256 targetId, uint256 winnerId);
     event SkinChanged(uint256 id, string newSkin);
     event FyghterRenamed(uint256 id, string newName);
 
-    struct Fighter {
+    struct Fyghter {
         uint256 id;
         string name;
         string skin;
@@ -29,11 +28,11 @@ contract Fyght is ERC721 {
         uint8 xpNeeded;
     }
 
-    Fighter[] public fighters;
+    Fyghter[] public fyghters;
     Skin[] public skins;
 
-    modifier onlyOwnerOf(uint256 _fighterId) {
-        require(msg.sender == ownerOf(_fighterId), "This operaction only can be done by the owner.");
+    modifier onlyOwnerOf(uint256 _fyghterId) {
+        require(msg.sender == ownerOf(_fyghterId), "This operaction only can be done by the owner.");
         _;
     }
 
@@ -49,78 +48,83 @@ contract Fyght is ERC721 {
         skins.push(Skin({skin: MASTER_SKIN, xpNeeded: MASTER_MIN_XP}));
     }
 
-    function createFighter(string calldata _name) external {
+    function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
-        uint256 _id = fighters.length;
-        fighters.push(Fighter({id: _id, name: _name, skin: skins[0].skin, xp: 1}));
+        uint256 _id = fyghters.length;
+        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1}));
         _mint(msg.sender, _id);
-        emit NewFighter(_id, _name);
+        emit NewFyghter(_id, _name);
     }
 
-    function renameFighter(uint256 _fighterId, string calldata _newName) external onlyOwnerOf(_fighterId) {
-        fighters[_fighterId].name = _newName;
-        emit FyghterRenamed(_fighterId, _newName);
+    function rename(uint256 _fyghterId, string calldata _newName) external onlyOwnerOf(_fyghterId) {
+        fyghters[_fyghterId].name = _newName;
+        emit FyghterRenamed(_fyghterId, _newName);
     }
 
-    function attack(uint256 _fighterId, uint256 _targetId) external onlyOwnerOf(_fighterId) {
-        uint256 attackVictoryProbability = calculateAttackerProbability(_fighterId, _targetId);
+    function attack(uint256 _attackerId, uint256 _targetId) external onlyOwnerOf(_fyghterId) {
+        uint256 attackVictoryProbability = calculateAttackerProbability(_fyghterId, _targetId);
 
         uint256 winnerId;
 
-        if (_random() <= attackVictoryProbability) winnerId = _fighterId;
+        if (_random() <= attackVictoryProbability) winnerId = _attackerId;
         else winnerId = _targetId;
 
-        fighters[winnerId].xp++;
+        fyghters[winnerId].xp++;
         _checkForSkinUpdate(winnerId);
-        emit Attack(_fighterId, _targetId, winnerId);
+        emit Attack(_attackerId, _targetId, winnerId);
     }
 
-    function changeSkin(uint256 _fighterId, string calldata _newSkin) external onlyOwnerOf(_fighterId) {
-        Fighter storage fighter = fighters[_fighterId];
-        require(fighter.xp >= ALL_SKINS_MIN_XP, "The fyghter has no enough XP to change skin.");
+    function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
+        Fyghter storage fyghter = fyghters[_fyghterId];
+        require(fyghter.xp >= ALL_SKINS_MIN_XP, "The fyghter has no enough XP to change skin.");
 
-        bool isSkinValid = false;
-        for (uint256 i = 0; i < skins.length; i++) {
-            if (keccak256(abi.encodePacked(_newSkin)) == keccak256(abi.encodePacked(skins[i].skin))) {
-                isSkinValid = true;
-                break;
-            }
-        }
-
-        require(isSkinValid, "Invalid skin.");
+        require(_isSkinValid(_newSkin), "Invalid skin.");
 
         if (keccak256(abi.encodePacked(_newSkin)) == keccak256(abi.encodePacked(MASTER_SKIN))) {
-            require(fighter.xp >= MASTER_MIN_XP, "The fyghter should be a master to use the master skin.");
+            require(fyghter.xp >= MASTER_MIN_XP, "The fyghter should be a master to use the master skin.");
         }
 
-        fighters[_fighterId].skin = _newSkin;
+        fyghters[_fyghterId].skin = _newSkin;
 
-        emit SkinChanged(_fighterId, _newSkin);
+        emit SkinChanged(_fyghterId, _newSkin);
     }
 
-    function calculateAttackerProbability(uint256 _fighterId, uint256 _targetId)
+    function calculateAttackerProbability(uint256 _attackerId, uint256 _targetId)
         public
         view
         returns (uint256 winProbability)
     {
-        Fighter memory attacker = fighters[_fighterId];
-        Fighter memory target = fighters[_targetId];
+        Fyghter memory attacker = fyghters[_attackerId];
+        Fyghter memory target = fyghters[_targetId];
 
         winProbability = attacker.xp.mul(ONE).div(attacker.xp.add(target.xp)).mul(100);
     }
 
-    function _checkForSkinUpdate(uint256 _fighterId) internal view returns (string memory newSkin) {
-        Fighter storage fighter = fighters[_fighterId];
+    function _checkForSkinUpdate(uint256 _fyghterId) internal view returns (string memory newSkin) {
         for (uint256 i = skins.length - 1; i >= 0; i--) {
-            if (fighter.xp >= skins[i].xpNeeded) {
+            if (fyghters[_fyghterId].xp >= skins[i].xpNeeded) {
                 newSkin = skins[i].skin;
                 break;
             }
         }
     }
 
+    /*
+    * Note: It isn't a safe way to generate random number.
+    * See more: https://github.com/marcelomorgado/fyght/issues/71
+    */
     function _random() internal view returns (uint256) {
         return (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE;
+    }
+
+    function _isSkinValid(string memory skin) private view returns (bool isSkinValid) {
+        isSkinValid = false;
+        for (uint256 i = 0; i < skins.length; i++) {
+            if (keccak256(abi.encodePacked(skin)) == keccak256(abi.encodePacked(skins[i].skin))) {
+                isSkinValid = true;
+                break;
+            }
+        }
     }
 
 }
