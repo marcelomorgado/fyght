@@ -3,6 +3,8 @@ import {
   CHANGE_SKIN,
   UPDATE_ENEMY_XP,
   UPDATE_MY_FIGHTER_XP,
+  TOGGLE_INITIALIZED,
+  LOAD_ENEMIES,
 } from "./actions";
 import { storeMocks } from "../testHelpers";
 const { myFyghter, enemies } = storeMocks;
@@ -10,11 +12,13 @@ const { myFyghter, enemies } = storeMocks;
 interface FyghtContextInterface {
   myFyghter: Fyghter;
   enemies: Array<Fyghter>;
+  initialized: boolean;
 }
 
 export const initialState: FyghtContextInterface = {
   myFyghter,
-  enemies,
+  enemies: [],
+  initialized: false,
 };
 
 const myFyghterReducer = (
@@ -41,7 +45,7 @@ const enemiesReducer = (
   action: { type: string; payload?: any }
 ): Array<Fyghter> => {
   const { type, payload } = action;
-  const { enemyId, xp } = payload;
+  const { enemyId, xp, enemies } = payload;
 
   switch (type) {
     case UPDATE_ENEMY_XP:
@@ -52,6 +56,22 @@ const enemiesReducer = (
           return e;
         }
       });
+    case LOAD_ENEMIES:
+      return enemies;
+    default:
+      return state;
+  }
+};
+
+const initializedReducer = (
+  state: boolean = initialState.initialized,
+  action: { type: string }
+): boolean => {
+  const { type } = action;
+
+  switch (type) {
+    case TOGGLE_INITIALIZED:
+      return !state;
     default:
       return state;
   }
@@ -61,9 +81,10 @@ export const rootReducer = (
   state: FyghtContextInterface = initialState,
   action: any
 ): FyghtContextInterface => {
-  const { myFyghter, enemies } = state;
+  const { myFyghter, enemies, initialized } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),
     enemies: enemiesReducer(enemies, action),
+    initialized: initializedReducer(initialized, action),
   };
 };

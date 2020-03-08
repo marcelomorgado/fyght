@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
 import { useFyghtContext } from "../../store";
 
 export const EnemiesContainer = () => {
-  const { state } = useFyghtContext();
+  const { state, loadEnemies } = useFyghtContext();
+
+  useEffect(() => {
+    loadEnemies();
+  }, []);
+
+  const { initialized } = state;
+  if (!initialized) {
+    return <>{`Loading...`}</>;
+  }
+
   return (
     <>
       <Divider
