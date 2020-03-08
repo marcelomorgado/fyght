@@ -14,7 +14,7 @@ contract Fyght is ERC721 {
 
     event NewFighter(uint256 id, string name);
     event Attack(uint256 attackerId, uint256 targetId, uint256 winnerId);
-    event SkinChanged(uint256 fighterId, string newSkin);
+    event SkinChanged(uint256 id, string newSkin);
     event FyghterRenamed(uint256 id, string newName);
 
     struct Fighter {

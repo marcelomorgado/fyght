@@ -37,6 +37,7 @@
     "@openzeppelin/test-helpers": "0.5.4",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-prettier": "6.10.0",
     "eslint-plugin-import": "2.20.1",
     "prettier": "1.19.1",
     "rimraf": "3.0.2"
