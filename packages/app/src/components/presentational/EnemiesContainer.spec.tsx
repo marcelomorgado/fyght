@@ -1,6 +1,6 @@
 import * as React from "react";
 import { shallow } from "enzyme";
-import * as FyghterContext from "../../FyghtContext";
+import * as FyghterContext from "../../store";
 import { EnemiesContainer } from "./EnemiesContainer";
 import { storeMocks } from "../../testHelpers";
 
