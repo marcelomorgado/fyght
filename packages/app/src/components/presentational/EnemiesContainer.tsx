@@ -1,22 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
 import { useFyghtContext } from "../../store";
 
 export const EnemiesContainer = () => {
-  // TODO: Set initialized as local state
+  const [isLoading, setLoading] = useState(true);
+
   const {
-    state: { initialized, enemies },
+    state: { enemies },
     loadEnemies,
   } = useFyghtContext();
 
   useEffect(() => {
-    loadEnemies();
+    const init = async () => {
+      await loadEnemies();
+      setLoading(false);
+    };
+    init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!initialized) {
+  if (isLoading) {
     return <>{`Loading...`}</>;
+  }
+
+  if (enemies.length === 0) {
+    return <>{`No enemies yet!`}</>;
   }
 
   return (
