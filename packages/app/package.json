@@ -29,7 +29,7 @@
     "url": "https://github.com/marcelomorgado/fyght/issues"
   },
   "dependencies": {
-    "antd": "4.0.0",
+    "antd": "4.0.2",
     "react": "16.12.0",
     "react-dom": "16.13.0",
     "web3": "1.2.6"
