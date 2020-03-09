@@ -1,6 +1,9 @@
 import { FyghtersFactory } from "../contracts/FyghtersFactory";
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils";
+import { Fyghters } from "../contracts/Fyghters";
+import { storeMocks } from "../testHelpers";
+const { myFyghter } = storeMocks;
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
@@ -8,6 +11,7 @@ export const UPDATE_MY_FIGHTER_XP = "UPDATE_MY_FIGHTER_XP";
 export const UPDATE_ENEMY_XP = "UPDATE_ENEMY_XP";
 export const TOGGLE_INITIALIZED = "TOGGLE_INITIALIZED";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
+export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 
 // TODO: Move to a setup/env config
 const FYGHTERS_CONTRACT_ADDRESS: string =
@@ -19,6 +23,9 @@ const fyghters: Fyghters = FyghtersFactory.connect(
 );
 
 export const createActions = (dispatch: any, state: any) => {
+  const setMyFyghter = (myFyghter: Fyghter) =>
+    dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
+
   const renameMyFyghter = (name: string) =>
     dispatch({ type: RENAME, payload: { name } });
 
@@ -30,6 +37,9 @@ export const createActions = (dispatch: any, state: any) => {
 
   const updateEnemyXp = (enemyId: BigNumber, xp: BigNumber) =>
     dispatch({ type: UPDATE_ENEMY_XP, payload: { enemyId, xp } });
+
+  const setEnemies = (enemies: Fyghter[]) =>
+    dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
   const attackAnEnemy = (enemyId: BigNumber) => {
     const { myFyghter, enemies } = state;
@@ -45,10 +55,6 @@ export const createActions = (dispatch: any, state: any) => {
     } else {
       updateEnemyXp(enemy.id, enemy.xp.add(new BigNumber("1")));
     }
-  };
-
-  const setEnemies = (enemies: Fyghter[]) => {
-    dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
   };
 
   //
@@ -77,10 +83,15 @@ export const createActions = (dispatch: any, state: any) => {
     dispatch({ type: TOGGLE_INITIALIZED, payload: {} });
   };
 
+  const loadMyFyghter = async () => {
+    setMyFyghter(myFyghter);
+  };
+
   return {
     renameMyFyghter,
     changeMyFyghterSkin,
     attackAnEnemy,
     loadEnemies,
+    loadMyFyghter,
   };
 };

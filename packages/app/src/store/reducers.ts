@@ -5,9 +5,8 @@ import {
   UPDATE_MY_FIGHTER_XP,
   TOGGLE_INITIALIZED,
   LOAD_ENEMIES,
+  SET_MY_FYGHTER,
 } from "./actions";
-import { storeMocks } from "../testHelpers";
-const { myFyghter, enemies } = storeMocks;
 
 interface FyghtContextInterface {
   myFyghter: Fyghter;
@@ -16,7 +15,7 @@ interface FyghtContextInterface {
 }
 
 export const initialState: FyghtContextInterface = {
-  myFyghter,
+  myFyghter: null,
   enemies: [],
   initialized: false,
 };
@@ -26,7 +25,7 @@ const myFyghterReducer = (
   action: { type: string; payload?: any }
 ): Fyghter => {
   const { type, payload } = action;
-  const { name, skin, xp } = payload;
+  const { name, skin, xp, myFyghter } = payload;
 
   switch (type) {
     case RENAME:
@@ -35,6 +34,8 @@ const myFyghterReducer = (
       return { ...state, skin };
     case UPDATE_MY_FIGHTER_XP:
       return { ...state, xp };
+    case SET_MY_FYGHTER:
+      return myFyghter;
     default:
       return state;
   }

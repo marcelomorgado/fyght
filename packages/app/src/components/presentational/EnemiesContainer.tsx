@@ -4,13 +4,17 @@ import { Enemy } from "./Enemy";
 import { useFyghtContext } from "../../store";
 
 export const EnemiesContainer = () => {
-  const { state, loadEnemies } = useFyghtContext();
+  // TODO: Set initialized as local state
+  const {
+    state: { initialized, enemies },
+    loadEnemies,
+  } = useFyghtContext();
 
   useEffect(() => {
     loadEnemies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { initialized } = state;
   if (!initialized) {
     return <>{`Loading...`}</>;
   }
@@ -24,7 +28,7 @@ export const EnemiesContainer = () => {
         Enemies
       </Divider>
       <Row gutter={[16, 24]}>
-        {state.enemies.map((enemy: Fyghter, i: number) => (
+        {enemies.map((enemy: Fyghter, i: number) => (
           <Col key={i} className="gutter-row" span={4}>
             <Enemy enemy={enemy} />
           </Col>
