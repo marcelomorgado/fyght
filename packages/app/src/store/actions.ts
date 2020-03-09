@@ -1,4 +1,3 @@
-import { Fyghters } from "../contracts/Fyghters";
 import { FyghtersFactory } from "../contracts/FyghtersFactory";
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils";
@@ -36,13 +35,15 @@ export const createActions = (dispatch: any, state: any) => {
     const { myFyghter, enemies } = state;
     const [enemy] = enemies.filter((e: Fyghter) => e.id == enemyId);
 
-    const winProbability = myFyghter.xp / (myFyghter.xp + enemy.xp);
+    const winProbability = (myFyghter.xp / (myFyghter.xp + enemy.xp)) * 10;
+    console.log(`winProbability=${winProbability}`);
     const random = Math.random();
+    console.log(`random=${random}`);
 
     if (random < winProbability) {
-      updateMyFyghterXp(myFyghter.xp + 1);
+      updateMyFyghterXp(myFyghter.xp.add(new BigNumber("1")));
     } else {
-      updateEnemyXp(enemy.id, enemy.xp + 1);
+      updateEnemyXp(enemy.id, enemy.xp.add(new BigNumber("1")));
     }
   };
 
