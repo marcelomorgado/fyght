@@ -3,7 +3,6 @@ import {
   CHANGE_SKIN,
   UPDATE_ENEMY_XP,
   UPDATE_MY_FIGHTER_XP,
-  TOGGLE_INITIALIZED,
   LOAD_ENEMIES,
   SET_MY_FYGHTER,
 } from "./actions";
@@ -11,13 +10,11 @@ import {
 interface FyghtContextInterface {
   myFyghter: Fyghter;
   enemies: Array<Fyghter>;
-  initialized: boolean;
 }
 
 export const initialState: FyghtContextInterface = {
   myFyghter: null,
   enemies: [],
-  initialized: false,
 };
 
 const myFyghterReducer = (
@@ -64,28 +61,13 @@ const enemiesReducer = (
   }
 };
 
-const initializedReducer = (
-  state: boolean = initialState.initialized,
-  action: { type: string }
-): boolean => {
-  const { type } = action;
-
-  switch (type) {
-    case TOGGLE_INITIALIZED:
-      return !state;
-    default:
-      return state;
-  }
-};
-
 export const rootReducer = (
   state: FyghtContextInterface = initialState,
   action: any
 ): FyghtContextInterface => {
-  const { myFyghter, enemies, initialized } = state;
+  const { myFyghter, enemies } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),
     enemies: enemiesReducer(enemies, action),
-    initialized: initializedReducer(initialized, action),
   };
 };

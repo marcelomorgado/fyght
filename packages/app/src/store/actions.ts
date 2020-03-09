@@ -2,20 +2,16 @@ import { FyghtersFactory } from "../contracts/FyghtersFactory";
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils";
 import { Fyghters } from "../contracts/Fyghters";
-import { storeMocks } from "../testHelpers";
-const { myFyghter } = storeMocks;
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
 export const UPDATE_MY_FIGHTER_XP = "UPDATE_MY_FIGHTER_XP";
 export const UPDATE_ENEMY_XP = "UPDATE_ENEMY_XP";
-export const TOGGLE_INITIALIZED = "TOGGLE_INITIALIZED";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
 export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 
 // TODO: Move to a setup/env config
-const FYGHTERS_CONTRACT_ADDRESS: string =
-  "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
+const FYGHTERS_CONTRACT_ADDRESS = "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
 const provider = new ethers.providers.JsonRpcProvider();
 const fyghters: Fyghters = FyghtersFactory.connect(
   FYGHTERS_CONTRACT_ADDRESS,
@@ -80,11 +76,11 @@ export const createActions = (dispatch: any, state: any) => {
     const enemies: Fyghter[] = await Promise.all(enemiesPromises);
 
     setEnemies(enemies);
-    dispatch({ type: TOGGLE_INITIALIZED, payload: {} });
   };
 
   const loadMyFyghter = async () => {
-    setMyFyghter(myFyghter);
+    // TODO: Load from blockchain
+    setMyFyghter(null);
   };
 
   return {

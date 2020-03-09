@@ -1,20 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { MyFyghter } from "./MyFyghter";
 import { useFyghtContext } from "../../store";
 
 export const MyFyghterContainer = () => {
+  const [isLoading, setLoading] = useState(true);
+
   const {
     state: { myFyghter },
     loadMyFyghter,
   } = useFyghtContext();
 
   useEffect(() => {
-    loadMyFyghter();
+    const init = async () => {
+      loadMyFyghter();
+      setLoading(false);
+    };
+    init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (myFyghter === null) {
+  // TODO: Move down
+  if (isLoading) {
     return <>{`Loading...`}</>;
   }
 
@@ -28,7 +35,11 @@ export const MyFyghterContainer = () => {
       </Divider>
       <Row gutter={[16, 24]}>
         <Col span={24}>
-          <MyFyghter fyghter={myFyghter} />
+          {myFyghter === null ? (
+            <>{`You have to create your fyghter!`}</>
+          ) : (
+            <MyFyghter fyghter={myFyghter} />
+          )}
         </Col>
       </Row>
     </>
