@@ -60,7 +60,9 @@ export const FyghtScreen = () => {
   });
 
   if (networkId != 1234) {
-    return <>{`Please, connect to the network: http://localhost:8545`}</>;
+    return (
+      <>{`Please, connect to the local network (http://localhost:8545)`}</>
+    );
   }
 
   return (
