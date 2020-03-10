@@ -9,6 +9,8 @@ export const UPDATE_MY_FIGHTER_XP = "UPDATE_MY_FIGHTER_XP";
 export const UPDATE_ENEMY_XP = "UPDATE_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
 export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
+export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
+export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 
 // TODO: Move to a setup/env config
 const FYGHTERS_CONTRACT_ADDRESS = "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
@@ -18,33 +20,31 @@ const fyghters: Fyghters = FyghtersFactory.connect(
   provider
 );
 
-export const createActions = (dispatch: any, state: any) => {
+export const createActions = (dispatch: any, state: any): any => {
   const setMyFyghter = (myFyghter: Fyghter) =>
     dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
-  const renameMyFyghter = (name: string) =>
+  const renameMyFyghter = (name: string): void =>
     dispatch({ type: RENAME, payload: { name } });
 
-  const changeMyFyghterSkin = (skin: string) =>
+  const changeMyFyghterSkin = (skin: string): void =>
     dispatch({ type: CHANGE_SKIN, payload: { skin } });
 
-  const updateMyFyghterXp = (xp: BigNumber) =>
+  const updateMyFyghterXp = (xp: BigNumber): void =>
     dispatch({ type: UPDATE_MY_FIGHTER_XP, payload: { xp } });
 
-  const updateEnemyXp = (enemyId: BigNumber, xp: BigNumber) =>
+  const updateEnemyXp = (enemyId: BigNumber, xp: BigNumber): void =>
     dispatch({ type: UPDATE_ENEMY_XP, payload: { enemyId, xp } });
 
-  const setEnemies = (enemies: Fyghter[]) =>
+  const setEnemies = (enemies: Fyghter[]): void =>
     dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
-  const attackAnEnemy = (enemyId: BigNumber) => {
+  const attackAnEnemy = (enemyId: BigNumber): void => {
     const { myFyghter, enemies } = state;
     const [enemy] = enemies.filter((e: Fyghter) => e.id == enemyId);
 
     const winProbability = (myFyghter.xp / (myFyghter.xp + enemy.xp)) * 10;
-    console.log(`winProbability=${winProbability}`);
     const random = Math.random();
-    console.log(`random=${random}`);
 
     if (random < winProbability) {
       updateMyFyghterXp(myFyghter.xp.add(new BigNumber("1")));
@@ -83,11 +83,19 @@ export const createActions = (dispatch: any, state: any) => {
     setMyFyghter(null);
   };
 
+  const setMetamaskAccount = (account: string) =>
+    dispatch({ type: UPDATE_METAMASK_ACCOUNT, payload: { account } });
+
+  const setMetamaskNetworkId = (networkId: number) =>
+    dispatch({ type: UPDATE_METAMASK_NETWORK, payload: { networkId } });
+
   return {
     renameMyFyghter,
     changeMyFyghterSkin,
     attackAnEnemy,
     loadEnemies,
     loadMyFyghter,
+    setMetamaskAccount,
+    setMetamaskNetworkId,
   };
 };
