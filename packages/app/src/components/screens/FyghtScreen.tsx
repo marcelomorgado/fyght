@@ -1,38 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Layout, Row, Col, Button } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
-import { FyghtProvider } from "../../store";
+import { useFyghtContext } from "../../store";
 
 const { Content, Footer } = Layout;
 
-// TODO: Move to global.d.ts
-declare global {
-  interface Window {
-    // TODO: Set properly type
-    ethereum: any;
-  }
-}
-
 export const FyghtScreen = () => {
-  // TODO: Follow break changes
-  // See more:
-  // https://medium.com/metamask/breaking-changes-to-the-metamask-inpage-provider-b4dde069dd0a
-  // https://gist.github.com/rekmarks/d318677c8fc89e5f7a2f526e00a0768a
-  const { ethereum } = window;
-  ethereum.autoRefreshOnNetworkChange = false;
-
-  const [metamask, setMetamask] = useState({
-    networkId: ethereum.networkVersion,
-    account: null,
-  });
+  const {
+    state: {
+      metamask: { ethereum, account, networkId },
+    },
+    setMetamaskAccount,
+    setMetamaskNetworkId,
+  } = useFyghtContext();
 
   useEffect(() => {
     const init = async () => {
       try {
         const [account] = await ethereum.send("eth_requestAccounts");
-        setMetamask({ ...metamask, account });
+        setMetamaskAccount(account);
       } catch (error) {
         console.error(error);
       }
@@ -47,11 +35,10 @@ export const FyghtScreen = () => {
 
   const onConnect = async (): Promise<void> => {
     const [account] = await ethereum.enable();
-    setMetamask({ ...metamask, account });
-    console.log(account);
+    setMetamaskAccount(account);
   };
 
-  if (!metamask.account) {
+  if (!account) {
     return (
       <Button type="primary" block={true} onClick={onConnect}>
         Connect to metamask
@@ -65,21 +52,20 @@ export const FyghtScreen = () => {
   // });
 
   ethereum.on("networkChanged", (networkId: number) => {
-    setMetamask({ ...metamask, networkId });
+    setMetamaskNetworkId(networkId);
   });
 
   ethereum.on("accountsChanged", ([account]: string[]) => {
-    setMetamask({ ...metamask, account });
+    setMetamaskAccount(account);
   });
 
-  if (metamask.networkId != 1234) {
+  if (networkId != 1234) {
     return <>{`Please, connect to the network: http://localhost:8545`}</>;
   }
 
   return (
-    <FyghtProvider>
-      <Layout>
-        {/* <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
+    <Layout>
+      {/* <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
           <div className="logo" />
           <Menu
             theme="dark"
@@ -93,19 +79,19 @@ export const FyghtScreen = () => {
           </Menu>
         </Header>
         <Content style={{ padding: "0 50px", marginTop: 64 }}> */}
-        <Content style={{ padding: "0 50px", marginTop: 25 }}>
-          <div style={{ margin: "16px 0" }}></div>
-          <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
-            <Row gutter={16}>
-              <Col span={3}>
-                <MyFyghterContainer />
-              </Col>
-              <Col span={21}>
-                <EnemiesContainer />
-              </Col>
-            </Row>
+      <Content style={{ padding: "0 50px", marginTop: 25 }}>
+        <div style={{ margin: "16px 0" }}></div>
+        <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
+          <Row gutter={16}>
+            <Col span={3}>
+              <MyFyghterContainer />
+            </Col>
+            <Col span={21}>
+              <EnemiesContainer />
+            </Col>
+          </Row>
 
-            {/* <Row gutter={16} style={{ marginTop: 25 }}>
+          {/* <Row gutter={16} style={{ marginTop: 25 }}>
               <Col span={6}>
                 <About />
               </Col>
@@ -113,11 +99,10 @@ export const FyghtScreen = () => {
                 <JourneyTable />
               </Col>
             </Row> */}
-          </div>
-        </Content>
-        <Footer style={{ textAlign: "center" }}>fyght - a crypto game</Footer>
-      </Layout>
-    </FyghtProvider>
+        </div>
+      </Content>
+      <Footer style={{ textAlign: "center" }}>fyght - a crypto game</Footer>
+    </Layout>
   );
 };
 
