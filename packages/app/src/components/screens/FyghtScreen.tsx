@@ -7,7 +7,20 @@ import { FyghtProvider } from "../../store";
 
 const { Content, Footer } = Layout;
 
+// TODO: Move to global.d.ts
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
+
 export const FyghtScreen = () => {
+  if (typeof window.ethereum !== "undefined") {
+    console.log("Metamask OK"); /* deal with it */
+  } else {
+    console.log("Metamask not installed");
+  }
+
   return (
     <FyghtProvider>
       <Layout>
