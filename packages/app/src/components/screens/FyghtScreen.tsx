@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, Row, Col, Button } from "antd";
+import { Layout, Row, Col, Button, Alert } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
@@ -80,6 +80,12 @@ export const FyghtScreen = () => {
         </Header>
         <Content style={{ padding: "0 50px", marginTop: 64 }}> */}
       <Content style={{ padding: "0 50px", marginTop: 25 }}>
+        <Alert
+          message="Funded wallet"
+          description="during page myth behave wish detail fantasy immune west release legend deliver"
+          type="info"
+          showIcon
+        />
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
           <Row gutter={16}>
