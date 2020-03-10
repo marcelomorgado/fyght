@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout, Row, Col } from "antd";
+import React, { useState, useEffect } from "react";
+import { Layout, Row, Col, Button } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
@@ -10,15 +10,70 @@ const { Content, Footer } = Layout;
 // TODO: Move to global.d.ts
 declare global {
   interface Window {
+    // TODO: Set properly type
     ethereum: any;
   }
 }
 
 export const FyghtScreen = () => {
-  if (typeof window.ethereum !== "undefined") {
-    console.log("Metamask OK"); /* deal with it */
-  } else {
-    console.log("Metamask not installed");
+  // TODO: Follow break changes
+  // See more:
+  // https://medium.com/metamask/breaking-changes-to-the-metamask-inpage-provider-b4dde069dd0a
+  // https://gist.github.com/rekmarks/d318677c8fc89e5f7a2f526e00a0768a
+  const { ethereum } = window;
+  ethereum.autoRefreshOnNetworkChange = false;
+
+  const [metamask, setMetamask] = useState({
+    networkId: ethereum.networkVersion,
+    account: null,
+  });
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const [account] = await ethereum.send("eth_requestAccounts");
+        setMetamask({ ...metamask, account });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ethereum]);
+
+  if (!ethereum || !ethereum.isMetaMask) {
+    return <>{"Please install MetaMask."}</>;
+  }
+
+  const onConnect = async (): Promise<void> => {
+    const [account] = await ethereum.enable();
+    setMetamask({ ...metamask, account });
+    console.log(account);
+  };
+
+  if (!metamask.account) {
+    return (
+      <Button type="primary" block={true} onClick={onConnect}>
+        Connect to metamask
+      </Button>
+    );
+  }
+
+  // Note: It isn't working
+  // ethereum.on("chainChanged", chainId => {
+  //   console.log(`chainChanged -> ${chainId}`);
+  // });
+
+  ethereum.on("networkChanged", (networkId: number) => {
+    setMetamask({ ...metamask, networkId });
+  });
+
+  ethereum.on("accountsChanged", ([account]: string[]) => {
+    setMetamask({ ...metamask, account });
+  });
+
+  if (metamask.networkId != 1234) {
+    return <>{`Please, connect to the network: http://localhost:8545`}</>;
   }
 
   return (
