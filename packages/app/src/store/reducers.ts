@@ -4,8 +4,8 @@ import { Fyghters } from "../contracts/Fyghters";
 import {
   RENAME,
   CHANGE_SKIN,
-  UPDATE_ENEMY_XP,
-  UPDATE_MY_FIGHTER_XP,
+  INCREMENT_ENEMY_XP,
+  INCREMENT_MY_FIGHTER_XP,
   LOAD_ENEMIES,
   SET_MY_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
@@ -13,6 +13,7 @@ import {
   INITIALIZE_METAMASK,
 } from "./actions";
 import { Metamask, Fyghter, Action, FyghtContextInterface } from "../global";
+import { BigNumber } from "ethers/utils";
 
 declare global {
   interface Window {
@@ -41,15 +42,15 @@ const myFyghterReducer = (
   action: Action
 ): Fyghter => {
   const { type, payload } = action;
-  const { name, skin, xp, myFyghter } = payload;
+  const { name, skin, myFyghter } = payload;
 
   switch (type) {
     case RENAME:
       return { ...state, name };
     case CHANGE_SKIN:
       return { ...state, skin };
-    case UPDATE_MY_FIGHTER_XP:
-      return { ...state, xp };
+    case INCREMENT_MY_FIGHTER_XP:
+      return { ...state, xp: new BigNumber(state.xp).add(new BigNumber("1")) };
     case SET_MY_FYGHTER:
       return myFyghter;
     default:
@@ -62,13 +63,13 @@ const enemiesReducer = (
   action: Action
 ): Array<Fyghter> => {
   const { type, payload } = action;
-  const { enemyId, xp, enemies } = payload;
+  const { enemyId, enemies } = payload;
 
   switch (type) {
-    case UPDATE_ENEMY_XP:
+    case INCREMENT_ENEMY_XP:
       return state.map(e => {
-        if (e.id === enemyId) {
-          return { ...e, xp };
+        if (e.id.eq(enemyId)) {
+          return { ...e, xp: new BigNumber(e.xp).add(new BigNumber("1")) };
         } else {
           return e;
         }
