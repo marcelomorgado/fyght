@@ -1,12 +1,12 @@
-import { ethers } from "ethers";
+import { ethers, ContractTransaction } from "ethers";
 import { BigNumber } from "ethers/utils";
 import { Fyghter, FyghtContextInterface } from "../global";
 import { getAllEvents } from "../helpers";
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
-export const UPDATE_MY_FIGHTER_XP = "UPDATE_MY_FIGHTER_XP";
-export const UPDATE_ENEMY_XP = "UPDATE_ENEMY_XP";
+export const INCREMENT_MY_FIGHTER_XP = "INCREMENT_MY_FIGHTER_XP";
+export const INCREMENT_ENEMY_XP = "INCREMENT_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
 export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
@@ -26,26 +26,48 @@ export const createActions = (
   const changeMyFyghterSkin = (skin: string): void =>
     dispatch({ type: CHANGE_SKIN, payload: { skin } });
 
-  const updateMyFyghterXp = (xp: BigNumber): void =>
-    dispatch({ type: UPDATE_MY_FIGHTER_XP, payload: { xp } });
+  const incrementMyFyghterXp = (): void =>
+    dispatch({ type: INCREMENT_MY_FIGHTER_XP, payload: {} });
 
-  const updateEnemyXp = (enemyId: BigNumber, xp: BigNumber): void =>
-    dispatch({ type: UPDATE_ENEMY_XP, payload: { enemyId, xp } });
+  const incrementEnemyXp = (enemyId: BigNumber): void =>
+    dispatch({ type: INCREMENT_ENEMY_XP, payload: { enemyId } });
 
   const setEnemies = (enemies: Fyghter[]): void =>
     dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
-  const attackAnEnemy = (enemyId: BigNumber): void => {
-    const { myFyghter, enemies } = state;
-    const [enemy] = enemies.filter((e: Fyghter) => e.id == enemyId);
+  const attackAnEnemy = async (enemyId: BigNumber): Promise<void> => {
+    const {
+      myFyghter: { id: myFyghterId },
+      metamask: { contract: fyghters },
+    } = state;
 
-    const winProbability = (myFyghter.xp / (myFyghter.xp + enemy.xp)) * 10;
-    const random = Math.random();
+    try {
+      // TODO: Also move other contract interactions to this file
+      const tx: ContractTransaction = await fyghters.attack(
+        myFyghterId,
+        enemyId
+      );
+      await tx.wait();
 
-    if (random < winProbability) {
-      updateMyFyghterXp(myFyghter.xp.add(new BigNumber("1")));
-    } else {
-      updateEnemyXp(enemy.id, enemy.xp.add(new BigNumber("1")));
+      // TODO: Get event from transaction
+      // TODO: Fix many events reading
+      const filter = fyghters.filters.Attack(null, null, null);
+      fyghters.on(
+        filter,
+        async (
+          myFighterId: BigNumber,
+          enemyId: BigNumber,
+          winnerId: BigNumber
+        ) => {
+          if (winnerId.eq(myFighterId)) {
+            incrementMyFyghterXp();
+          } else {
+            incrementEnemyXp(enemyId);
+          }
+        }
+      );
+    } catch (e) {
+      console.log(e);
     }
   };
 
