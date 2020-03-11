@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { MyFyghter } from "./MyFyghter";
 import { useFyghtContext } from "../../store";
+import { FyghterCreationModal } from "./FyghterCreationModal";
 
 export const MyFyghterContainer = () => {
   const [isLoading, setLoading] = useState(true);
@@ -36,7 +37,10 @@ export const MyFyghterContainer = () => {
       <Row gutter={[16, 24]}>
         <Col span={24}>
           {myFyghter === null ? (
-            <>{`You have to create your fyghter!`}</>
+            <>
+              {`You have to create your fyghter!`}
+              <FyghterCreationModal />
+            </>
           ) : (
             <MyFyghter fyghter={myFyghter} />
           )}

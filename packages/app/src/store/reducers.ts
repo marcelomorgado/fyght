@@ -100,7 +100,8 @@ const metamaskReducer = (
       const provider = new ethers.providers.Web3Provider(ethereum);
       const contract: Fyghters = FyghtersFactory.connect(
         FYGHTERS_CONTRACT_ADDRESS,
-        provider
+        // TODO: Change signer when accounts change
+        provider.getSigner()
       );
 
       return { ...state, contract, provider, ethereum };

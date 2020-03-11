@@ -2,8 +2,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
-import { fyghters } from "../../contracts";
-import { ContractTransaction } from "ethers";
+import { ContractTransaction, providers } from "ethers";
 
 interface Values {}
 
@@ -29,7 +28,9 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
       onOk={async (): Promise<void> => {
         try {
           const values = await form.validateFields();
-          console.log(`values = ${values}`);
+          console.log(`>>> values`);
+          console.log(values);
+          console.log(`<<< values`);
           form.resetFields();
           onCreate(values);
         } catch (info) {
@@ -57,14 +58,39 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
 
 export const FyghterCreationModal = () => {
   const [isVisible, setVisible] = useState(false);
-  const [creationTransaction, setCreationTransaction] = useState(null);
+
+  const {
+    state: {
+      metamask: { account, contract: fyghters, provider },
+    },
+    setMyFyghter,
+  } = useFyghtContext();
 
   const { renameMyFyghter } = useFyghtContext();
 
   const onSave = ({ name }: { name: string }): void => {
     const c = async () => {
-      const tx: ContractTransaction = await fyghters.create(name);
-      setCreationTransaction(tx);
+      try {
+        const tx: ContractTransaction = await fyghters.create(name);
+        await tx.wait();
+        console.log(tx);
+        console.log("---");
+        const r = await provider.getTransactionReceipt(tx.hash);
+        console.log(r);
+
+        // TODO: Get event from transaction
+        const filter = fyghters.filters.NewFyghter(null, null, null);
+        fyghters.on(filter, async (owner: string, id: number, name: string) => {
+          const myFyghter = await fyghters.fyghters(id);
+          console.log(myFyghter);
+          setMyFyghter(myFyghter);
+        });
+      } catch (e) {
+        console.log(e);
+        // Revert message
+        //console.log(e.data.message);
+      }
+
       setVisible(false);
     };
     c();
@@ -79,7 +105,7 @@ export const FyghterCreationModal = () => {
           setVisible(true);
         }}
       >
-        Rename
+        Create
       </Button>
       <FyghterCreationForm
         visible={isVisible}
