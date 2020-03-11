@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
-import { ContractTransaction, providers } from "ethers";
+import { ContractTransaction } from "ethers";
 
 interface Values {}
 
@@ -28,9 +28,6 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
       onOk={async (): Promise<void> => {
         try {
           const values = await form.validateFields();
-          console.log(`>>> values`);
-          console.log(values);
-          console.log(`<<< values`);
           form.resetFields();
           onCreate(values);
         } catch (info) {
@@ -61,39 +58,30 @@ export const FyghterCreationModal = () => {
 
   const {
     state: {
-      metamask: { account, contract: fyghters, provider },
+      metamask: { contract: fyghters },
     },
     setMyFyghter,
   } = useFyghtContext();
 
-  const { renameMyFyghter } = useFyghtContext();
+  const onSave = async ({ name }: { name: string }): Promise<void> => {
+    try {
+      const tx: ContractTransaction = await fyghters.create(name);
+      await tx.wait();
 
-  const onSave = ({ name }: { name: string }): void => {
-    const c = async () => {
-      try {
-        const tx: ContractTransaction = await fyghters.create(name);
-        await tx.wait();
-        console.log(tx);
-        console.log("---");
-        const r = await provider.getTransactionReceipt(tx.hash);
-        console.log(r);
-
-        // TODO: Get event from transaction
-        const filter = fyghters.filters.NewFyghter(null, null, null);
-        fyghters.on(filter, async (owner: string, id: number, name: string) => {
-          const myFyghter = await fyghters.fyghters(id);
-          console.log(myFyghter);
-          setMyFyghter(myFyghter);
-        });
-      } catch (e) {
-        console.log(e);
-        // Revert message
-        //console.log(e.data.message);
-      }
-
+      // TODO: Get event from transaction
+      const filter = fyghters.filters.NewFyghter(null, null, null);
+      fyghters.on(filter, async (owner: string, id: number, name: string) => {
+        const myFyghter = await fyghters.fyghters(id);
+        console.log(myFyghter);
+        setMyFyghter(myFyghter);
+      });
+    } catch (e) {
+      console.log(e);
+      // Revert message
+      //console.log(e.data.message);
+    } finally {
       setVisible(false);
-    };
-    c();
+    }
   };
 
   return (

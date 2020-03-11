@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
+import { ContractTransaction } from "ethers";
 
 interface Values {}
 
 interface FyghterRenamingFormProps {
   visible: boolean;
   // TODO: To use Values type above
-  onCreate: (values: any) => void;
+  onSave: (values: any) => void;
   onCancel: () => void;
 }
 
@@ -16,7 +17,7 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   visible,
   onCancel,
   // TODO: Rename to onRenaming
-  onCreate,
+  onSave,
 }) => {
   const [form] = Form.useForm();
   return (
@@ -25,16 +26,14 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
       title="Rename fyghter"
       okText="Save"
       onCancel={onCancel}
-      onOk={() => {
-        form
-          .validateFields()
-          .then(values => {
-            form.resetFields();
-            onCreate(values);
-          })
-          .catch(info => {
-            console.log("Validate Failed:", info);
-          });
+      onOk={async (): Promise<void> => {
+        try {
+          const values = await form.validateFields();
+          form.resetFields();
+          onSave(values);
+        } catch (info) {
+          console.log("Validate Failed:", info);
+        }
       }}
     >
       <Form form={form} layout="vertical" name="form_in_modal">
@@ -58,11 +57,26 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
 export const FyghterRenamingModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { renameMyFyghter } = useFyghtContext();
+  const {
+    renameMyFyghter,
+    state: {
+      myFyghter: { id: myFyghterId },
+      metamask: { contract: fyghters },
+    },
+  } = useFyghtContext();
 
-  const onSave = ({ name }: { name: string }) => {
-    renameMyFyghter(name);
-    setVisible(false);
+  const onSave = async ({ name }: { name: string }): Promise<void> => {
+    try {
+      const tx: ContractTransaction = await fyghters.rename(myFyghterId, name);
+      await tx.wait();
+
+      // TODO: Wait for event to update store
+      renameMyFyghter(name);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setVisible(false);
+    }
   };
 
   return (
@@ -81,7 +95,7 @@ export const FyghterRenamingModal = () => {
         onCancel={() => {
           setVisible(false);
         }}
-        onCreate={onSave}
+        onSave={onSave}
       />
     </div>
   );

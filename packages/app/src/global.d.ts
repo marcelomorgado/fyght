@@ -4,6 +4,7 @@ import { Fyghters } from "./contracts/Fyghters";
 declare module "*.png";
 declare module "*.gif";
 
+// TODO: Rename type
 interface FyghtContextInterface {
   myFyghter: Fyghter;
   enemies: Array<Fyghter>;
@@ -29,6 +30,7 @@ interface Metamask {
   // TODO: Deprecated?
   ethereum: any;
   provider: Provider;
+  // TODO: having contracts as objects and having name (?) as key
   contract: Fyghters;
 
   //const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()

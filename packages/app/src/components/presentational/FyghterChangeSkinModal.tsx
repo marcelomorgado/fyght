@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Modal, Form, Radio } from "antd";
+import { Button, Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 import { useFyghtContext } from "../../store";
+import { ContractTransaction } from "ethers";
+import { TransactionReceipt } from "ethers/providers";
 
 interface Values {
   skin: string;
@@ -12,14 +14,16 @@ interface Values {
 interface FyghterChangeSkinFormProps {
   visible: boolean;
   // TODO: To use Values type above
-  onCreate: (values: any) => void;
+  onSave: (values: any) => void;
   onCancel: () => void;
+  errorMessage: string;
 }
 
 const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
   visible,
   onCancel,
-  onCreate,
+  onSave,
+  errorMessage,
 }) => {
   const [form] = Form.useForm();
   const {
@@ -35,31 +39,33 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
       okText="Save"
       cancelText="Cancel"
       onCancel={onCancel}
-      onOk={() => {
-        form
-          .validateFields()
-          .then(values => {
-            form.resetFields();
-            onCreate(values);
-          })
-          .catch(info => {
-            console.log("Validate Failed:", info);
-          });
+      onOk={async (): Promise<void> => {
+        try {
+          const values = await form.validateFields();
+          form.resetFields();
+          onSave(values);
+        } catch (info) {
+          console.log("Validate Failed:", info);
+        }
       }}
     >
+      {errorMessage ? <Alert message={errorMessage} type="error" /> : <></>}
       <Form
         form={form}
         layout="vertical"
         name="form_in_modal"
         initialValues={{ skin: currentSkin }}
+        style={{ marginTop: 30 }}
       >
         <Form.Item name="skin" label="">
           <Radio.Group>
-            {skins.map(({ skin }, i: number) => (
-              <Radio key={i} value={skin}>
-                <SkinAvatar size="small" skin={skin} />
-              </Radio>
-            ))}
+            <Row gutter={[16, 24]} justify="center">
+              {skins.map(({ skin }, i: number) => (
+                <Radio key={i} value={skin}>
+                  <SkinAvatar size="small" skin={skin} />
+                </Radio>
+              ))}
+            </Row>
           </Radio.Group>
         </Form.Item>
       </Form>
@@ -69,12 +75,41 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
 
 export const FyghterChangeSkinModal = () => {
   const [isVisible, setVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const { changeMyFyghterSkin } = useFyghtContext();
+  const {
+    changeMyFyghterSkin,
+    state: {
+      myFyghter: { id: myFyghterId },
+      metamask: { contract: fyghters, provider },
+    },
+  } = useFyghtContext();
 
-  const onSave = ({ skin }: { skin: string }) => {
-    changeMyFyghterSkin(skin);
-    setVisible(false);
+  const onSave = async ({ skin }: { skin: string }): Promise<void> => {
+    try {
+      const tx: ContractTransaction = await fyghters.changeSkin(
+        myFyghterId,
+        skin
+      );
+      await tx.wait();
+      const r: TransactionReceipt = await provider.getTransactionReceipt(
+        tx.hash
+      );
+
+      if (r.status == 1) {
+        changeMyFyghterSkin(skin);
+        setVisible(false);
+      } else {
+        setErrorMessage("Unexpected error.");
+      }
+    } catch (e) {
+      console.log(e);
+
+      if (e && e.data && e.data.message) {
+        // TODO: Is it possible to get error without expection?
+        setErrorMessage(e.data.message);
+      }
+    }
   };
 
   return (
@@ -82,7 +117,7 @@ export const FyghterChangeSkinModal = () => {
       <Button
         type="primary"
         block={true}
-        onClick={() => {
+        onClick={(): void => {
           setVisible(true);
         }}
       >
@@ -90,10 +125,12 @@ export const FyghterChangeSkinModal = () => {
       </Button>
       <FyghterChangeSkinForm
         visible={isVisible}
-        onCancel={() => {
+        onCancel={(): void => {
           setVisible(false);
+          setErrorMessage(null);
         }}
-        onCreate={onSave}
+        onSave={onSave}
+        errorMessage={errorMessage}
       />
     </div>
   );
