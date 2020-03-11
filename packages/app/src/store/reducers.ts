@@ -1,3 +1,6 @@
+import { ethers } from "ethers";
+import { FyghtersFactory } from "../contracts/FyghtersFactory";
+import { Fyghters } from "../contracts/Fyghters";
 import {
   RENAME,
   CHANGE_SKIN,
@@ -7,7 +10,9 @@ import {
   SET_MY_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
   UPDATE_METAMASK_NETWORK,
+  INITIALIZE_METAMASK,
 } from "./actions";
+import { Metamask, Fyghter, Action, FyghtContextInterface } from "../global";
 
 declare global {
   interface Window {
@@ -16,19 +21,19 @@ declare global {
   }
 }
 
-interface FyghtContextInterface {
-  myFyghter: Fyghter;
-  enemies: Array<Fyghter>;
-  metamask: Metamask;
-}
-
 const { ethereum } = window;
 ethereum.autoRefreshOnNetworkChange = false;
 
 export const initialState: FyghtContextInterface = {
   myFyghter: null,
   enemies: [],
-  metamask: { networkId: ethereum.networkVersion, account: null, ethereum },
+  metamask: {
+    networkId: ethereum.networkVersion,
+    account: null,
+    ethereum,
+    contract: null,
+    provider: null,
+  },
 };
 
 const myFyghterReducer = (
@@ -87,6 +92,19 @@ const metamaskReducer = (
       return { ...state, account };
     case UPDATE_METAMASK_NETWORK:
       return { ...state, networkId };
+    case INITIALIZE_METAMASK: {
+      const { ethereum } = state;
+      // TODO: Move to a setup/env config
+      const FYGHTERS_CONTRACT_ADDRESS =
+        "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const contract: Fyghters = FyghtersFactory.connect(
+        FYGHTERS_CONTRACT_ADDRESS,
+        provider
+      );
+
+      return { ...state, contract, provider, ethereum };
+    }
     default:
       return state;
   }

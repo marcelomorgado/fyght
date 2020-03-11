@@ -1,7 +1,6 @@
-import { FyghtersFactory } from "../contracts/FyghtersFactory";
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils";
-import { Fyghters } from "../contracts/Fyghters";
+import { Fyghter } from "../global";
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
@@ -11,17 +10,13 @@ export const LOAD_ENEMIES = "LOAD_ENEMIES";
 export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
+export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 
-// TODO: Move to a setup/env config
-const FYGHTERS_CONTRACT_ADDRESS = "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
-const provider = new ethers.providers.JsonRpcProvider();
-const fyghters: Fyghters = FyghtersFactory.connect(
-  FYGHTERS_CONTRACT_ADDRESS,
-  provider
-);
-
-export const createActions = (dispatch: any, state: any): any => {
-  const setMyFyghter = (myFyghter: Fyghter) =>
+export const createActions = (
+  dispatch: any,
+  state: FyghtContextInterface
+): any => {
+  const setMyFyghter = (myFyghter: Fyghter): void =>
     dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
   const renameMyFyghter = (name: string): void =>
@@ -57,7 +52,16 @@ export const createActions = (dispatch: any, state: any): any => {
   // Note: This low level code needed to get past events is the way that ethers.js v4 works
   // See more: https://github.com/marcelomorgado/fyght/issues/78
   //
-  const loadEnemies = async () => {
+  const loadEnemies = async (): Promise<void> => {
+    const {
+      metamask: { contract: fyghters, provider },
+    } = state;
+
+    if (!fyghters || !provider) {
+      setEnemies([]);
+      return;
+    }
+
     // TODO: Extract this code to a generic utils function
     const topic = ethers.utils.id("NewFyghter(uint256,string)");
     const filter = {
@@ -78,15 +82,18 @@ export const createActions = (dispatch: any, state: any): any => {
     setEnemies(enemies);
   };
 
-  const loadMyFyghter = async () => {
+  const loadMyFyghter = async (): Promise<void> => {
     // TODO: Load from blockchain
     setMyFyghter(null);
   };
 
-  const setMetamaskAccount = (account: string) =>
+  const initializeMetamask = (): void =>
+    dispatch({ type: INITIALIZE_METAMASK, payload: {} });
+
+  const setMetamaskAccount = (account: string): void =>
     dispatch({ type: UPDATE_METAMASK_ACCOUNT, payload: { account } });
 
-  const setMetamaskNetworkId = (networkId: number) =>
+  const setMetamaskNetworkId = (networkId: number): void =>
     dispatch({ type: UPDATE_METAMASK_NETWORK, payload: { networkId } });
 
   return {
@@ -97,5 +104,6 @@ export const createActions = (dispatch: any, state: any): any => {
     loadMyFyghter,
     setMetamaskAccount,
     setMetamaskNetworkId,
+    initializeMetamask,
   };
 };

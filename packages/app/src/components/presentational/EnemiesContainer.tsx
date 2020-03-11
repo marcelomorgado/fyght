@@ -7,7 +7,7 @@ export const EnemiesContainer = () => {
   const [isLoading, setLoading] = useState(true);
 
   const {
-    state: { enemies },
+    state: { enemies, metamask },
     loadEnemies,
   } = useFyghtContext();
 
@@ -18,7 +18,7 @@ export const EnemiesContainer = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [metamask]);
 
   if (isLoading) {
     return <>{`Loading...`}</>;

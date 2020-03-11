@@ -1,5 +1,14 @@
+import { Provider } from "ethers/providers";
+import { Fyghters } from "./contracts/Fyghters";
+
 declare module "*.png";
 declare module "*.gif";
+
+interface FyghtContextInterface {
+  myFyghter: Fyghter;
+  enemies: Array<Fyghter>;
+  metamask: Metamask;
+}
 
 interface Fyghter {
   id: import("ethers/utils").BigNumber;
@@ -13,9 +22,14 @@ interface Action {
   payload?: any;
 }
 
+// TODO: Rename from metamask to root (maybe another context?)
 interface Metamask {
   networkId: number;
   account: string;
-  // TODO: Set the correct type
+  // TODO: Deprecated?
   ethereum: any;
+  provider: Provider;
+  contract: Fyghters;
+
+  //const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
 }
