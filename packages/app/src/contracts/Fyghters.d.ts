@@ -99,7 +99,7 @@ interface FyghtersInterface extends Interface {
     }>;
 
     NewFyghter: TypedEventDescription<{
-      encodeTopics([id, name]: [null, null]): string[];
+      encodeTopics([owner, id, name]: [null, null, null]): string[];
     }>;
 
     SkinChanged: TypedEventDescription<{
@@ -320,7 +320,7 @@ export class Fyghters extends Contract {
 
     FyghterRenamed(id: null, newName: null): EventFilter;
 
-    NewFyghter(id: null, name: null): EventFilter;
+    NewFyghter(owner: null, id: null, name: null): EventFilter;
 
     SkinChanged(id: null, newSkin: null): EventFilter;
 
