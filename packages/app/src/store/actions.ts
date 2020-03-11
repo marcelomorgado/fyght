@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils";
-import { Fyghter } from "../global";
+import { Fyghter, FyghtContextInterface } from "../global";
+import { getAllEvents } from "../helpers";
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
@@ -54,7 +55,7 @@ export const createActions = (
   //
   const loadEnemies = async (): Promise<void> => {
     const {
-      metamask: { contract: fyghters, provider },
+      metamask: { contract: fyghters, provider, account },
     } = state;
 
     if (!fyghters || !provider) {
@@ -62,19 +63,15 @@ export const createActions = (
       return;
     }
 
-    // TODO: Extract this code to a generic utils function
-    const topic = ethers.utils.id("NewFyghter(uint256,string)");
-    const filter = {
-      address: fyghters.address,
-      fromBlock: 0,
-      toBlock: await provider.getBlockNumber(),
-      topics: [topic],
-    };
-    const logs = await provider.getLogs(filter);
-    const enemiesIds = logs
-      .map(log => fyghters.interface.parseLog(log))
-      .map(l => l.values)
-      .map(e => e.id);
+    const topic = ethers.utils.id("NewFyghter(address,uint256,string)");
+    const events = await getAllEvents(fyghters, topic);
+    const enemiesIds = events
+      .filter(
+        (event: any) =>
+          ethers.utils.getAddress(event.owner) !==
+          ethers.utils.getAddress(account)
+      )
+      .map((event: any) => event.id);
 
     const enemiesPromises = enemiesIds.map(id => fyghters.fyghters(id));
     const enemies: Fyghter[] = await Promise.all(enemiesPromises);
@@ -83,8 +80,24 @@ export const createActions = (
   };
 
   const loadMyFyghter = async (): Promise<void> => {
-    // TODO: Load from blockchain
-    setMyFyghter(null);
+    const {
+      metamask: { contract: fyghters, account },
+    } = state;
+
+    const topic = ethers.utils.id("NewFyghter(address,uint256,string)");
+    const events = await getAllEvents(fyghters, topic);
+    const [myFyghterId] = events
+      .filter(
+        (event: any) =>
+          ethers.utils.getAddress(event.owner) ===
+          ethers.utils.getAddress(account)
+      )
+      .map((event: any) => event.id);
+
+    if (myFyghterId) {
+      const myFyghter = await fyghters.fyghters(myFyghterId);
+      setMyFyghter(myFyghter);
+    }
   };
 
   const initializeMetamask = (): void =>
@@ -105,5 +118,6 @@ export const createActions = (
     setMetamaskAccount,
     setMetamaskNetworkId,
     initializeMetamask,
+    setMyFyghter,
   };
 };
