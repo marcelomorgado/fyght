@@ -25,6 +25,7 @@ contract("Fyghters", (accounts) => {
     const balanceAfter = await fyght.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
     expectEvent(tx, "NewFyghter", {
+      owner: aliceAddress,
       id: ALICES_FYGHTER_ID,
       name: fyghterName,
     });
