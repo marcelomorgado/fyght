@@ -14,11 +14,13 @@ export const FyghtScreen = () => {
     },
     setMetamaskAccount,
     setMetamaskNetworkId,
+    initializeMetamask,
   } = useFyghtContext();
 
   useEffect(() => {
-    const init = async () => {
+    const init = async (): Promise<void> => {
       try {
+        initializeMetamask();
         const [account] = await ethereum.send("eth_requestAccounts");
         setMetamaskAccount(account);
       } catch (error) {
@@ -46,11 +48,8 @@ export const FyghtScreen = () => {
     );
   }
 
-  // Note: It isn't working
-  // ethereum.on("chainChanged", chainId => {
-  //   console.log(`chainChanged -> ${chainId}`);
-  // });
-
+  // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
+  // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
   ethereum.on("networkChanged", (networkId: number) => {
     setMetamaskNetworkId(networkId);
   });

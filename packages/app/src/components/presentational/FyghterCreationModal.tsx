@@ -2,39 +2,39 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
+import { fyghters } from "../../contracts";
+import { ContractTransaction } from "ethers";
 
 interface Values {}
 
-interface FyghterRenamingFormProps {
+interface FyghterCreationFormProps {
   visible: boolean;
   // TODO: To use Values type above
   onCreate: (values: any) => void;
   onCancel: () => void;
 }
 
-const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
+const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
   visible,
   onCancel,
-  // TODO: Rename to onRenaming
   onCreate,
 }) => {
   const [form] = Form.useForm();
   return (
     <Modal
       visible={visible}
-      title="Rename fyghter"
+      title="Create a fyghter"
       okText="Save"
       onCancel={onCancel}
-      onOk={() => {
-        form
-          .validateFields()
-          .then(values => {
-            form.resetFields();
-            onCreate(values);
-          })
-          .catch(info => {
-            console.log("Validate Failed:", info);
-          });
+      onOk={async (): Promise<void> => {
+        try {
+          const values = await form.validateFields();
+          console.log(`values = ${values}`);
+          form.resetFields();
+          onCreate(values);
+        } catch (info) {
+          console.log("Validate Failed:", info);
+        }
       }}
     >
       <Form form={form} layout="vertical" name="form_in_modal">
@@ -55,14 +55,19 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   );
 };
 
-export const FyghterRenamingModal = () => {
+export const FyghterCreationModal = () => {
   const [isVisible, setVisible] = useState(false);
+  const [creationTransaction, setCreationTransaction] = useState(null);
 
   const { renameMyFyghter } = useFyghtContext();
 
-  const onSave = ({ name }: { name: string }) => {
-    renameMyFyghter(name);
-    setVisible(false);
+  const onSave = ({ name }: { name: string }): void => {
+    const c = async () => {
+      const tx: ContractTransaction = await fyghters.create(name);
+      setCreationTransaction(tx);
+      setVisible(false);
+    };
+    c();
   };
 
   return (
@@ -76,7 +81,7 @@ export const FyghterRenamingModal = () => {
       >
         Rename
       </Button>
-      <FyghterRenamingForm
+      <FyghterCreationForm
         visible={isVisible}
         onCancel={() => {
           setVisible(false);
