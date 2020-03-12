@@ -4,6 +4,7 @@ import * as FyghterContext from "../../store";
 import { EnemiesContainer } from "./EnemiesContainer";
 import { storeMocks } from "../../testHelpers";
 
+// TODO: Create a alread loaded test case
 describe("EnemiesContainer", () => {
   test("should render the component", () => {
     const contextValues = {

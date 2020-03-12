@@ -2,43 +2,6 @@
 
 exports[`MyFyghterContainer should render the component 1`] = `
 <Fragment>
-  <Divider
-    orientation="left"
-    style={
-      Object {
-        "color": "#333",
-        "fontWeight": "normal",
-      }
-    }
-  >
-    My Fyghter
-  </Divider>
-  <Row
-    gutter={
-      Array [
-        16,
-        24,
-      ]
-    }
-  >
-    <Col
-      span={24}
-    >
-      <Component
-        fyghter={
-          Object {
-            "id": BigNumber {
-              "_hex": "0x01",
-            },
-            "name": "John",
-            "skin": "normal_guy",
-            "xp": BigNumber {
-              "_hex": "0x05",
-            },
-          }
-        }
-      />
-    </Col>
-  </Row>
+  Loading...
 </Fragment>
 `;

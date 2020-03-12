@@ -23,13 +23,15 @@ declare global {
 }
 
 const { ethereum } = window;
-ethereum.autoRefreshOnNetworkChange = false;
+if (ethereum) {
+  ethereum.autoRefreshOnNetworkChange = false;
+}
 
 export const initialState: FyghtContextInterface = {
   myFyghter: null,
   enemies: [],
   metamask: {
-    networkId: ethereum.networkVersion,
+    networkId: null,
     account: null,
     ethereum,
     contract: null,
