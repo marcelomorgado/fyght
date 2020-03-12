@@ -13,8 +13,9 @@ exports[`FyghterChangeSkinModal should render the component 1`] = `
     Change skin
   </Button>
   <FyghterChangeSkinForm
+    errorMessage={null}
     onCancel={[Function]}
-    onCreate={[Function]}
+    onSave={[Function]}
     visible={false}
   />
 </div>

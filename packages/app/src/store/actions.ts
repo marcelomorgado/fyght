@@ -2,6 +2,7 @@ import { ethers, ContractTransaction } from "ethers";
 import { BigNumber } from "ethers/utils";
 import { Fyghter, FyghtContextInterface } from "../global";
 import { getAllEvents } from "../helpers";
+import { TransactionReceipt } from "ethers/providers";
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
@@ -20,11 +21,55 @@ export const createActions = (
   const setMyFyghter = (myFyghter: Fyghter): void =>
     dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
-  const renameMyFyghter = (name: string): void =>
-    dispatch({ type: RENAME, payload: { name } });
+  const renameMyFyghter = async (name: string): void => {
+    const {
+      myFyghter: { id: myFyghterId },
+      metamask: { contract: fyghters },
+    } = state;
 
-  const changeMyFyghterSkin = (skin: string): void =>
-    dispatch({ type: CHANGE_SKIN, payload: { skin } });
+    try {
+      const tx: ContractTransaction = await fyghters.rename(myFyghterId, name);
+      await tx.wait();
+
+      // TODO: Wait for event to update store
+      dispatch({ type: RENAME, payload: { name } });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const changeMyFyghterSkin = async (skin: string): Promise<void> => {
+    const {
+      myFyghter: { id: myFyghterId },
+      metamask: { contract: fyghters, provider },
+    } = state;
+
+    try {
+      const tx: ContractTransaction = await fyghters.changeSkin(
+        myFyghterId,
+        skin
+      );
+      await tx.wait();
+      const r: TransactionReceipt = await provider.getTransactionReceipt(
+        tx.hash
+      );
+
+      if (r.status == 1) {
+        dispatch({ type: CHANGE_SKIN, payload: { skin } });
+      } else {
+        // TODO: Create a global message component
+        // setErrorMessage("Unexpected error.");
+      }
+    } catch (e) {
+      console.log(e);
+
+      if (e && e.data && e.data.message) {
+        // TODO: Is it possible to get error without expection?
+        // TODO: Create a global message component
+        // setErrorMessage(e.data.message);
+      }
+    }
+  };
 
   const incrementMyFyghterXp = (): void =>
     dispatch({ type: INCREMENT_MY_FIGHTER_XP, payload: {} });
@@ -122,14 +167,31 @@ export const createActions = (
     }
   };
 
-  const initializeMetamask = (): void =>
-    dispatch({ type: INITIALIZE_METAMASK, payload: {} });
-
   const setMetamaskAccount = (account: string): void =>
     dispatch({ type: UPDATE_METAMASK_ACCOUNT, payload: { account } });
 
   const setMetamaskNetworkId = (networkId: number): void =>
     dispatch({ type: UPDATE_METAMASK_NETWORK, payload: { networkId } });
+
+  const initializeMetamask = (): void => {
+    const {
+      metamask: { ethereum },
+    } = state;
+
+    if (ethereum) {
+      // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
+      // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
+      ethereum.on("networkChanged", (networkId: number) => {
+        setMetamaskNetworkId(networkId);
+      });
+
+      ethereum.on("accountsChanged", ([account]: string[]) => {
+        setMetamaskAccount(account);
+      });
+    }
+
+    dispatch({ type: INITIALIZE_METAMASK, payload: {} });
+  };
 
   return {
     renameMyFyghter,

@@ -14,7 +14,7 @@ exports[`FyghterRenamingModal should render the component 1`] = `
   </Button>
   <FyghterRenamingForm
     onCancel={[Function]}
-    onCreate={[Function]}
+    onSave={[Function]}
     visible={false}
   />
 </div>

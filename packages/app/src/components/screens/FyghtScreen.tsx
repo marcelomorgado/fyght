@@ -48,16 +48,6 @@ export const FyghtScreen = () => {
     );
   }
 
-  // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
-  // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
-  ethereum.on("networkChanged", (networkId: number) => {
-    setMetamaskNetworkId(networkId);
-  });
-
-  ethereum.on("accountsChanged", ([account]: string[]) => {
-    setMetamaskAccount(account);
-  });
-
   if (networkId != 1234) {
     return (
       <>{`Please, connect to the local network (http://localhost:8545)`}</>

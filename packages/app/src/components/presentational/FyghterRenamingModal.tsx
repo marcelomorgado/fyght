@@ -1,8 +1,8 @@
+// TODO: Solve this
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
-import { ContractTransaction } from "ethers";
 
 interface Values {}
 
@@ -57,26 +57,11 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
 export const FyghterRenamingModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const {
-    renameMyFyghter,
-    state: {
-      myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters },
-    },
-  } = useFyghtContext();
+  const { renameMyFyghter } = useFyghtContext();
 
   const onSave = async ({ name }: { name: string }): Promise<void> => {
-    try {
-      const tx: ContractTransaction = await fyghters.rename(myFyghterId, name);
-      await tx.wait();
-
-      // TODO: Wait for event to update store
-      renameMyFyghter(name);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setVisible(false);
-    }
+    renameMyFyghter(name);
+    setVisible(false);
   };
 
   return (

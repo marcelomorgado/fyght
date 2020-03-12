@@ -4,8 +4,6 @@ import { Button, Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 import { useFyghtContext } from "../../store";
-import { ContractTransaction } from "ethers";
-import { TransactionReceipt } from "ethers/providers";
 
 interface Values {
   skin: string;
@@ -73,43 +71,15 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
   );
 };
 
-export const FyghterChangeSkinModal = () => {
+export const FyghterChangeSkinModal = (): any => {
   const [isVisible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const {
-    changeMyFyghterSkin,
-    state: {
-      myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters, provider },
-    },
-  } = useFyghtContext();
+  const { changeMyFyghterSkin } = useFyghtContext();
 
   const onSave = async ({ skin }: { skin: string }): Promise<void> => {
-    try {
-      const tx: ContractTransaction = await fyghters.changeSkin(
-        myFyghterId,
-        skin
-      );
-      await tx.wait();
-      const r: TransactionReceipt = await provider.getTransactionReceipt(
-        tx.hash
-      );
-
-      if (r.status == 1) {
-        changeMyFyghterSkin(skin);
-        setVisible(false);
-      } else {
-        setErrorMessage("Unexpected error.");
-      }
-    } catch (e) {
-      console.log(e);
-
-      if (e && e.data && e.data.message) {
-        // TODO: Is it possible to get error without expection?
-        setErrorMessage(e.data.message);
-      }
-    }
+    changeMyFyghterSkin(skin);
+    setVisible(false);
   };
 
   return (

@@ -21,7 +21,7 @@ export const EnemiesContainer = () => {
   }, [metamask]);
 
   if (isLoading) {
-    return <>{`Loading...`}</>;
+    return <>{`Loading ...`}</>;
   }
 
   if (enemies.length === 0) {
