@@ -1,3 +1,5 @@
+import { Skin } from "../constants";
+
 export const skins = [
   {
     skin: Skin.NAKED,
@@ -19,7 +21,7 @@ export const skins = [
     unlock: "15 XP",
   },
   {
-    skin: "japonese",
+    skin: Skin.JAPONESE,
     level: "Japonese",
     description: "In the land of the rising sun new knowledges are discovered",
     unlock: "25 XP",
@@ -43,7 +45,7 @@ export const skins = [
     unlock: "80 XP",
   },
   {
-    skin: "daemon",
+    skin: Skin.DAEMON,
     level: "Damon",
     description: "Anyone means anyone",
     unlock: "80 XP",
