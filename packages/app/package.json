@@ -18,8 +18,8 @@
   },
   "scripts": {
     "test": "npx --no-install jest",
-    "eslint": "npx --no-install eslint src/**/*.tsx",
-    "prettier": "npx --no-install prettier -c src/**/*.tsx",
+    "eslint": "npx --no-install eslint src/**/**/*.tsx",
+    "prettier": "npx --no-install prettier -c src/**/**/*.tsx",
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "start": "npm run start:dev",
