@@ -1,6 +1,7 @@
 import React from "react";
 
 // Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
+// TODO: Solve this
 import images from "../../assets/img/*.png";
 
 type Props = {

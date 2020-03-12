@@ -13,7 +13,7 @@ export const MyFyghterContainer = () => {
   } = useFyghtContext();
 
   useEffect(() => {
-    const init = async () => {
+    const init = async (): Promise<void> => {
       loadMyFyghter();
       setLoading(false);
     };
