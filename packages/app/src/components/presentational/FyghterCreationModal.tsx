@@ -1,14 +1,13 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
-import { ContractTransaction } from "ethers";
 
-interface Values {}
+// interface Values {}
 
 interface FyghterCreationFormProps {
   visible: boolean;
   // TODO: To use Values type above
+  // See more: https://github.com/ant-design/ant-design/issues/21195
   onCreate: (values: any) => void;
   onCancel: () => void;
 }

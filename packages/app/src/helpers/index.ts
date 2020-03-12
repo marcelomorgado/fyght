@@ -1,19 +1,19 @@
 export const skins = [
   {
-    skin: "naked",
-    level: "Naked",
+    skin: Skin.NAKED,
+    level: Skin.NAKED,
     description:
       "You are ready to begin your journey when you let go all of material stuffs",
     unlock: "-",
   },
   {
-    skin: "normal_guy",
+    skin: Skin.NORMAL_GUY,
     level: "Normal Guy",
     description: "You are a new man now",
     unlock: "10 XP",
   },
   {
-    skin: "karate_kid",
+    skin: Skin.KARATE_KID,
     level: "Karate Kid",
     description: "Now people respect you",
     unlock: "15 XP",
@@ -25,19 +25,19 @@ export const skins = [
     unlock: "25 XP",
   },
   {
-    skin: "monk",
-    level: "Monk",
+    skin: Skin.MONK,
+    level: Skin.MONK,
     description: "Secret powers and wisdoms are achieve",
     unlock: "40 XP",
   },
   {
-    skin: "ninja",
-    level: "Ninja",
+    skin: Skin.NINJA,
+    level: Skin.NINJA,
     description: "Secret powers and wisdoms are achieve",
     unlock: "50 XP",
   },
   {
-    skin: "no_one",
+    skin: Skin.NO_ONE,
     level: "No One",
     description: "Valar dohaeris",
     unlock: "80 XP",
@@ -49,8 +49,8 @@ export const skins = [
     unlock: "80 XP",
   },
   {
-    skin: "master",
-    level: "Master",
+    skin: Skin.MASTER,
+    level: Skin.MASTER,
     description: "Try not, do or do not",
     unlock: "100 XP",
   },

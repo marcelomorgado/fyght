@@ -1,17 +1,17 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 import { useFyghtContext } from "../../store";
 
-interface Values {
-  skin: string;
-}
+// interface Values {
+//   skin: string;
+// }
 
 interface FyghterChangeSkinFormProps {
   visible: boolean;
   // TODO: To use Values type above
+  // See more: https://github.com/ant-design/ant-design/issues/21195
   onSave: (values: any) => void;
   onCancel: () => void;
   errorMessage: string;

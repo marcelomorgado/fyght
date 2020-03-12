@@ -3,12 +3,13 @@ import { Card } from "antd";
 import { FyghterRenamingModal } from "./FyghterRenamingModal";
 import { FyghterChangeSkinModal } from "./FyghterChangeSkinModal";
 import { SkinAvatar } from "./SkinAvatar";
+// TODO: Should work without import
+import { Fyghter } from "../../global";
 
 type Props = {
   fyghter: Fyghter;
 };
 
-// TODO: Edit fyghter name
 export const MyFyghter = ({ fyghter: { skin, name, xp } }: Props) => {
   return (
     <Card type="inner" title={name} hoverable={true}>
