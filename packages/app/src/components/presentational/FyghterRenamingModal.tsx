@@ -1,14 +1,13 @@
-// TODO: Solve this
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
 
-interface Values {}
+// interface Values {}
 
 interface FyghterRenamingFormProps {
   visible: boolean;
   // TODO: To use Values type above
+  // See more: https://github.com/ant-design/ant-design/issues/21195
   onSave: (values: any) => void;
   onCancel: () => void;
 }
@@ -16,7 +15,6 @@ interface FyghterRenamingFormProps {
 const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   visible,
   onCancel,
-  // TODO: Rename to onRenaming
   onSave,
 }) => {
   const [form] = Form.useForm();
@@ -69,7 +67,7 @@ export const FyghterRenamingModal = () => {
       <Button
         type="primary"
         block={true}
-        onClick={() => {
+        onClick={(): void => {
           setVisible(true);
         }}
       >
@@ -77,7 +75,7 @@ export const FyghterRenamingModal = () => {
       </Button>
       <FyghterRenamingForm
         visible={isVisible}
-        onCancel={() => {
+        onCancel={(): void => {
           setVisible(false);
         }}
         onSave={onSave}

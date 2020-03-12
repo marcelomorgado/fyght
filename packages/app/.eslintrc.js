@@ -34,4 +34,12 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn",
     "react/display-name": "off",
   },
+  overrides: [
+    {
+      files: ["**/*.tsx"],
+      rules: {
+        "react/prop-types": "off",
+      },
+    },
+  ],
 };
