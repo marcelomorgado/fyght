@@ -9,7 +9,7 @@ export const CHANGE_SKIN = "CHANGE_SKIN";
 export const INCREMENT_MY_FIGHTER_XP = "INCREMENT_MY_FIGHTER_XP";
 export const INCREMENT_ENEMY_XP = "INCREMENT_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
-export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
+export const CREATE_FYGHTER = "CREATE_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
@@ -18,8 +18,27 @@ export const createActions = (
   dispatch: any,
   state: FyghtContextInterface
 ): any => {
-  const setMyFyghter = (myFyghter: Fyghter): void =>
-    dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
+  const createFyghter = async (name: string): Promise<void> => {
+    const {
+      metamask: { contract: fyghters },
+    } = state;
+
+    try {
+      const tx: ContractTransaction = await fyghters.create(name);
+      await tx.wait();
+
+      // TODO: Get event from transaction
+      const filter = fyghters.filters.NewFyghter(null, null, null);
+      fyghters.on(filter, async (owner: string, id: number, name: string) => {
+        const myFyghter = await fyghters.fyghters(id);
+        dispatch({ type: CREATE_FYGHTER, payload: { myFyghter } });
+      });
+    } catch (e) {
+      console.log(e);
+      // Revert message
+      //console.log(e.data.message);
+    }
+  };
 
   const renameMyFyghter = async (name: string): void => {
     const {
@@ -163,7 +182,7 @@ export const createActions = (
 
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
-      setMyFyghter(myFyghter);
+      createFyghter(myFyghter);
     }
   };
 
@@ -202,6 +221,6 @@ export const createActions = (
     setMetamaskAccount,
     setMetamaskNetworkId,
     initializeMetamask,
-    setMyFyghter,
+    createFyghter,
   };
 };
