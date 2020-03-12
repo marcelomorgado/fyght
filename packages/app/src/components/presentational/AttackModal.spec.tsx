@@ -1,7 +1,8 @@
 import * as React from "react";
 import { shallow } from "enzyme";
-import * as FyghterContext from "../../FyghtContext";
+import * as FyghterContext from "../../store";
 import { AttackModal } from "./AttackModal";
+import { BigNumber } from "ethers/utils";
 
 describe("AttackModal", () => {
   test("should render the component", () => {
@@ -11,6 +12,8 @@ describe("AttackModal", () => {
       .spyOn(FyghterContext, "useFyghtContext")
       .mockImplementation(() => contextValues);
 
-    expect(shallow(<AttackModal enemyId={2} />)).toMatchSnapshot();
+    expect(
+      shallow(<AttackModal enemyId={new BigNumber(2)} />)
+    ).toMatchSnapshot();
   });
 });

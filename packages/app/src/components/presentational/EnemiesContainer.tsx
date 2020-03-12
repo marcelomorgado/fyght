@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
-import { useFyghtContext } from "../../FyghtContext";
+import { useFyghtContext } from "../../store";
 
 export const EnemiesContainer = () => {
-  const { state } = useFyghtContext();
+  const [isLoading, setLoading] = useState(true);
+
+  const {
+    state: { enemies, metamask },
+    loadEnemies,
+  } = useFyghtContext();
+
+  useEffect(() => {
+    const init = async () => {
+      await loadEnemies();
+      setLoading(false);
+    };
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metamask]);
+
+  if (isLoading) {
+    return <>{`Loading ...`}</>;
+  }
+
+  if (enemies.length === 0) {
+    return <>{`No enemies yet!`}</>;
+  }
+
   return (
     <>
       <Divider
@@ -14,7 +37,7 @@ export const EnemiesContainer = () => {
         Enemies
       </Divider>
       <Row gutter={[16, 24]}>
-        {state.enemies.map((enemy: Fyghter, i: number) => (
+        {enemies.map((enemy: Fyghter, i: number) => (
           <Col key={i} className="gutter-row" span={4}>
             <Enemy enemy={enemy} />
           </Col>

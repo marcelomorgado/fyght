@@ -1,60 +1,62 @@
+import { BigNumber } from "ethers/utils";
+
 export const storeMocks = {
   myFyghter: {
-    id: 1,
+    id: new BigNumber("1"),
     name: "John",
     // TODO: Skin as constant (?)
     skin: "normal_guy",
-    xp: 5,
+    xp: new BigNumber("5"),
   },
   enemies: [
     {
-      id: 2,
+      id: new BigNumber("2"),
       name: "Charlie",
       // TODO: Skin as constant (?)
       skin: "naked",
-      xp: 1,
+      xp: new BigNumber("1"),
     },
     {
-      id: 3,
+      id: new BigNumber("3"),
       name: "Saul",
       // TODO: Skin as constant (?)
       skin: "ninja",
-      xp: 10,
+      xp: new BigNumber("10"),
     },
     {
-      id: 4,
+      id: new BigNumber("4"),
       name: "Julian",
       // TODO: Skin as constant (?)
       skin: "naked",
-      xp: 1,
+      xp: new BigNumber("1"),
     },
     {
-      id: 5,
+      id: new BigNumber("5"),
       name: "Brad",
       // TODO: Skin as constant (?)
       skin: "master",
-      xp: 89,
+      xp: new BigNumber("89"),
     },
     {
-      id: 6,
+      id: new BigNumber("6"),
       name: "Frank",
       // TODO: Skin as constant (?)
       skin: "no_one",
-      xp: 71,
+      xp: new BigNumber("71"),
     },
     {
-      id: 7,
+      id: new BigNumber("7"),
       name: "Brian",
       // TODO: Skin as constant (?)
       skin: "monk",
-      xp: 30,
+      xp: new BigNumber("30"),
     },
     {
-      id: 8,
+      id: new BigNumber("8"),
       name: "Fred",
       // TODO: Skin as constant (?)
       skin: "karate_kid",
-      xp: 10,
+      xp: new BigNumber("10"),
     },
   ],
 };

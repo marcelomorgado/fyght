@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import { useFyghtContext } from "../../FyghtContext";
+import { useFyghtContext } from "../../store";
 
 // Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
 import gifs from "../../assets/img/*.gif";
+import { BigNumber } from "ethers/utils";
 
 const EnamyAttackView: any = class extends React.Component<any> {
   render() {
@@ -24,7 +25,7 @@ const EnamyAttackView: any = class extends React.Component<any> {
 };
 
 type Props = {
-  enemyId: number;
+  enemyId: BigNumber;
 };
 
 export const AttackModal = ({ enemyId }: Props) => {

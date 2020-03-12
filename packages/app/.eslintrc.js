@@ -23,6 +23,7 @@ module.exports = {
     "prettier/react",
     "plugin:react/recommended",
     "plugin:jest/recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
   globals: {
     react: true,

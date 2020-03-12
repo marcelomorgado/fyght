@@ -24,4 +24,12 @@ module.exports = {
   moduleNameMapper: {
     "\\.(gif|png)$": "<rootDir>/src/__mocks__/fileMock.js",
   },
+
+  globals: {
+    "ts-jest": {
+      diagnostics: {
+        pathRegex: "\\.(spec|test)\\.tsx$",
+      },
+    },
+  },
 };

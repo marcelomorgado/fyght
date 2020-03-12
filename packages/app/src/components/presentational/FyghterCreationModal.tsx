@@ -1,36 +1,35 @@
-// TODO: Solve this
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
+import { ContractTransaction } from "ethers";
 
 interface Values {}
 
-interface FyghterRenamingFormProps {
+interface FyghterCreationFormProps {
   visible: boolean;
   // TODO: To use Values type above
-  onSave: (values: any) => void;
+  onCreate: (values: any) => void;
   onCancel: () => void;
 }
 
-const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
+const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
   visible,
   onCancel,
-  // TODO: Rename to onRenaming
-  onSave,
+  onCreate,
 }) => {
   const [form] = Form.useForm();
   return (
     <Modal
       visible={visible}
-      title="Rename fyghter"
+      title="Create a fyghter"
       okText="Save"
       onCancel={onCancel}
       onOk={async (): Promise<void> => {
         try {
           const values = await form.validateFields();
           form.resetFields();
-          onSave(values);
+          onCreate(values);
         } catch (info) {
           console.log("Validate Failed:", info);
         }
@@ -54,14 +53,35 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   );
 };
 
-export const FyghterRenamingModal = () => {
+export const FyghterCreationModal = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { renameMyFyghter } = useFyghtContext();
+  const {
+    state: {
+      metamask: { contract: fyghters },
+    },
+    setMyFyghter,
+  } = useFyghtContext();
 
   const onSave = async ({ name }: { name: string }): Promise<void> => {
-    renameMyFyghter(name);
-    setVisible(false);
+    try {
+      const tx: ContractTransaction = await fyghters.create(name);
+      await tx.wait();
+
+      // TODO: Get event from transaction
+      const filter = fyghters.filters.NewFyghter(null, null, null);
+      fyghters.on(filter, async (owner: string, id: number, name: string) => {
+        const myFyghter = await fyghters.fyghters(id);
+        console.log(myFyghter);
+        setMyFyghter(myFyghter);
+      });
+    } catch (e) {
+      console.log(e);
+      // Revert message
+      //console.log(e.data.message);
+    } finally {
+      setVisible(false);
+    }
   };
 
   return (
@@ -73,14 +93,14 @@ export const FyghterRenamingModal = () => {
           setVisible(true);
         }}
       >
-        Rename
+        Create
       </Button>
-      <FyghterRenamingForm
+      <FyghterCreationForm
         visible={isVisible}
         onCancel={() => {
           setVisible(false);
         }}
-        onSave={onSave}
+        onCreate={onSave}
       />
     </div>
   );
