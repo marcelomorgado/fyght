@@ -3,8 +3,6 @@ import { Card } from "antd";
 import { FyghterRenamingModal } from "./FyghterRenamingModal";
 import { FyghterChangeSkinModal } from "./FyghterChangeSkinModal";
 import { SkinAvatar } from "./SkinAvatar";
-// TODO: Should work without import
-import { Fyghter } from "../../global";
 
 type Props = {
   fyghter: Fyghter;

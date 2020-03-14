@@ -12,7 +12,6 @@ import {
   UPDATE_METAMASK_NETWORK,
   INITIALIZE_METAMASK,
 } from "./actions";
-import { Metamask, Fyghter, Action, FyghtContextInterface } from "../global";
 import { BigNumber } from "ethers/utils";
 
 declare global {

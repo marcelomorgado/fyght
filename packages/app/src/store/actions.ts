@@ -1,6 +1,5 @@
 import { ethers, ContractTransaction } from "ethers";
 import { BigNumber } from "ethers/utils";
-import { Fyghter, FyghtContextInterface } from "../global";
 import { getAllEvents } from "../helpers";
 import { TransactionReceipt } from "ethers/providers";
 
