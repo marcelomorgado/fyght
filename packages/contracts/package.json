@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "ganache-cli": "6.9.1",
-    "truffle": "5.1.16",
+    "truffle": "5.1.17",
     "truffle-hdwallet-provider": "1.0.17"
   },
   "devDependencies": {
