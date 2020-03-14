@@ -6,7 +6,7 @@ import { BigNumber } from "ethers/utils";
 
 describe("AttackModal", () => {
   test("should render the component", () => {
-    const contextValues = { attackAnEnemy: () => {} };
+    const contextValues = { attackAnEnemy: jest.fn() };
 
     jest
       .spyOn(FyghterContext, "useFyghtContext")

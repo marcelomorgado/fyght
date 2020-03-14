@@ -8,8 +8,7 @@ declare namespace NodeJS {
   }
 }
 
-// TODO: Rename type
-interface FyghtContextInterface {
+interface FyghtContext {
   myFyghter: Fyghter;
   enemies: Array<Fyghter>;
   metamask: Metamask;
@@ -36,6 +35,4 @@ interface Metamask {
   provider: Provider;
   // TODO: having contracts as objects and having name (?) as key
   contract: Fyghters;
-
-  //const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
 }

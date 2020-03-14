@@ -5,7 +5,7 @@ import { FyghterRenamingModal } from "./FyghterRenamingModal";
 
 describe("FyghterRenamingModal", () => {
   test("should render the component", () => {
-    const contextValues = { renameMyFyghter: () => {} };
+    const contextValues = { renameMyFyghter: jest.fn() };
 
     jest
       .spyOn(FyghterContext, "useFyghtContext")
