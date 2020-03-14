@@ -5,7 +5,7 @@ import { AvatarSize } from "../../constants";
 
 type Props = {
   skin: string;
-  size: string; // TODO: To enum
+  size: string;
 };
 
 export const SkinAvatar = ({ skin, size }: Props) => {

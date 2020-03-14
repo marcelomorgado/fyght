@@ -14,6 +14,10 @@ import {
 } from "./actions";
 import { BigNumber } from "ethers/utils";
 
+// eslint-disable-next-line no-undef
+const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
+
+// TODO: Move this declaration to the global.d.ts file
 declare global {
   interface Window {
     // TODO: Set properly type
@@ -96,9 +100,6 @@ const metamaskReducer = (
       return { ...state, networkId };
     case INITIALIZE_METAMASK: {
       const { ethereum } = state;
-      // TODO: Move to a setup/env config
-      const FYGHTERS_CONTRACT_ADDRESS =
-        "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
       const provider = new ethers.providers.Web3Provider(ethereum);
       const contract: Fyghters = FyghtersFactory.connect(
         FYGHTERS_CONTRACT_ADDRESS,
