@@ -1,6 +1,3 @@
-import { Provider } from "ethers/providers";
-import { Fyghters } from "./contracts/Fyghters";
-
 declare module "*.png";
 declare module "*.gif";
 

@@ -1,6 +1,5 @@
 import { BigNumber } from "ethers/utils";
 import { Skin } from "../constants";
-import { Fyghter } from "../global";
 
 export const storeMocks: { myFyghter: Fyghter; enemies: Fyghter[] } = {
   myFyghter: {
