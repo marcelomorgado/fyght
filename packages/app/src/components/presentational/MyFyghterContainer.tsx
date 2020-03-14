@@ -21,10 +21,7 @@ export const MyFyghterContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // TODO: Move down
-  if (isLoading) {
-    return <>{`Loading...`}</>;
-  }
+  const hasFyghter = !isLoading && myFyghter !== null;
 
   return (
     <>
@@ -36,11 +33,10 @@ export const MyFyghterContainer = () => {
       </Divider>
       <Row gutter={[16, 24]}>
         <Col span={24}>
-          {myFyghter === null ? (
-            <>
-              {`You have to create your fyghter!`}
-              <FyghterCreationModal />
-            </>
+          {isLoading ? (
+            <>{`Loading...`}</>
+          ) : !hasFyghter ? (
+            <FyghterCreationModal />
           ) : (
             <MyFyghter fyghter={myFyghter} />
           )}

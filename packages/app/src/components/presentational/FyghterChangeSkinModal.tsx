@@ -3,6 +3,7 @@ import { Button, Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 import { useFyghtContext } from "../../store";
+import { AvatarSize } from "../../constants";
 
 // interface Values {
 //   skin: string;
@@ -60,7 +61,7 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
             <Row gutter={[16, 24]} justify="center">
               {skins.map(({ skin }, i: number) => (
                 <Radio key={i} value={skin}>
-                  <SkinAvatar size="small" skin={skin} />
+                  <SkinAvatar size={AvatarSize.SMALL} skin={skin} />
                 </Radio>
               ))}
             </Row>

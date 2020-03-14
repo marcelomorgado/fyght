@@ -9,3 +9,8 @@ export enum Skin {
   DAEMON = "daemon",
   MASTER = "master",
 }
+
+export enum AvatarSize {
+  SMALL = "SMALL",
+  MEDIUM = "MEDIUM",
+}
