@@ -11,7 +11,7 @@ contract Fyghters is ERC721 {
     string constant MASTER_SKIN = "master";
     uint256 constant ONE = 1 * 10**18;
 
-    event NewFyghter(address owner, uint256 id, string name);
+    event NewFyghter(address indexed owner, uint256 id, string name);
     event Attack(uint256 attackerId, uint256 targetId, uint256 winnerId);
     event SkinChanged(uint256 id, string newSkin);
     event FyghterRenamed(uint256 id, string newName);

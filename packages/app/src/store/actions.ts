@@ -1,7 +1,9 @@
-import { ethers, ContractTransaction } from "ethers";
-import { BigNumber } from "ethers/utils";
+import { ethers, ContractTransaction, Event } from "ethers";
+import { BigNumber } from "ethers";
 import { getAllEvents } from "../helpers";
-import { TransactionReceipt } from "ethers/providers";
+import { MyFyghter } from "../components/presentational/MyFyghter";
+
+const { getAddress } = ethers.utils;
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
@@ -13,7 +15,25 @@ export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 
+interface NewFyghter {
+  owner: string;
+  id: BigNumber;
+  name: string;
+}
+
 export const createActions = (dispatch: any, state: FyghtContext): any => {
+  const incrementMyFyghterXp = (): void =>
+    dispatch({ type: INCREMENT_MY_FIGHTER_XP, payload: {} });
+
+  const incrementEnemyXp = (enemyId: BigNumber): void =>
+    dispatch({ type: INCREMENT_ENEMY_XP, payload: { enemyId } });
+
+  const setEnemies = (enemies: Fyghter[]): void =>
+    dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
+
+  const setMyFyghter = (myFyghter: Fyghter): void =>
+    dispatch({ type: CREATE_FYGHTER, payload: { myFyghter } });
+
   const createFyghter = async (name: string): Promise<void> => {
     const {
       metamask: { contract: fyghters },
@@ -27,7 +47,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       const filter = fyghters.filters.NewFyghter(null, null, null);
       fyghters.on(filter, async (owner: string, id: number, name: string) => {
         const myFyghter = await fyghters.fyghters(id);
-        dispatch({ type: CREATE_FYGHTER, payload: { myFyghter } });
+        setMyFyghter(myFyghter);
       });
     } catch (e) {
       console.log(e);
@@ -86,15 +106,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     }
   };
 
-  const incrementMyFyghterXp = (): void =>
-    dispatch({ type: INCREMENT_MY_FIGHTER_XP, payload: {} });
-
-  const incrementEnemyXp = (enemyId: BigNumber): void =>
-    dispatch({ type: INCREMENT_ENEMY_XP, payload: { enemyId } });
-
-  const setEnemies = (enemies: Fyghter[]): void =>
-    dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
-
   const attackAnEnemy = async (enemyId: BigNumber): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
@@ -144,17 +155,18 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       return;
     }
 
-    const topic = ethers.utils.id("NewFyghter(address,uint256,string)");
-    const events = await getAllEvents(fyghters, topic);
-    const enemiesIds = events
+    const filter = fyghters.filters.NewFyghter(null, null, null);
+    const logs = await fyghters.queryFilter(filter, 0, "latest");
+    const enemiesIds = logs
+      .map((l: Event) => l.args)
       .filter(
-        (event: any) =>
-          ethers.utils.getAddress(event.owner) !==
-          ethers.utils.getAddress(account)
+        ({ owner }: NewFyghter) => getAddress(owner) !== getAddress(account)
       )
-      .map((event: any) => event.id);
+      .map(({ id }: NewFyghter) => id);
 
-    const enemiesPromises = enemiesIds.map(id => fyghters.fyghters(id));
+    const enemiesPromises = enemiesIds.map((id: BigNumber) =>
+      fyghters.fyghters(id)
+    );
     const enemies: Fyghter[] = await Promise.all(enemiesPromises);
 
     setEnemies(enemies);
@@ -165,19 +177,15 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       metamask: { contract: fyghters, account },
     } = state;
 
-    const topic = ethers.utils.id("NewFyghter(address,uint256,string)");
-    const events = await getAllEvents(fyghters, topic);
-    const [myFyghterId] = events
-      .filter(
-        (event: any) =>
-          ethers.utils.getAddress(event.owner) ===
-          ethers.utils.getAddress(account)
-      )
-      .map((event: any) => event.id);
+    const filter = fyghters.filters.NewFyghter(getAddress(account), null, null);
+    const logs = await fyghters.queryFilter(filter, 0, "latest");
+    const [myFyghterId] = logs
+      .map((l: Event) => l.args)
+      .map(({ id }: NewFyghter) => id);
 
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
-      createFyghter(myFyghter);
+      setMyFyghter(myFyghter);
     }
   };
 

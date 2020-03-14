@@ -15,10 +15,10 @@ interface FyghtContext {
 }
 
 interface Fyghter {
-  id: import("ethers/utils").BigNumber;
+  id: import("ethers").BigNumber;
   skin: string;
   name: string;
-  xp: import("ethers/utils").BigNumber;
+  xp: import("ethers").BigNumber;
 }
 
 interface Action {
@@ -34,5 +34,5 @@ interface Metamask {
   ethereum: any;
   provider: Provider;
   // TODO: having contracts as objects and having name (?) as key
-  contract: Fyghters;
+  contract: Contract;
 }

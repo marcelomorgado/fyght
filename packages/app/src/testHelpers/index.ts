@@ -1,55 +1,55 @@
-import { BigNumber } from "ethers/utils";
+import { BigNumber } from "ethers";
 import { Skin } from "../constants";
 
 export const storeMocks: { myFyghter: Fyghter; enemies: Fyghter[] } = {
   myFyghter: {
-    id: new BigNumber("1"),
+    id: BigNumber.from("1"),
     name: "John",
     skin: Skin.NORMAL_GUY,
-    xp: new BigNumber("5"),
+    xp: BigNumber.from("5"),
   },
   enemies: [
     {
-      id: new BigNumber("2"),
+      id: BigNumber.from("2"),
       name: "Charlie",
       skin: Skin.NAKED,
-      xp: new BigNumber("1"),
+      xp: BigNumber.from("1"),
     },
     {
-      id: new BigNumber("3"),
+      id: BigNumber.from("3"),
       name: "Saul",
       skin: Skin.NINJA,
-      xp: new BigNumber("10"),
+      xp: BigNumber.from("10"),
     },
     {
-      id: new BigNumber("4"),
+      id: BigNumber.from("4"),
       name: "Julian",
       skin: Skin.NAKED,
-      xp: new BigNumber("1"),
+      xp: BigNumber.from("1"),
     },
     {
-      id: new BigNumber("5"),
+      id: BigNumber.from("5"),
       name: "Brad",
       skin: Skin.MASTER,
-      xp: new BigNumber("89"),
+      xp: BigNumber.from("89"),
     },
     {
-      id: new BigNumber("6"),
+      id: BigNumber.from("6"),
       name: "Frank",
       skin: Skin.NO_ONE,
-      xp: new BigNumber("71"),
+      xp: BigNumber.from("71"),
     },
     {
-      id: new BigNumber("7"),
+      id: BigNumber.from("7"),
       name: "Brian",
       skin: Skin.MONK,
-      xp: new BigNumber("30"),
+      xp: BigNumber.from("30"),
     },
     {
-      id: new BigNumber("8"),
+      id: BigNumber.from("8"),
       name: "Fred",
       skin: Skin.KARATE_KID,
-      xp: new BigNumber("10"),
+      xp: BigNumber.from("10"),
     },
   ],
 };

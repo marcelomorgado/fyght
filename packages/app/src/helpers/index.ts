@@ -57,16 +57,3 @@ export const skins = [
     unlock: "100 XP",
   },
 ];
-
-export const getAllEvents = async (contract: any, topic: any): Promise<any> => {
-  const filter = {
-    address: contract.address,
-    fromBlock: 0,
-    toBlock: "latest",
-    topics: [topic],
-  };
-  const logs = await contract.provider.getLogs(filter);
-  return logs
-    .map((log: any) => contract.interface.parseLog(log))
-    .map((parsedLog: any) => parsedLog.values);
-};

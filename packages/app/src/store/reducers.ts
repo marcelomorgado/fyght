@@ -1,6 +1,4 @@
 import { ethers } from "ethers";
-import { FyghtersFactory } from "../contracts/FyghtersFactory";
-import { Fyghters } from "../contracts/Fyghters";
 import {
   RENAME,
   CHANGE_SKIN,
@@ -12,7 +10,7 @@ import {
   UPDATE_METAMASK_NETWORK,
   INITIALIZE_METAMASK,
 } from "./actions";
-import { BigNumber } from "ethers/utils";
+import { BigNumber } from "ethers";
 
 // eslint-disable-next-line no-undef
 const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
@@ -55,7 +53,10 @@ const myFyghterReducer = (
     case CHANGE_SKIN:
       return { ...state, skin };
     case INCREMENT_MY_FIGHTER_XP:
-      return { ...state, xp: new BigNumber(state.xp).add(new BigNumber("1")) };
+      return {
+        ...state,
+        xp: BigNumber.from(state.xp).add(BigNumber.from("1")),
+      };
     case CREATE_FYGHTER:
       return myFyghter;
     default:
@@ -74,7 +75,7 @@ const enemiesReducer = (
     case INCREMENT_ENEMY_XP:
       return state.map(e => {
         if (e.id.eq(enemyId)) {
-          return { ...e, xp: new BigNumber(e.xp).add(new BigNumber("1")) };
+          return { ...e, xp: BigNumber.from(e.xp).add(BigNumber.from("1")) };
         } else {
           return e;
         }
@@ -101,10 +102,13 @@ const metamaskReducer = (
     case INITIALIZE_METAMASK: {
       const { ethereum } = state;
       const provider = new ethers.providers.Web3Provider(ethereum);
-      const contract: Fyghters = FyghtersFactory.connect(
+      // TODO: Change signer when accounts change
+      const signer = provider.getSigner();
+      const FYGHTERS_CONTRACT_ABI = require("../contracts/Fyghters.json").abi;
+      const contract = new ethers.Contract(
         FYGHTERS_CONTRACT_ADDRESS,
-        // TODO: Change signer when accounts change
-        provider.getSigner()
+        FYGHTERS_CONTRACT_ABI,
+        signer
       );
 
       return { ...state, contract, provider, ethereum };

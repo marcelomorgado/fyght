@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "antd": "4.0.2",
-    "ethers": "4.0.45",
+    "ethers": "5.0.0-beta.176",
     "react": "16.13.0",
     "react-dom": "16.13.0",
     "web3": "1.2.6"
