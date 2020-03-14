@@ -1,11 +1,14 @@
-import { Provider } from "ethers/providers";
-import { Fyghters } from "./contracts/Fyghters";
-
 declare module "*.png";
 declare module "*.gif";
 
-// TODO: Rename type
-interface FyghtContextInterface {
+declare namespace NodeJS {
+  export interface ProcessEnv {
+    NODE_ENV: "dev";
+    FYGHTERS_CONTRACT_ADDRESS: string;
+  }
+}
+
+interface FyghtContext {
   myFyghter: Fyghter;
   enemies: Array<Fyghter>;
   metamask: Metamask;
@@ -32,6 +35,4 @@ interface Metamask {
   provider: Provider;
   // TODO: having contracts as objects and having name (?) as key
   contract: Fyghters;
-
-  //const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
 }

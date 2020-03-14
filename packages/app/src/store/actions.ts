@@ -1,6 +1,5 @@
 import { ethers, ContractTransaction } from "ethers";
 import { BigNumber } from "ethers/utils";
-import { Fyghter, FyghtContextInterface } from "../global";
 import { getAllEvents } from "../helpers";
 import { TransactionReceipt } from "ethers/providers";
 
@@ -9,17 +8,33 @@ export const CHANGE_SKIN = "CHANGE_SKIN";
 export const INCREMENT_MY_FIGHTER_XP = "INCREMENT_MY_FIGHTER_XP";
 export const INCREMENT_ENEMY_XP = "INCREMENT_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
-export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
+export const CREATE_FYGHTER = "CREATE_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 
-export const createActions = (
-  dispatch: any,
-  state: FyghtContextInterface
-): any => {
-  const setMyFyghter = (myFyghter: Fyghter): void =>
-    dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
+export const createActions = (dispatch: any, state: FyghtContext): any => {
+  const createFyghter = async (name: string): Promise<void> => {
+    const {
+      metamask: { contract: fyghters },
+    } = state;
+
+    try {
+      const tx: ContractTransaction = await fyghters.create(name);
+      await tx.wait();
+
+      // TODO: Get event from transaction
+      const filter = fyghters.filters.NewFyghter(null, null, null);
+      fyghters.on(filter, async (owner: string, id: number, name: string) => {
+        const myFyghter = await fyghters.fyghters(id);
+        dispatch({ type: CREATE_FYGHTER, payload: { myFyghter } });
+      });
+    } catch (e) {
+      console.log(e);
+      // Revert message
+      //console.log(e.data.message);
+    }
+  };
 
   const renameMyFyghter = async (name: string): void => {
     const {
@@ -64,7 +79,7 @@ export const createActions = (
       console.log(e);
 
       if (e && e.data && e.data.message) {
-        // TODO: Is it possible to get error without expection?
+        // TODO: Is it possible to get error without exception?
         // TODO: Create a global message component
         // setErrorMessage(e.data.message);
       }
@@ -87,7 +102,6 @@ export const createActions = (
     } = state;
 
     try {
-      // TODO: Also move other contract interactions to this file
       const tx: ContractTransaction = await fyghters.attack(
         myFyghterId,
         enemyId
@@ -163,7 +177,7 @@ export const createActions = (
 
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
-      setMyFyghter(myFyghter);
+      createFyghter(myFyghter);
     }
   };
 
@@ -202,6 +216,6 @@ export const createActions = (
     setMetamaskAccount,
     setMetamaskNetworkId,
     initializeMetamask,
-    setMyFyghter,
+    createFyghter,
   };
 };

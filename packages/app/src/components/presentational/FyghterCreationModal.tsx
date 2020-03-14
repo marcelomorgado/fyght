@@ -1,15 +1,14 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
-import { ContractTransaction } from "ethers";
 
-interface Values {}
+// interface Values {}
 
 interface FyghterCreationFormProps {
   visible: boolean;
   // TODO: To use Values type above
-  onCreate: (values: any) => void;
+  // See more: https://github.com/ant-design/ant-design/issues/21195
+  onCreate: (values: {}) => void;
   onCancel: () => void;
 }
 
@@ -30,8 +29,8 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
           const values = await form.validateFields();
           form.resetFields();
           onCreate(values);
-        } catch (info) {
-          console.log("Validate Failed:", info);
+        } catch (e) {
+          // TODO: Handle error
         }
       }}
     >
@@ -53,43 +52,23 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
   );
 };
 
-export const FyghterCreationModal = () => {
+export const FyghterCreationModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const {
-    state: {
-      metamask: { contract: fyghters },
-    },
-    setMyFyghter,
-  } = useFyghtContext();
+  const { createFyghter } = useFyghtContext();
 
   const onSave = async ({ name }: { name: string }): Promise<void> => {
-    try {
-      const tx: ContractTransaction = await fyghters.create(name);
-      await tx.wait();
-
-      // TODO: Get event from transaction
-      const filter = fyghters.filters.NewFyghter(null, null, null);
-      fyghters.on(filter, async (owner: string, id: number, name: string) => {
-        const myFyghter = await fyghters.fyghters(id);
-        console.log(myFyghter);
-        setMyFyghter(myFyghter);
-      });
-    } catch (e) {
-      console.log(e);
-      // Revert message
-      //console.log(e.data.message);
-    } finally {
-      setVisible(false);
-    }
+    createFyghter(name);
+    setVisible(false);
   };
 
   return (
     <div>
+      {`You have to create your fyghter!`}
       <Button
         type="primary"
         block={true}
-        onClick={() => {
+        onClick={(): void => {
           setVisible(true);
         }}
       >
@@ -97,7 +76,7 @@ export const FyghterCreationModal = () => {
       </Button>
       <FyghterCreationForm
         visible={isVisible}
-        onCancel={() => {
+        onCancel={(): void => {
           setVisible(false);
         }}
         onCreate={onSave}

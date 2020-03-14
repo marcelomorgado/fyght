@@ -3,16 +3,18 @@ import { Card } from "antd";
 import { FyghterRenamingModal } from "./FyghterRenamingModal";
 import { FyghterChangeSkinModal } from "./FyghterChangeSkinModal";
 import { SkinAvatar } from "./SkinAvatar";
+import { AvatarSize } from "../../constants";
 
 type Props = {
   fyghter: Fyghter;
 };
 
-// TODO: Edit fyghter name
-export const MyFyghter = ({ fyghter: { skin, name, xp } }: Props) => {
+export const MyFyghter: React.FC<Props> = ({
+  fyghter: { skin, name, xp },
+}: Props) => {
   return (
     <Card type="inner" title={name} hoverable={true}>
-      <SkinAvatar skin={skin} size="medium" />
+      <SkinAvatar skin={skin} size={AvatarSize.MEDIUM} />
       <p></p>
       <p>{`XP: ${xp}`}</p>
       <FyghterRenamingModal />

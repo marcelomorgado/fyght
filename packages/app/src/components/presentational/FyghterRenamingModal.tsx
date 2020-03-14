@@ -1,22 +1,20 @@
-// TODO: Solve this
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { useFyghtContext } from "../../store";
 
-interface Values {}
+// interface Values {}
 
 interface FyghterRenamingFormProps {
   visible: boolean;
   // TODO: To use Values type above
-  onSave: (values: any) => void;
+  // See more: https://github.com/ant-design/ant-design/issues/21195
+  onSave: (values: {}) => void;
   onCancel: () => void;
 }
 
 const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   visible,
   onCancel,
-  // TODO: Rename to onRenaming
   onSave,
 }) => {
   const [form] = Form.useForm();
@@ -31,8 +29,8 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
           const values = await form.validateFields();
           form.resetFields();
           onSave(values);
-        } catch (info) {
-          console.log("Validate Failed:", info);
+        } catch (e) {
+          // TODO: Handle error
         }
       }}
     >
@@ -54,7 +52,7 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   );
 };
 
-export const FyghterRenamingModal = () => {
+export const FyghterRenamingModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
   const { renameMyFyghter } = useFyghtContext();
@@ -69,7 +67,7 @@ export const FyghterRenamingModal = () => {
       <Button
         type="primary"
         block={true}
-        onClick={() => {
+        onClick={(): void => {
           setVisible(true);
         }}
       >
@@ -77,7 +75,7 @@ export const FyghterRenamingModal = () => {
       </Button>
       <FyghterRenamingForm
         visible={isVisible}
-        onCancel={() => {
+        onCancel={(): void => {
           setVisible(false);
         }}
         onSave={onSave}

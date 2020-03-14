@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AttackModal should render the component 1`] = `
+exports[`FyghterCreationModal should render the component 1`] = `
 <div>
+  You have to create your fyghter!
   <Button
     block={true}
     ghost={false}
@@ -10,11 +11,11 @@ exports[`AttackModal should render the component 1`] = `
     onClick={[Function]}
     type="primary"
   >
-    Attack
+    Create
   </Button>
-  <EnamyAttackView
+  <FyghterCreationForm
     onCancel={[Function]}
-    onOk={[Function]}
+    onCreate={[Function]}
     visible={false}
   />
 </div>

@@ -7,14 +7,17 @@ import {
   INCREMENT_ENEMY_XP,
   INCREMENT_MY_FIGHTER_XP,
   LOAD_ENEMIES,
-  SET_MY_FYGHTER,
+  CREATE_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
   UPDATE_METAMASK_NETWORK,
   INITIALIZE_METAMASK,
 } from "./actions";
-import { Metamask, Fyghter, Action, FyghtContextInterface } from "../global";
 import { BigNumber } from "ethers/utils";
 
+// eslint-disable-next-line no-undef
+const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
+
+// TODO: Move this declaration to the global.d.ts file
 declare global {
   interface Window {
     // TODO: Set properly type
@@ -27,7 +30,7 @@ if (ethereum) {
   ethereum.autoRefreshOnNetworkChange = false;
 }
 
-export const initialState: FyghtContextInterface = {
+export const initialState: FyghtContext = {
   myFyghter: null,
   enemies: [],
   metamask: {
@@ -53,7 +56,7 @@ const myFyghterReducer = (
       return { ...state, skin };
     case INCREMENT_MY_FIGHTER_XP:
       return { ...state, xp: new BigNumber(state.xp).add(new BigNumber("1")) };
-    case SET_MY_FYGHTER:
+    case CREATE_FYGHTER:
       return myFyghter;
     default:
       return state;
@@ -97,9 +100,6 @@ const metamaskReducer = (
       return { ...state, networkId };
     case INITIALIZE_METAMASK: {
       const { ethereum } = state;
-      // TODO: Move to a setup/env config
-      const FYGHTERS_CONTRACT_ADDRESS =
-        "0x49de9b5f6c0Dc3e22e9Af986477Cac01dBe82659";
       const provider = new ethers.providers.Web3Provider(ethereum);
       const contract: Fyghters = FyghtersFactory.connect(
         FYGHTERS_CONTRACT_ADDRESS,
@@ -115,9 +115,9 @@ const metamaskReducer = (
 };
 
 export const rootReducer = (
-  state: FyghtContextInterface = initialState,
+  state: FyghtContext = initialState,
   action: Action
-): FyghtContextInterface => {
+): FyghtContext => {
   const { myFyghter, enemies, metamask } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),
