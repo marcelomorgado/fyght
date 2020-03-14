@@ -1,6 +1,13 @@
 declare module "*.png";
 declare module "*.gif";
 
+declare namespace NodeJS {
+  export interface ProcessEnv {
+    NODE_ENV: "dev";
+    FYGHTERS_CONTRACT_ADDRESS: string;
+  }
+}
+
 // TODO: Rename type
 interface FyghtContextInterface {
   myFyghter: Fyghter;

@@ -82,7 +82,7 @@ export const createActions = (
       console.log(e);
 
       if (e && e.data && e.data.message) {
-        // TODO: Is it possible to get error without expection?
+        // TODO: Is it possible to get error without exception?
         // TODO: Create a global message component
         // setErrorMessage(e.data.message);
       }
@@ -105,7 +105,6 @@ export const createActions = (
     } = state;
 
     try {
-      // TODO: Also move other contract interactions to this file
       const tx: ContractTransaction = await fyghters.attack(
         myFyghterId,
         enemyId
