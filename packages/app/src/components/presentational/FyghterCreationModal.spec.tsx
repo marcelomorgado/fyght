@@ -6,7 +6,7 @@ import { FyghterCreationModal } from "./FyghterCreationModal";
 describe("FyghterCreationModal", () => {
   test("should render the component", () => {
     const contextValues = {
-      createFyghter: (): void => {},
+      createFyghter: jest.fn(),
     };
 
     jest

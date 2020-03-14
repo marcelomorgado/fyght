@@ -8,7 +8,7 @@ const { myFyghter } = storeMocks;
 describe("FyghterChangeSkinModal", () => {
   test("should render the component", () => {
     const contextValues = {
-      changeMyFyghterSkin: (): void => {},
+      changeMyFyghterSkin: jest.fn(),
       state: { myFyghter },
     };
 

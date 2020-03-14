@@ -13,10 +13,7 @@ export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 
-export const createActions = (
-  dispatch: any,
-  state: FyghtContextInterface
-): any => {
+export const createActions = (dispatch: any, state: FyghtContext): any => {
   const createFyghter = async (name: string): Promise<void> => {
     const {
       metamask: { contract: fyghters },

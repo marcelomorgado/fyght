@@ -30,7 +30,7 @@ if (ethereum) {
   ethereum.autoRefreshOnNetworkChange = false;
 }
 
-export const initialState: FyghtContextInterface = {
+export const initialState: FyghtContext = {
   myFyghter: null,
   enemies: [],
   metamask: {
@@ -115,9 +115,9 @@ const metamaskReducer = (
 };
 
 export const rootReducer = (
-  state: FyghtContextInterface = initialState,
+  state: FyghtContext = initialState,
   action: Action
-): FyghtContextInterface => {
+): FyghtContext => {
   const { myFyghter, enemies, metamask } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),
