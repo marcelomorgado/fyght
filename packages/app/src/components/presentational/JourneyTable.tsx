@@ -1,8 +1,8 @@
 import React from "react";
 import { Row, Col, Table } from "antd";
-
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
+import { AvatarSize } from "../../constants";
 
 const dataSource = skins.map((skin: any, i: number) => ({
   key: `${i + 1}`,
@@ -14,7 +14,9 @@ const columns = [
     title: "",
     dataIndex: "skin",
     key: "skin",
-    render: (text: string) => <SkinAvatar skin={text} size="small" />,
+    render: (text: string) => (
+      <SkinAvatar skin={text} size={AvatarSize.SMALL} />
+    ),
   },
   {
     title: "Level",

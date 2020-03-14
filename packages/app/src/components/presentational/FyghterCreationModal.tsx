@@ -64,6 +64,7 @@ export const FyghterCreationModal = () => {
 
   return (
     <div>
+      {`You have to create your fyghter!`}
       <Button
         type="primary"
         block={true}
