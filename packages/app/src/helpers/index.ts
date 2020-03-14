@@ -3,7 +3,7 @@ import { Skin } from "../constants";
 export const skins = [
   {
     skin: Skin.NAKED,
-    level: Skin.NAKED,
+    level: "Naked",
     description:
       "You are ready to begin your journey when you let go all of material stuffs",
     unlock: "-",
@@ -28,13 +28,13 @@ export const skins = [
   },
   {
     skin: Skin.MONK,
-    level: Skin.MONK,
+    level: "Monk",
     description: "Secret powers and wisdoms are achieve",
     unlock: "40 XP",
   },
   {
     skin: Skin.NINJA,
-    level: Skin.NINJA,
+    level: "Ninja",
     description: "Secret powers and wisdoms are achieve",
     unlock: "50 XP",
   },
@@ -52,7 +52,7 @@ export const skins = [
   },
   {
     skin: Skin.MASTER,
-    level: Skin.MASTER,
+    level: "Master",
     description: "Try not, do or do not",
     unlock: "100 XP",
   },

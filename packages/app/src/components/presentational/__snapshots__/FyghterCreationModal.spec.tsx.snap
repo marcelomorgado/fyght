@@ -2,6 +2,7 @@
 
 exports[`FyghterCreationModal should render the component 1`] = `
 <div>
+  You have to create your fyghter!
   <Button
     block={true}
     ghost={false}

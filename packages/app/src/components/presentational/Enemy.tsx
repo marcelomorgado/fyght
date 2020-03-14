@@ -8,7 +8,9 @@ type Props = {
   enemy: Fyghter;
 };
 
-export const Enemy = ({ enemy: { id, skin, name, xp } }: Props) => {
+export const Enemy: React.FC<Props> = ({
+  enemy: { id, skin, name, xp },
+}: Props) => {
   return (
     <Card type="inner" title={name} hoverable={true} style={{ height: 405 }}>
       <SkinAvatar skin={skin} size={AvatarSize.MEDIUM} />

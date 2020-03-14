@@ -7,13 +7,12 @@ import { useFyghtContext } from "../../store";
 
 const { Content, Footer } = Layout;
 
-export const FyghtScreen = () => {
+export const FyghtScreen: React.FC = () => {
   const {
     state: {
       metamask: { ethereum, account, networkId },
     },
     setMetamaskAccount,
-    setMetamaskNetworkId,
     initializeMetamask,
   } = useFyghtContext();
 
@@ -23,8 +22,8 @@ export const FyghtScreen = () => {
         initializeMetamask();
         const [account] = await ethereum.send("eth_requestAccounts");
         setMetamaskAccount(account);
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        // TODO: Handle error
       }
     };
     init();

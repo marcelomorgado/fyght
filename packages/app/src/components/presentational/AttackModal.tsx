@@ -6,34 +6,42 @@ import { useFyghtContext } from "../../store";
 import gifs from "../../assets/img/*.gif";
 import { BigNumber } from "ethers/utils";
 
-const EnamyAttackView: any = class extends React.Component<any> {
-  render() {
-    const { visible, onCancel, onOk } = this.props;
-    return (
-      <Modal
-        width={370}
-        visible={visible}
-        title="Attacking in progress..."
-        okText="OK"
-        onCancel={onCancel}
-        onOk={onOk}
-      >
-        <img alt="loading..." src={gifs["loading"]} width={320} />
-      </Modal>
-    );
-  }
+interface EnamyAttackViewProps {
+  visible: boolean;
+  onOk: () => void;
+  onCancel: () => void;
+}
+
+const EnamyAttackView: React.FC<EnamyAttackViewProps> = ({
+  visible,
+  onCancel,
+  onOk,
+}) => {
+  return (
+    <Modal
+      width={370}
+      visible={visible}
+      title="Attacking in progress..."
+      okText="OK"
+      onCancel={onCancel}
+      onOk={onOk}
+    >
+      <img alt="loading..." src={gifs["loading"]} width={320} />
+    </Modal>
+  );
 };
 
 type Props = {
   enemyId: BigNumber;
 };
 
-export const AttackModal = ({ enemyId }: Props) => {
+export const AttackModal: React.FC<Props> = ({ enemyId }: Props) => {
   const [isVisible, setVisible] = useState(false);
 
   const { attackAnEnemy } = useFyghtContext();
 
-  const onAttack = () => {
+  // TODO: Review UX interaction
+  const onAttack = (): void => {
     setVisible(true);
     const secondsToGo = 2;
     setTimeout(() => {
@@ -49,10 +57,10 @@ export const AttackModal = ({ enemyId }: Props) => {
       </Button>
       <EnamyAttackView
         visible={isVisible}
-        onCancel={() => {
+        onCancel={(): void => {
           setVisible(false);
         }}
-        onOk={() => {
+        onOk={(): void => {
           setVisible(false);
         }}
       />

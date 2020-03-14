@@ -4,7 +4,7 @@ import { MyFyghter } from "./MyFyghter";
 import { useFyghtContext } from "../../store";
 import { FyghterCreationModal } from "./FyghterCreationModal";
 
-export const MyFyghterContainer = () => {
+export const MyFyghterContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
 
   const {
