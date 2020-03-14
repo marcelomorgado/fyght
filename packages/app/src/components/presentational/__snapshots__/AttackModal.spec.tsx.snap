@@ -12,7 +12,7 @@ exports[`AttackModal should render the component 1`] = `
   >
     Attack
   </Button>
-  <class_1
+  <EnamyAttackView
     onCancel={[Function]}
     onOk={[Function]}
     visible={false}

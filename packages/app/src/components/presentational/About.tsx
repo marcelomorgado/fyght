@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 
-export const About = () => {
+export const About: React.FC = () => {
   return (
     <Card type="inner" title="About & Rules">
       <p>Your journey to became a master starts now.</p>

@@ -3,7 +3,7 @@ import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
 import { useFyghtContext } from "../../store";
 
-export const EnemiesContainer = () => {
+export const EnemiesContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
 
   const {
@@ -12,7 +12,7 @@ export const EnemiesContainer = () => {
   } = useFyghtContext();
 
   useEffect(() => {
-    const init = async () => {
+    const init = async (): Promise<void> => {
       await loadEnemies();
       setLoading(false);
     };

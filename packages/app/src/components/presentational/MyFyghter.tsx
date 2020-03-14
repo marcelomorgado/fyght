@@ -9,7 +9,9 @@ type Props = {
   fyghter: Fyghter;
 };
 
-export const MyFyghter = ({ fyghter: { skin, name, xp } }: Props) => {
+export const MyFyghter: React.FC<Props> = ({
+  fyghter: { skin, name, xp },
+}: Props) => {
   return (
     <Card type="inner" title={name} hoverable={true}>
       <SkinAvatar skin={skin} size={AvatarSize.MEDIUM} />

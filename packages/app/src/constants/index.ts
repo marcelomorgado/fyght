@@ -11,6 +11,6 @@ export enum Skin {
 }
 
 export enum AvatarSize {
-  SMALL = "SMALL",
-  MEDIUM = "MEDIUM",
+  SMALL = "small",
+  MEDIUM = "medium",
 }

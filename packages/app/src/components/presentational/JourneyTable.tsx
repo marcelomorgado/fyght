@@ -4,7 +4,7 @@ import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
 import { AvatarSize } from "../../constants";
 
-const dataSource = skins.map((skin: any, i: number) => ({
+const dataSource = skins.map((skin: {}, i: number) => ({
   key: `${i + 1}`,
   ...skin,
 }));
@@ -14,7 +14,7 @@ const columns = [
     title: "",
     dataIndex: "skin",
     key: "skin",
-    render: (text: string) => (
+    render: (text: string): JSX.Element => (
       <SkinAvatar skin={text} size={AvatarSize.SMALL} />
     ),
   },
@@ -35,7 +35,7 @@ const columns = [
   },
 ];
 
-export const JourneyTable = () => {
+export const JourneyTable: React.FC = () => {
   return (
     <>
       <Row gutter={16} justify="center">

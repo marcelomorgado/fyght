@@ -2,6 +2,30 @@
 
 exports[`MyFyghterContainer should render the component 1`] = `
 <Fragment>
-  Loading...
+  <Divider
+    orientation="left"
+    style={
+      Object {
+        "color": "#333",
+        "fontWeight": "normal",
+      }
+    }
+  >
+    My Fyghter
+  </Divider>
+  <Row
+    gutter={
+      Array [
+        16,
+        24,
+      ]
+    }
+  >
+    <Col
+      span={24}
+    >
+      Loading...
+    </Col>
+  </Row>
 </Fragment>
 `;

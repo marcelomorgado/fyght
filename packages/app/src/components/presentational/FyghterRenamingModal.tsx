@@ -8,7 +8,7 @@ interface FyghterRenamingFormProps {
   visible: boolean;
   // TODO: To use Values type above
   // See more: https://github.com/ant-design/ant-design/issues/21195
-  onSave: (values: any) => void;
+  onSave: (values: {}) => void;
   onCancel: () => void;
 }
 
@@ -29,8 +29,8 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
           const values = await form.validateFields();
           form.resetFields();
           onSave(values);
-        } catch (info) {
-          console.log("Validate Failed:", info);
+        } catch (e) {
+          // TODO: Handle error
         }
       }}
     >
@@ -52,7 +52,7 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
   );
 };
 
-export const FyghterRenamingModal = () => {
+export const FyghterRenamingModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
   const { renameMyFyghter } = useFyghtContext();

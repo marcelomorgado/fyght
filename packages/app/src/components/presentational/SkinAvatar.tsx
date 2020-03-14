@@ -8,7 +8,7 @@ type Props = {
   size: string;
 };
 
-export const SkinAvatar = ({ skin, size }: Props) => {
+export const SkinAvatar: React.FC<Props> = ({ skin, size }: Props) => {
   let px = null;
 
   if (size === AvatarSize.SMALL) px = 100;

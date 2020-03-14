@@ -13,7 +13,7 @@ interface FyghterChangeSkinFormProps {
   visible: boolean;
   // TODO: To use Values type above
   // See more: https://github.com/ant-design/ant-design/issues/21195
-  onSave: (values: any) => void;
+  onSave: (values: {}) => void;
   onCancel: () => void;
   errorMessage: string;
 }
@@ -43,8 +43,8 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
           const values = await form.validateFields();
           form.resetFields();
           onSave(values);
-        } catch (info) {
-          console.log("Validate Failed:", info);
+        } catch (e) {
+          // TODO: Handle error
         }
       }}
     >
@@ -72,7 +72,7 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
   );
 };
 
-export const FyghterChangeSkinModal = (): any => {
+export const FyghterChangeSkinModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
