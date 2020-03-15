@@ -1,12 +1,10 @@
 import { Skin } from "../constants";
-import { ContractReceipt, Event, Contract } from "ethers";
 
 export const skins = [
   {
     skin: Skin.NAKED,
     level: "Naked",
-    description:
-      "You are ready to begin your journey when you let go all of material stuffs",
+    description: "You are ready to begin your journey when you let go all of material stuffs",
     unlock: "-",
   },
   {

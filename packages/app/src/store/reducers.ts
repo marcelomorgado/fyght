@@ -26,10 +26,7 @@ export const initialState: FyghtContext = {
   },
 };
 
-const myFyghterReducer = (
-  state: Fyghter = initialState.myFyghter,
-  action: Action
-): Fyghter => {
+const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Action): Fyghter => {
   const { type, payload } = action;
   const { name, skin, myFyghter } = payload;
 
@@ -50,10 +47,7 @@ const myFyghterReducer = (
   }
 };
 
-const enemiesReducer = (
-  state: Array<Fyghter> = initialState.enemies,
-  action: Action
-): Array<Fyghter> => {
+const enemiesReducer = (state: Array<Fyghter> = initialState.enemies, action: Action): Array<Fyghter> => {
   const { type, payload } = action;
   const { enemyId, enemies } = payload;
 
@@ -84,10 +78,7 @@ const errorMessageReducer = (state: string, action: Action): string => {
   }
 };
 
-const metamaskReducer = (
-  state: MetamaskContext = initialState.metamask,
-  action: Action
-): MetamaskContext => {
+const metamaskReducer = (state: MetamaskContext = initialState.metamask, action: Action): MetamaskContext => {
   const { type, payload } = action;
   const { networkId, account, ethereum, contract, provider } = payload;
 
@@ -112,10 +103,7 @@ const metamaskReducer = (
   }
 };
 
-export const rootReducer = (
-  state: FyghtContext = initialState,
-  action: Action
-): FyghtContext => {
+export const rootReducer = (state: FyghtContext = initialState, action: Action): FyghtContext => {
   const { myFyghter, enemies, errorMessage, metamask } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),

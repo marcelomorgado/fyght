@@ -18,6 +18,7 @@ interface FyghtContext {
 interface MetamaskContext {
   networkId: number;
   account: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
   provider: Provider;
   // TODO: having contracts as objects and having name (?) as key
@@ -34,5 +35,6 @@ interface Fyghter {
 
 interface Action {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload?: any;
 }
