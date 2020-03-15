@@ -18,7 +18,7 @@ declare global {
 
 const { ethereum } = window;
 if (ethereum) {
-  // ethereum.autoRefreshOnNetworkChange = false;
+  ethereum.autoRefreshOnNetworkChange = false;
 }
 
 const { getAddress } = ethers.utils;
@@ -64,7 +64,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     tx: Transaction;
     onOptimistic?: () => void;
     onSuccess?: (receipt?: ContractReceipt) => void;
-    onError: () => void;
+    onError: (receipt?: ContractReceipt) => void;
   }): Promise<void> => {
     const {
       metamask: { provider },
@@ -77,7 +77,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     provider.once(tx.hash, (receipt: ContractReceipt) => {
       const { status } = receipt;
       if (!status) {
-        onError();
+        onError(receipt);
         return;
       }
       if (onSuccess) {
@@ -157,8 +157,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       onOptimistic: () => {
         dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
       },
-      onError: () => {
+      onError: (receipt: ContractReceipt) => {
         dispatch({ type: RENAME, payload: { name: oldSkin } });
+        console.log(receipt);
         // TODO: Error mesage with reason
       },
     });
@@ -235,6 +236,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
       setMyFyghter(myFyghter);
+    } else {
+      setMyFyghter(null);
     }
   };
 
@@ -259,7 +262,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       });
 
       const provider = new ethers.providers.Web3Provider(ethereum);
-
       const signer = provider.getSigner();
       const FYGHTERS_CONTRACT_ABI = require("../contracts/Fyghters.json").abi;
       const contract = new ethers.Contract(
@@ -270,7 +272,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
       const [account] = await ethereum.enable();
 
-      const { networkVersion: networkId } = ethereum;
+      // const { networkVersion: networkId } = ethereum;
       dispatch({
         type: INITIALIZE_METAMASK,
         payload: {
@@ -279,7 +281,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           ethereum,
           account,
           provider,
-          networkId,
+          // networkId,
         },
       });
     }

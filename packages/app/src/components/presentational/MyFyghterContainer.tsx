@@ -8,7 +8,10 @@ export const MyFyghterContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
 
   const {
-    state: { myFyghter, metamask },
+    state: {
+      myFyghter,
+      metamask: { account },
+    },
     loadMyFyghter,
   } = useFyghtContext();
 
@@ -19,7 +22,7 @@ export const MyFyghterContainer: React.FC = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metamask]);
+  }, [account]);
 
   const hasFyghter = !isLoading && myFyghter !== null;
 
