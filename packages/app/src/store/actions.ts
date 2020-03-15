@@ -5,7 +5,6 @@ import { Skin } from "../constants";
 // TODO: Move this declaration to the global.d.ts file
 declare global {
   interface Window {
-    // TODO: Set properly type
     ethereum: any;
   }
 }

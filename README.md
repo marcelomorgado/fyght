@@ -15,7 +15,7 @@ After each victory, your fyghter gains +1 XP and <b>become stronger</b>.
 | <img src="/packages/app/src/assets/img/monk.png" alt="monk" width="100px"/>             | Monk       | Secret powers and wisdoms are achieve                                      | 40 XP  |
 | <img src="/packages/app/src/assets/img/ninja.png" alt="ninja" width="100px"/>           | Ninja      | Light as the wind                                                          | 50 XP  |
 | <img src="/packages/app/src/assets/img/no_one.png" alt="no_one" width="100px"/>         | No One     | Valar dohaeris                                                             | 80 XP  |
-| <img src="/packages/app/src/assets/img/daemon.png" alt="daemon" width="100px"/>         | Daemon     | Anyone means anyone                                                        | 80 XP  |
+| <img src="/packages/app/src/assets/img/demon.png" alt="demon" width="100px"/>           | Demon      | Anyone means anyone                                                        | 80 XP  |
 | <img src="/packages/app/src/assets/img/master.png" alt="master" width="100px"/>         | Master     | Try not, do or do not                                                      | 100 XP |
 
 ## Running
@@ -35,6 +35,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 All images used on this project are available under Creative Commons Attribution license.
 
-- naked, normal_guy, karate_kid, japonese, monk, ninja, no_one, daemon by [TGBB](https://piq.codeus.net/u/TGBB) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+- naked, normal_guy, karate_kid, japonese, monk, ninja, no_one, demon by [TGBB](https://piq.codeus.net/u/TGBB) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 - master by [a5m00thcrimin4l](https://piq.codeus.net/u/a5m00thcrimin4l) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 - pencil by [Tom](https://piq.codeus.net/u/Tom) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)

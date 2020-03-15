@@ -90,8 +90,8 @@ exports[`JourneyTable should render the component 1`] = `
             Object {
               "description": "Anyone means anyone",
               "key": "8",
-              "level": "Damon",
-              "skin": "daemon",
+              "level": "Demon",
+              "skin": "demon",
               "unlock": "80 XP",
             },
             Object {

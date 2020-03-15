@@ -46,8 +46,8 @@ export const skins = [
     unlock: "80 XP",
   },
   {
-    skin: Skin.DAEMON,
-    level: "Damon",
+    skin: Skin.DEMON,
+    level: "Demon",
     description: "Anyone means anyone",
     unlock: "80 XP",
   },

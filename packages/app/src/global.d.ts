@@ -18,7 +18,6 @@ interface FyghtContext {
 interface MetamaskContext {
   networkId: number;
   account: string;
-  // TODO: Deprecated?
   ethereum: any;
   provider: Provider;
   // TODO: having contracts as objects and having name (?) as key
