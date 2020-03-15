@@ -11,26 +11,13 @@ import {
 } from "./actions";
 import { BigNumber } from "ethers";
 
-// TODO: Move this declaration to the global.d.ts file
-declare global {
-  interface Window {
-    // TODO: Set properly type
-    ethereum: any;
-  }
-}
-
-const { ethereum } = window;
-if (ethereum) {
-  ethereum.autoRefreshOnNetworkChange = false;
-}
-
 export const initialState: FyghtContext = {
   myFyghter: null,
   enemies: [],
   metamask: {
     networkId: null,
     account: null,
-    ethereum,
+    ethereum: null,
     contract: null,
     provider: null,
     loading: true,

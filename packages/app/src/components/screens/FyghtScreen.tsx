@@ -19,7 +19,7 @@ export const FyghtScreen: React.FC = () => {
   useEffect(() => {
     initializeMetamask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ethereum]);
+  }, []);
 
   if (loading) {
     return <Spin />;

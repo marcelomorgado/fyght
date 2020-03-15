@@ -8,6 +8,19 @@ import {
 import { BigNumber } from "ethers";
 import { Skin } from "../constants";
 
+// TODO: Move this declaration to the global.d.ts file
+declare global {
+  interface Window {
+    // TODO: Set properly type
+    ethereum: any;
+  }
+}
+
+const { ethereum } = window;
+if (ethereum) {
+  // ethereum.autoRefreshOnNetworkChange = false;
+}
+
 const { getAddress } = ethers.utils;
 
 export const RENAME = "RENAME";
@@ -89,7 +102,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           name,
           xp: BigNumber.from("1"),
         };
-        setMyFyghter(myFyghter);
+        // setMyFyghter(myFyghter);
       },
       onSuccess: async (receipt: ContractReceipt) => {
         const [log] = receipt.logs
@@ -233,7 +246,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   const initializeMetamask = async (): Promise<void> => {
     const { metamask } = state;
-    const { ethereum } = metamask;
 
     if (ethereum) {
       // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
