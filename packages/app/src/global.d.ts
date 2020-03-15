@@ -14,6 +14,18 @@ interface FyghtContext {
   metamask: Metamask;
 }
 
+// TODO: Rename from metamask to root (maybe another context?)
+interface Metamask {
+  networkId: number;
+  account: string;
+  // TODO: Deprecated?
+  ethereum: any;
+  provider: Provider;
+  // TODO: having contracts as objects and having name (?) as key
+  contract: Contract;
+  loading: boolean;
+}
+
 interface Fyghter {
   id: import("ethers").BigNumber;
   skin: string;
@@ -24,15 +36,4 @@ interface Fyghter {
 interface Action {
   type: string;
   payload?: any;
-}
-
-// TODO: Rename from metamask to root (maybe another context?)
-interface Metamask {
-  networkId: number;
-  account: string;
-  // TODO: Deprecated?
-  ethereum: any;
-  provider: Provider;
-  // TODO: having contracts as objects and having name (?) as key
-  contract: Contract;
 }

@@ -20,6 +20,9 @@ export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 
+// eslint-disable-next-line no-undef
+const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
+
 interface NewFyghter {
   owner: string;
   id: BigNumber;
@@ -228,10 +231,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const setMetamaskNetworkId = (networkId: number): void =>
     dispatch({ type: UPDATE_METAMASK_NETWORK, payload: { networkId } });
 
-  const initializeMetamask = (): void => {
-    const {
-      metamask: { ethereum },
-    } = state;
+  const initializeMetamask = async (): Promise<void> => {
+    const { metamask } = state;
+    const { ethereum } = metamask;
 
     if (ethereum) {
       // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
@@ -243,9 +245,32 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       ethereum.on("accountsChanged", ([account]: string[]) => {
         setMetamaskAccount(account);
       });
-    }
 
-    dispatch({ type: INITIALIZE_METAMASK, payload: {} });
+      const provider = new ethers.providers.Web3Provider(ethereum);
+
+      const signer = provider.getSigner();
+      const FYGHTERS_CONTRACT_ABI = require("../contracts/Fyghters.json").abi;
+      const contract = new ethers.Contract(
+        FYGHTERS_CONTRACT_ADDRESS,
+        FYGHTERS_CONTRACT_ABI,
+        signer
+      );
+
+      const [account] = await ethereum.enable();
+
+      const { networkVersion: networkId } = ethereum;
+      dispatch({
+        type: INITIALIZE_METAMASK,
+        payload: {
+          ...metamask,
+          contract,
+          ethereum,
+          account,
+          provider,
+          networkId,
+        },
+      });
+    }
   };
 
   return {

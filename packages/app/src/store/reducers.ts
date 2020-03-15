@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import {
   RENAME,
   CHANGE_SKIN,
@@ -11,9 +10,6 @@ import {
   INITIALIZE_METAMASK,
 } from "./actions";
 import { BigNumber } from "ethers";
-
-// eslint-disable-next-line no-undef
-const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
 
 // TODO: Move this declaration to the global.d.ts file
 declare global {
@@ -37,6 +33,7 @@ export const initialState: FyghtContext = {
     ethereum,
     contract: null,
     provider: null,
+    loading: true,
   },
 };
 
@@ -92,7 +89,7 @@ const metamaskReducer = (
   action: Action
 ): Metamask => {
   const { type, payload } = action;
-  const { networkId, account } = payload;
+  const { networkId, account, ethereum, contract, provider } = payload;
 
   switch (type) {
     case UPDATE_METAMASK_ACCOUNT:
@@ -100,18 +97,15 @@ const metamaskReducer = (
     case UPDATE_METAMASK_NETWORK:
       return { ...state, networkId };
     case INITIALIZE_METAMASK: {
-      const { ethereum } = state;
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      // TODO: Change signer when accounts change
-      const signer = provider.getSigner();
-      const FYGHTERS_CONTRACT_ABI = require("../contracts/Fyghters.json").abi;
-      const contract = new ethers.Contract(
-        FYGHTERS_CONTRACT_ADDRESS,
-        FYGHTERS_CONTRACT_ABI,
-        signer
-      );
-
-      return { ...state, contract, provider, ethereum };
+      return {
+        ...state,
+        account,
+        contract,
+        provider,
+        ethereum,
+        networkId,
+        loading: false,
+      };
     }
     default:
       return state;
