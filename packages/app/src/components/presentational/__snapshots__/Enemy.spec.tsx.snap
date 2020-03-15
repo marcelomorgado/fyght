@@ -23,6 +23,7 @@ exports[`Enemy should render the component 1`] = `
     enemyId={
       BigNumber {
         "_hex": "0x02",
+        "_isBigNumber": true,
       }
     }
   />

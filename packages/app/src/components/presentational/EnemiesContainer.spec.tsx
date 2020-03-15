@@ -8,7 +8,11 @@ import { storeMocks } from "../../testHelpers";
 describe("EnemiesContainer", () => {
   test("should render the component", () => {
     const contextValues = {
-      state: { enemies: storeMocks.enemies, initialized: true },
+      state: {
+        enemies: storeMocks.enemies,
+        initialized: true,
+        metamask: { account: "" },
+      },
     };
 
     jest
