@@ -1,10 +1,4 @@
-import {
-  ethers,
-  ContractTransaction,
-  Event,
-  Transaction,
-  ContractReceipt,
-} from "ethers";
+import { ethers, ContractTransaction, Event, ContractReceipt } from "ethers";
 import { BigNumber } from "ethers";
 import { Skin } from "../constants";
 
@@ -32,6 +26,7 @@ export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
+export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
 
 // eslint-disable-next-line no-undef
 const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
@@ -55,16 +50,19 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const setMyFyghter = (myFyghter: Fyghter): void =>
     dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
+  const setErrorMessage = (errorMessage: string): void =>
+    dispatch({ type: SET_ERROR_MESSAGE, payload: { errorMessage } });
+
   const optimisticUpdate = async ({
-    tx,
+    txPromise,
     onOptimistic,
     onSuccess,
     onError,
   }: {
-    tx: Transaction;
+    txPromise: Promise<ContractTransaction>;
     onOptimistic?: () => void;
     onSuccess?: (receipt?: ContractReceipt) => void;
-    onError: (receipt?: ContractReceipt) => void;
+    onError: (errorMessage: string, receipt?: ContractReceipt) => void;
   }): Promise<void> => {
     const {
       metamask: { provider },
@@ -74,16 +72,28 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       onOptimistic();
     }
 
-    provider.once(tx.hash, (receipt: ContractReceipt) => {
-      const { status } = receipt;
-      if (!status) {
-        onError(receipt);
-        return;
-      }
-      if (onSuccess) {
-        onSuccess(receipt);
-      }
-    });
+    try {
+      const tx: ContractTransaction = await txPromise;
+
+      provider.once(tx.hash, (receipt: ContractReceipt) => {
+        const { status } = receipt;
+        if (!status) {
+          onError("", receipt);
+          return;
+        }
+        if (onSuccess) {
+          onSuccess(receipt);
+        }
+      });
+    } catch (e) {
+      const { data } = e;
+      const { message } = data;
+      const errorMessage = message.replace(
+        "VM Exception while processing transaction: revert ",
+        ""
+      );
+      onError(errorMessage);
+    }
   };
 
   const createFyghter = async (name: string): Promise<void> => {
@@ -91,10 +101,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       metamask: { contract: fyghters },
     } = state;
 
-    const tx: ContractTransaction = await fyghters.create(name);
-
     optimisticUpdate({
-      tx,
+      txPromise: fyghters.create(name),
       onOptimistic: () => {
         const myFyghter: Fyghter = {
           id: null,
@@ -102,7 +110,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           name,
           xp: BigNumber.from("1"),
         };
-        // setMyFyghter(myFyghter);
+        setMyFyghter(myFyghter);
       },
       onSuccess: async (receipt: ContractReceipt) => {
         const [log] = receipt.logs
@@ -113,9 +121,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         const myFyghter = await fyghters.fyghters(id);
         setMyFyghter(myFyghter);
       },
-      onError: () => {
+      onError: (errorMessage: string) => {
         setMyFyghter(null);
-        // TODO: Error message
+        setErrorMessage(errorMessage);
       },
     });
   };
@@ -127,15 +135,14 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     } = state;
     const { id: myFyghterId, name: oldName } = myFyghter;
 
-    const tx: ContractTransaction = await fyghters.rename(myFyghterId, newName);
-
     optimisticUpdate({
-      tx,
+      txPromise: fyghters.rename(myFyghterId, newName),
       onOptimistic: () => {
         dispatch({ type: RENAME, payload: { name: newName } });
       },
-      onError: () => {
+      onError: (errorMessage: string) => {
         dispatch({ type: RENAME, payload: { name: oldName } });
+        setErrorMessage(errorMessage);
       },
     });
   };
@@ -147,20 +154,14 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     } = state;
     const { id: myFyghterId, skin: oldSkin } = myFyghter;
 
-    const tx: ContractTransaction = await fyghters.changeSkin(
-      myFyghterId,
-      newSkin
-    );
-
     optimisticUpdate({
-      tx,
+      txPromise: fyghters.changeSkin(myFyghterId, newSkin),
       onOptimistic: () => {
         dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
       },
-      onError: (receipt: ContractReceipt) => {
+      onError: (errorMessage: string) => {
         dispatch({ type: RENAME, payload: { name: oldSkin } });
-        console.log(receipt);
-        // TODO: Error mesage with reason
+        setErrorMessage(errorMessage);
       },
     });
   };
@@ -171,11 +172,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       metamask: { contract: fyghters },
     } = state;
 
-    const tx: ContractTransaction = await fyghters.attack(myFyghterId, enemyId);
-
     optimisticUpdate({
-      tx,
-      onOptimistic: () => {},
+      txPromise: fyghters.attack(myFyghterId, enemyId),
       onSuccess: (receipt: ContractReceipt) => {
         const [log] = receipt.logs
           .map((log: Event) => fyghters.interface.parseLog(log))
@@ -189,8 +187,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           incrementEnemyXp(enemyId);
         }
       },
-      onError: () => {
-        // TODO: Error message
+      onError: (errorMessage: string) => {
+        setErrorMessage(errorMessage);
       },
     });
   };
@@ -272,7 +270,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
       const [account] = await ethereum.enable();
 
-      // const { networkVersion: networkId } = ethereum;
+      // TODO: It isn't working sometimes
+      const { networkVersion: networkId } = ethereum;
       dispatch({
         type: INITIALIZE_METAMASK,
         payload: {
@@ -281,7 +280,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           ethereum,
           account,
           provider,
-          // networkId,
+          networkId,
         },
       });
     }

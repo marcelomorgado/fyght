@@ -11,11 +11,11 @@ declare namespace NodeJS {
 interface FyghtContext {
   myFyghter: Fyghter;
   enemies: Array<Fyghter>;
-  metamask: Metamask;
+  errorMessage: string;
+  metamask: MetamaskContext;
 }
 
-// TODO: Rename from metamask to root (maybe another context?)
-interface Metamask {
+interface MetamaskContext {
   networkId: number;
   account: string;
   // TODO: Deprecated?

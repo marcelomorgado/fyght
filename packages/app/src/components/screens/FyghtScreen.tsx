@@ -10,6 +10,7 @@ const { Content, Footer } = Layout;
 export const FyghtScreen: React.FC = () => {
   const {
     state: {
+      errorMessage,
       metamask: { ethereum, account, networkId, loading },
     },
     setMetamaskAccount,
@@ -71,6 +72,10 @@ export const FyghtScreen: React.FC = () => {
           type="info"
           showIcon
         />
+        <div style={{ margin: "16px 0" }}></div>
+        {errorMessage ? (
+          <Alert message={errorMessage} type="error" closable showIcon />
+        ) : null}
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
           <Row gutter={16}>
