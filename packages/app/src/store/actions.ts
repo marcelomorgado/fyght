@@ -1,91 +1,43 @@
-import { ethers, ContractTransaction } from "ethers";
-import { BigNumber } from "ethers/utils";
-import { getAllEvents } from "../helpers";
-import { TransactionReceipt } from "ethers/providers";
+import { ethers, ContractTransaction, Event, ContractReceipt } from "ethers";
+import { BigNumber } from "ethers";
+import { Skin } from "../constants";
+
+// TODO: Move this declaration to the global.d.ts file
+declare global {
+  interface Window {
+    // TODO: Set properly type
+    ethereum: any;
+  }
+}
+
+const { ethereum } = window;
+if (ethereum) {
+  ethereum.autoRefreshOnNetworkChange = false;
+}
+
+const { getAddress } = ethers.utils;
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
 export const INCREMENT_MY_FIGHTER_XP = "INCREMENT_MY_FIGHTER_XP";
 export const INCREMENT_ENEMY_XP = "INCREMENT_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
-export const CREATE_FYGHTER = "CREATE_FYGHTER";
+export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
+export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
+
+// eslint-disable-next-line no-undef
+const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
+
+interface NewFyghter {
+  owner: string;
+  id: BigNumber;
+  name: string;
+}
 
 export const createActions = (dispatch: any, state: FyghtContext): any => {
-  const createFyghter = async (name: string): Promise<void> => {
-    const {
-      metamask: { contract: fyghters },
-    } = state;
-
-    try {
-      const tx: ContractTransaction = await fyghters.create(name);
-      await tx.wait();
-
-      // TODO: Get event from transaction
-      const filter = fyghters.filters.NewFyghter(null, null, null);
-      fyghters.on(filter, async (owner: string, id: number, name: string) => {
-        const myFyghter = await fyghters.fyghters(id);
-        dispatch({ type: CREATE_FYGHTER, payload: { myFyghter } });
-      });
-    } catch (e) {
-      console.log(e);
-      // Revert message
-      //console.log(e.data.message);
-    }
-  };
-
-  const renameMyFyghter = async (name: string): void => {
-    const {
-      myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters },
-    } = state;
-
-    try {
-      const tx: ContractTransaction = await fyghters.rename(myFyghterId, name);
-      await tx.wait();
-
-      // TODO: Wait for event to update store
-      dispatch({ type: RENAME, payload: { name } });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const changeMyFyghterSkin = async (skin: string): Promise<void> => {
-    const {
-      myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters, provider },
-    } = state;
-
-    try {
-      const tx: ContractTransaction = await fyghters.changeSkin(
-        myFyghterId,
-        skin
-      );
-      await tx.wait();
-      const r: TransactionReceipt = await provider.getTransactionReceipt(
-        tx.hash
-      );
-
-      if (r.status == 1) {
-        dispatch({ type: CHANGE_SKIN, payload: { skin } });
-      } else {
-        // TODO: Create a global message component
-        // setErrorMessage("Unexpected error.");
-      }
-    } catch (e) {
-      console.log(e);
-
-      if (e && e.data && e.data.message) {
-        // TODO: Is it possible to get error without exception?
-        // TODO: Create a global message component
-        // setErrorMessage(e.data.message);
-      }
-    }
-  };
-
   const incrementMyFyghterXp = (): void =>
     dispatch({ type: INCREMENT_MY_FIGHTER_XP, payload: {} });
 
@@ -95,45 +47,152 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const setEnemies = (enemies: Fyghter[]): void =>
     dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
+  const setMyFyghter = (myFyghter: Fyghter): void =>
+    dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
+
+  const setErrorMessage = (errorMessage: string): void =>
+    dispatch({ type: SET_ERROR_MESSAGE, payload: { errorMessage } });
+
+  const optimisticUpdate = async ({
+    txPromise,
+    onOptimistic,
+    onSuccess,
+    onError,
+  }: {
+    txPromise: Promise<ContractTransaction>;
+    onOptimistic?: () => void;
+    onSuccess?: (receipt?: ContractReceipt) => void;
+    onError: (errorMessage: string, receipt?: ContractReceipt) => void;
+  }): Promise<void> => {
+    const {
+      metamask: { provider },
+    } = state;
+
+    if (onOptimistic) {
+      onOptimistic();
+    }
+
+    try {
+      const tx: ContractTransaction = await txPromise;
+
+      provider.once(tx.hash, (receipt: ContractReceipt) => {
+        const { status } = receipt;
+        if (!status) {
+          onError("", receipt);
+          return;
+        }
+        if (onSuccess) {
+          onSuccess(receipt);
+        }
+      });
+    } catch (e) {
+      const { data } = e;
+      const { message } = data;
+      const errorMessage = message.replace(
+        "VM Exception while processing transaction: revert ",
+        ""
+      );
+      onError(errorMessage);
+    }
+  };
+
+  const createFyghter = async (name: string): Promise<void> => {
+    const {
+      metamask: { contract: fyghters },
+    } = state;
+
+    optimisticUpdate({
+      txPromise: fyghters.create(name),
+      onOptimistic: () => {
+        const myFyghter: Fyghter = {
+          id: null,
+          skin: Skin.NAKED,
+          name,
+          xp: BigNumber.from("1"),
+        };
+        setMyFyghter(myFyghter);
+      },
+      onSuccess: async (receipt: ContractReceipt) => {
+        const [log] = receipt.logs
+          .map((log: Event) => fyghters.interface.parseLog(log))
+          .filter(({ name }) => name == "Attack")
+          .map(({ args }) => args);
+        const [owner, id, name] = log;
+        const myFyghter = await fyghters.fyghters(id);
+        setMyFyghter(myFyghter);
+      },
+      onError: (errorMessage: string) => {
+        setMyFyghter(null);
+        setErrorMessage(errorMessage);
+      },
+    });
+  };
+
+  const renameMyFyghter = async (newName: string): void => {
+    const {
+      myFyghter,
+      metamask: { contract: fyghters },
+    } = state;
+    const { id: myFyghterId, name: oldName } = myFyghter;
+
+    optimisticUpdate({
+      txPromise: fyghters.rename(myFyghterId, newName),
+      onOptimistic: () => {
+        dispatch({ type: RENAME, payload: { name: newName } });
+      },
+      onError: (errorMessage: string) => {
+        dispatch({ type: RENAME, payload: { name: oldName } });
+        setErrorMessage(errorMessage);
+      },
+    });
+  };
+
+  const changeMyFyghterSkin = async (newSkin: string): Promise<void> => {
+    const {
+      myFyghter,
+      metamask: { contract: fyghters },
+    } = state;
+    const { id: myFyghterId, skin: oldSkin } = myFyghter;
+
+    optimisticUpdate({
+      txPromise: fyghters.changeSkin(myFyghterId, newSkin),
+      onOptimistic: () => {
+        dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
+      },
+      onError: (errorMessage: string) => {
+        dispatch({ type: RENAME, payload: { name: oldSkin } });
+        setErrorMessage(errorMessage);
+      },
+    });
+  };
+
   const attackAnEnemy = async (enemyId: BigNumber): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
       metamask: { contract: fyghters },
     } = state;
 
-    try {
-      const tx: ContractTransaction = await fyghters.attack(
-        myFyghterId,
-        enemyId
-      );
-      await tx.wait();
+    optimisticUpdate({
+      txPromise: fyghters.attack(myFyghterId, enemyId),
+      onSuccess: (receipt: ContractReceipt) => {
+        const [log] = receipt.logs
+          .map((log: Event) => fyghters.interface.parseLog(log))
+          .filter(({ name }) => name == "Attack")
+          .map(({ args }) => args);
+        const [myFighterId, enemyId, winnerId] = log;
 
-      // TODO: Get event from transaction
-      // TODO: Fix many events reading
-      const filter = fyghters.filters.Attack(null, null, null);
-      fyghters.on(
-        filter,
-        async (
-          myFighterId: BigNumber,
-          enemyId: BigNumber,
-          winnerId: BigNumber
-        ) => {
-          if (winnerId.eq(myFighterId)) {
-            incrementMyFyghterXp();
-          } else {
-            incrementEnemyXp(enemyId);
-          }
+        if (winnerId.eq(myFighterId)) {
+          incrementMyFyghterXp();
+        } else {
+          incrementEnemyXp(enemyId);
         }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+      },
+      onError: (errorMessage: string) => {
+        setErrorMessage(errorMessage);
+      },
+    });
   };
 
-  //
-  // Note: This low level code needed to get past events is the way that ethers.js v4 works
-  // See more: https://github.com/marcelomorgado/fyght/issues/78
-  //
   const loadEnemies = async (): Promise<void> => {
     const {
       metamask: { contract: fyghters, provider, account },
@@ -144,17 +203,18 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       return;
     }
 
-    const topic = ethers.utils.id("NewFyghter(address,uint256,string)");
-    const events = await getAllEvents(fyghters, topic);
-    const enemiesIds = events
+    const filter = fyghters.filters.NewFyghter(null, null, null);
+    const logs = await fyghters.queryFilter(filter, 0, "latest");
+    const enemiesIds = logs
+      .map((l: Event) => l.args)
       .filter(
-        (event: any) =>
-          ethers.utils.getAddress(event.owner) !==
-          ethers.utils.getAddress(account)
+        ({ owner }: NewFyghter) => getAddress(owner) !== getAddress(account)
       )
-      .map((event: any) => event.id);
+      .map(({ id }: NewFyghter) => id);
 
-    const enemiesPromises = enemiesIds.map(id => fyghters.fyghters(id));
+    const enemiesPromises = enemiesIds.map((id: BigNumber) =>
+      fyghters.fyghters(id)
+    );
     const enemies: Fyghter[] = await Promise.all(enemiesPromises);
 
     setEnemies(enemies);
@@ -165,19 +225,17 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       metamask: { contract: fyghters, account },
     } = state;
 
-    const topic = ethers.utils.id("NewFyghter(address,uint256,string)");
-    const events = await getAllEvents(fyghters, topic);
-    const [myFyghterId] = events
-      .filter(
-        (event: any) =>
-          ethers.utils.getAddress(event.owner) ===
-          ethers.utils.getAddress(account)
-      )
-      .map((event: any) => event.id);
+    const filter = fyghters.filters.NewFyghter(getAddress(account), null, null);
+    const logs = await fyghters.queryFilter(filter, 0, "latest");
+    const [myFyghterId] = logs
+      .map((l: Event) => l.args)
+      .map(({ id }: NewFyghter) => id);
 
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
-      createFyghter(myFyghter);
+      setMyFyghter(myFyghter);
+    } else {
+      setMyFyghter(null);
     }
   };
 
@@ -187,10 +245,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const setMetamaskNetworkId = (networkId: number): void =>
     dispatch({ type: UPDATE_METAMASK_NETWORK, payload: { networkId } });
 
-  const initializeMetamask = (): void => {
-    const {
-      metamask: { ethereum },
-    } = state;
+  const initializeMetamask = async (): Promise<void> => {
+    const { metamask } = state;
 
     if (ethereum) {
       // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
@@ -202,9 +258,32 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       ethereum.on("accountsChanged", ([account]: string[]) => {
         setMetamaskAccount(account);
       });
-    }
 
-    dispatch({ type: INITIALIZE_METAMASK, payload: {} });
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const FYGHTERS_CONTRACT_ABI = require("../contracts/Fyghters.json").abi;
+      const contract = new ethers.Contract(
+        FYGHTERS_CONTRACT_ADDRESS,
+        FYGHTERS_CONTRACT_ABI,
+        signer
+      );
+
+      const [account] = await ethereum.enable();
+
+      // TODO: It isn't working sometimes
+      const { networkVersion: networkId } = ethereum;
+      dispatch({
+        type: INITIALIZE_METAMASK,
+        payload: {
+          ...metamask,
+          contract,
+          ethereum,
+          account,
+          provider,
+          networkId,
+        },
+      });
+    }
   };
 
   return {

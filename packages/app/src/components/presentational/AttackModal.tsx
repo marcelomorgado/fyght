@@ -4,7 +4,7 @@ import { useFyghtContext } from "../../store";
 
 // Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
 import gifs from "../../assets/img/*.gif";
-import { BigNumber } from "ethers/utils";
+import { BigNumber } from "ethers";
 
 interface EnamyAttackViewProps {
   visible: boolean;

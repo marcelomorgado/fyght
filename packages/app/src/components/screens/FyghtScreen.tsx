@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, Row, Col, Button, Alert } from "antd";
+import { Layout, Row, Col, Button, Alert, Spin } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
@@ -10,25 +10,21 @@ const { Content, Footer } = Layout;
 export const FyghtScreen: React.FC = () => {
   const {
     state: {
-      metamask: { ethereum, account, networkId },
+      errorMessage,
+      metamask: { ethereum, account, networkId, loading },
     },
     setMetamaskAccount,
     initializeMetamask,
   } = useFyghtContext();
 
   useEffect(() => {
-    const init = async (): Promise<void> => {
-      try {
-        initializeMetamask();
-        const [account] = await ethereum.send("eth_requestAccounts");
-        setMetamaskAccount(account);
-      } catch (e) {
-        // TODO: Handle error
-      }
-    };
-    init();
+    initializeMetamask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ethereum]);
+  }, []);
+
+  if (loading) {
+    return <Spin />;
+  }
 
   if (!ethereum || !ethereum.isMetaMask) {
     return <>{"Please install MetaMask."}</>;
@@ -76,6 +72,10 @@ export const FyghtScreen: React.FC = () => {
           type="info"
           showIcon
         />
+        <div style={{ margin: "16px 0" }}></div>
+        {errorMessage ? (
+          <Alert message={errorMessage} type="error" closable showIcon />
+        ) : null}
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
           <Row gutter={16}>

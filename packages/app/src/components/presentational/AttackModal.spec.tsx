@@ -2,7 +2,7 @@ import * as React from "react";
 import { shallow } from "enzyme";
 import * as FyghterContext from "../../store";
 import { AttackModal } from "./AttackModal";
-import { BigNumber } from "ethers/utils";
+import { BigNumber } from "ethers";
 
 describe("AttackModal", () => {
   test("should render the component", () => {
@@ -13,7 +13,7 @@ describe("AttackModal", () => {
       .mockImplementation(() => contextValues);
 
     expect(
-      shallow(<AttackModal enemyId={new BigNumber(2)} />)
+      shallow(<AttackModal enemyId={BigNumber.from(2)} />)
     ).toMatchSnapshot();
   });
 });
