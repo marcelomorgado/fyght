@@ -45,7 +45,7 @@ contract Fyghters is ERC721 {
         skins.push(Skin({skin: "monk", xpNeeded: 40}));
         skins.push(Skin({skin: "ninja", xpNeeded: 50}));
         skins.push(Skin({skin: "no_one", xpNeeded: ALL_SKINS_MIN_XP}));
-        skins.push(Skin({skin: "daemon", xpNeeded: 80}));
+        skins.push(Skin({skin: "demon", xpNeeded: 80}));
         skins.push(Skin({skin: MASTER_SKIN, xpNeeded: MASTER_MIN_XP}));
     }
 

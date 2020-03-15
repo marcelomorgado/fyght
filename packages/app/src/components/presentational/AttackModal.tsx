@@ -12,20 +12,9 @@ interface EnamyAttackViewProps {
   onCancel: () => void;
 }
 
-const EnamyAttackView: React.FC<EnamyAttackViewProps> = ({
-  visible,
-  onCancel,
-  onOk,
-}) => {
+const EnamyAttackView: React.FC<EnamyAttackViewProps> = ({ visible, onCancel, onOk }) => {
   return (
-    <Modal
-      width={370}
-      visible={visible}
-      title="Attacking in progress..."
-      okText="OK"
-      onCancel={onCancel}
-      onOk={onOk}
-    >
+    <Modal width={370} visible={visible} title="Attacking in progress..." okText="OK" onCancel={onCancel} onOk={onOk}>
       <img alt="loading..." src={gifs["loading"]} width={320} />
     </Modal>
   );

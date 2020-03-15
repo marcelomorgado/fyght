@@ -12,11 +12,7 @@ interface FyghterRenamingFormProps {
   onCancel: () => void;
 }
 
-const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({
-  visible,
-  onCancel,
-  onSave,
-}) => {
+const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCancel, onSave }) => {
   const [form] = Form.useForm();
   return (
     <Modal

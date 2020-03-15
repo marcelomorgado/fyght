@@ -6,7 +6,7 @@ export enum Skin {
   MONK = "monk",
   NINJA = "ninja",
   NO_ONE = "no_one",
-  DAEMON = "daemon",
+  DEMON = "demon",
   MASTER = "master",
 }
 

@@ -44,9 +44,7 @@ export const FyghtScreen: React.FC = () => {
   }
 
   if (networkId != 1234) {
-    return (
-      <>{`Please, connect to the local network (http://localhost:8545)`}</>
-    );
+    return <>{`Please, connect to the local network (http://localhost:8545)`}</>;
   }
 
   return (
@@ -73,9 +71,7 @@ export const FyghtScreen: React.FC = () => {
           showIcon
         />
         <div style={{ margin: "16px 0" }}></div>
-        {errorMessage ? (
-          <Alert message={errorMessage} type="error" closable showIcon />
-        ) : null}
+        {errorMessage ? <Alert message={errorMessage} type="error" closable showIcon /> : null}
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
           <Row gutter={16}>

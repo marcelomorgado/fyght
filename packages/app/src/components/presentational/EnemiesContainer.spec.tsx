@@ -1,23 +1,33 @@
-import * as React from "react";
+import React, { useState as useStateMock } from "react";
 import { shallow } from "enzyme";
 import * as FyghterContext from "../../store";
 import { EnemiesContainer } from "./EnemiesContainer";
 import { storeMocks } from "../../testHelpers";
 
-// TODO: Create a alread loaded test case
-describe("EnemiesContainer", () => {
-  test("should render the component", () => {
-    const contextValues = {
-      state: {
-        enemies: storeMocks.enemies,
-        initialized: true,
-        metamask: { account: "" },
-      },
-    };
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
+  useState: jest.fn(),
+}));
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+describe("EnemiesContainer", () => {
+  const contextValues = {
+    state: {
+      enemies: storeMocks.enemies,
+      metamask: { account: "" },
+    },
+  };
+  jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
+
+  test("loading", () => {
+    const stateValues = [true, jest.fn()];
+    (useStateMock as jest.Mock).mockImplementation(() => stateValues);
+
+    expect(shallow(<EnemiesContainer />)).toMatchSnapshot();
+  });
+
+  test("after loading loading", () => {
+    const stateValues = [false, jest.fn()];
+    (useStateMock as jest.Mock).mockImplementation(() => stateValues);
 
     expect(shallow(<EnemiesContainer />)).toMatchSnapshot();
   });

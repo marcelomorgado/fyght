@@ -9,9 +9,7 @@ describe("FyghterCreationModal", () => {
       createFyghter: jest.fn(),
     };
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
     expect(shallow(<FyghterCreationModal />)).toMatchSnapshot();
   });

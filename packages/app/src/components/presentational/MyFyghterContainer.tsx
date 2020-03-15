@@ -28,21 +28,12 @@ export const MyFyghterContainer: React.FC = () => {
 
   return (
     <>
-      <Divider
-        orientation="left"
-        style={{ color: "#333", fontWeight: "normal" }}
-      >
+      <Divider orientation="left" style={{ color: "#333", fontWeight: "normal" }}>
         My Fyghter
       </Divider>
       <Row gutter={[16, 24]}>
         <Col span={24}>
-          {isLoading ? (
-            <>{`Loading...`}</>
-          ) : !hasFyghter ? (
-            <FyghterCreationModal />
-          ) : (
-            <MyFyghter fyghter={myFyghter} />
-          )}
+          {isLoading ? <>{`Loading...`}</> : !hasFyghter ? <FyghterCreationModal /> : <MyFyghter fyghter={myFyghter} />}
         </Col>
       </Row>
     </>

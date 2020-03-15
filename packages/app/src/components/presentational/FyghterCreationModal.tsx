@@ -12,11 +12,7 @@ interface FyghterCreationFormProps {
   onCancel: () => void;
 }
 
-const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({
-  visible,
-  onCancel,
-  onCreate,
-}) => {
+const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({ visible, onCancel, onCreate }) => {
   const [form] = Form.useForm();
   return (
     <Modal
