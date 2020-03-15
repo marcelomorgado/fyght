@@ -12,9 +12,7 @@ describe("FyghterChangeSkinModal", () => {
       state: { myFyghter },
     };
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
     expect(shallow(<FyghterChangeSkinModal />)).toMatchSnapshot();
   });

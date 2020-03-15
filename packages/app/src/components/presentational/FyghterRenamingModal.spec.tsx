@@ -7,9 +7,7 @@ describe("FyghterRenamingModal", () => {
   test("should render the component", () => {
     const contextValues = { renameMyFyghter: jest.fn() };
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
     expect(shallow(<FyghterRenamingModal />)).toMatchSnapshot();
   });

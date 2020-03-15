@@ -5,8 +5,6 @@ import { AvatarSize, Skin } from "../../constants";
 
 describe("SkinAvatar", () => {
   test("should render the component", () => {
-    expect(
-      shallow(<SkinAvatar size={AvatarSize.SMALL} skin={Skin.NINJA} />)
-    ).toMatchSnapshot();
+    expect(shallow(<SkinAvatar size={AvatarSize.SMALL} skin={Skin.NINJA} />)).toMatchSnapshot();
   });
 });

@@ -18,12 +18,7 @@ interface FyghterChangeSkinFormProps {
   errorMessage: string;
 }
 
-const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({
-  visible,
-  onCancel,
-  onSave,
-  errorMessage,
-}) => {
+const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, onCancel, onSave, errorMessage }) => {
   const [form] = Form.useForm();
   const {
     state: {

@@ -8,12 +8,8 @@ describe("AttackModal", () => {
   test("should render the component", () => {
     const contextValues = { attackAnEnemy: jest.fn() };
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
-    expect(
-      shallow(<AttackModal enemyId={BigNumber.from(2)} />)
-    ).toMatchSnapshot();
+    expect(shallow(<AttackModal enemyId={BigNumber.from(2)} />)).toMatchSnapshot();
   });
 });

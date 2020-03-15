@@ -11,9 +11,7 @@ describe("MyFyghterContainer", () => {
       state: { myFyghter: storeMocks.myFyghter, metamask: { account: "" } },
     };
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
     expect(shallow(<MyFyghterContainer />)).toMatchSnapshot();
   });

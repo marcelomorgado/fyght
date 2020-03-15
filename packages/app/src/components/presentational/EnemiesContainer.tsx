@@ -33,10 +33,7 @@ export const EnemiesContainer: React.FC = () => {
 
   return (
     <>
-      <Divider
-        orientation="left"
-        style={{ color: "#333", fontWeight: "normal" }}
-      >
+      <Divider orientation="left" style={{ color: "#333", fontWeight: "normal" }}>
         Enemies
       </Divider>
       <Row gutter={[16, 24]}>

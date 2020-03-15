@@ -15,9 +15,7 @@ describe("EnemiesContainer", () => {
       },
     };
 
-    jest
-      .spyOn(FyghterContext, "useFyghtContext")
-      .mockImplementation(() => contextValues);
+    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
     expect(shallow(<EnemiesContainer />)).toMatchSnapshot();
   });

@@ -14,9 +14,7 @@ const columns = [
     title: "",
     dataIndex: "skin",
     key: "skin",
-    render: (text: string): JSX.Element => (
-      <SkinAvatar skin={text} size={AvatarSize.SMALL} />
-    ),
+    render: (text: string): JSX.Element => <SkinAvatar skin={text} size={AvatarSize.SMALL} />,
   },
   {
     title: "Level",
@@ -40,12 +38,7 @@ export const JourneyTable: React.FC = () => {
     <>
       <Row gutter={16} justify="center">
         <Col span={24}>
-          <Table
-            dataSource={dataSource}
-            bordered={true}
-            columns={columns}
-            pagination={false}
-          />
+          <Table dataSource={dataSource} bordered={true} columns={columns} pagination={false} />
         </Col>
       </Row>
     </>
