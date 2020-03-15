@@ -1,4 +1,5 @@
 import { Skin } from "../constants";
+import { ContractReceipt, Event, Contract } from "ethers";
 
 export const skins = [
   {
@@ -57,3 +58,27 @@ export const skins = [
     unlock: "100 XP",
   },
 ];
+
+// export const getTransactionEvents = (
+//   contract: Contract,
+//   receipt: ContractReceipt
+// ): { [eventName: string]: Event } => {
+//   const txEvents: { [eventName: string]: Event } = {};
+
+//   // for each log in the transaction receipt
+//   for (const log of receipt.logs) {
+//     // for each event in the ABI
+//     for (const abiEvent of Object.values(contract.interface.events)) {
+//       // if the hash of the ABI event equals the tx receipt log
+//       if (abiEvent.topics[0] == log.topics[0]) {
+//         // Parse the event from the log topics and data
+//         txEvents[abiEvent.name] = abiEvent.parse(log.topics, log.data);
+
+//         // stop looping through the ABI events
+//         break;
+//       }
+//     }
+//   }
+
+//   return txEvents;
+// };

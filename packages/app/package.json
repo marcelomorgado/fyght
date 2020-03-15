@@ -23,8 +23,7 @@
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "start": "npm run start:dev",
-    "start:dev": "NODE_ENV=dev npx --no-install parcel serve src/index.html -p 8080 --open",
-    "typechain": "npx --no-install typechain --target=ethers '../contracts/build/contracts/*.json' --outDir src/contracts/"
+    "start:dev": "NODE_ENV=dev npx --no-install parcel serve src/index.html -p 8080 --open"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
@@ -61,8 +60,6 @@
     "prettier": "1.19.1",
     "react-test-renderer": "16.13.0",
     "ts-jest": "24.3.0",
-    "typechain": "1.0.5",
-    "typechain-target-ethers": "1.0.3",
     "typescript": "3.8.3"
   }
 }

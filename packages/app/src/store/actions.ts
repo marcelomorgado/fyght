@@ -4,9 +4,9 @@ import {
   Event,
   Transaction,
   ContractReceipt,
-  Contract,
 } from "ethers";
 import { BigNumber } from "ethers";
+import { Skin } from "../constants";
 
 const { getAddress } = ethers.utils;
 
@@ -39,46 +39,68 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const setMyFyghter = (myFyghter: Fyghter): void =>
     dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
-  const createFyghter = async (name: string): Promise<void> => {
-    const {
-      metamask: { contract: fyghters },
-    } = state;
-
-    try {
-      const tx: ContractTransaction = await fyghters.create(name);
-      await tx.wait();
-      console.log(tx);
-
-      // TODO: Get event from transaction
-      const filter = fyghters.filters.NewFyghter(null, null, null);
-      fyghters.on(filter, async (owner: string, id: number, name: string) => {
-        const myFyghter = await fyghters.fyghters(id);
-        setMyFyghter(myFyghter);
-      });
-    } catch (e) {
-      console.log(e);
-      // Revert message
-      //console.log(e.data.message);
-    }
-  };
-
-  const optimisticUpdate = async (
-    tx: Transaction,
-    onSuccess: () => void,
-    onError: () => void
-  ): Promise<void> => {
+  const optimisticUpdate = async ({
+    tx,
+    onOptimistic,
+    onSuccess,
+    onError,
+  }: {
+    tx: Transaction;
+    onOptimistic?: () => void;
+    onSuccess?: (receipt?: ContractReceipt) => void;
+    onError: () => void;
+  }): Promise<void> => {
     const {
       metamask: { provider },
     } = state;
 
-    // Optimistic update
-    onSuccess();
+    if (onOptimistic) {
+      onOptimistic();
+    }
 
     provider.once(tx.hash, (receipt: ContractReceipt) => {
       const { status } = receipt;
       if (!status) {
         onError();
+        return;
       }
+      if (onSuccess) {
+        onSuccess(receipt);
+      }
+    });
+  };
+
+  const createFyghter = async (name: string): Promise<void> => {
+    const {
+      metamask: { contract: fyghters },
+    } = state;
+
+    const tx: ContractTransaction = await fyghters.create(name);
+
+    optimisticUpdate({
+      tx,
+      onOptimistic: () => {
+        const myFyghter: Fyghter = {
+          id: null,
+          skin: Skin.NAKED,
+          name,
+          xp: BigNumber.from("1"),
+        };
+        setMyFyghter(myFyghter);
+      },
+      onSuccess: async (receipt: ContractReceipt) => {
+        const [log] = receipt.logs
+          .map((log: Event) => fyghters.interface.parseLog(log))
+          .filter(({ name }) => name == "Attack")
+          .map(({ args }) => args);
+        const [owner, id, name] = log;
+        const myFyghter = await fyghters.fyghters(id);
+        setMyFyghter(myFyghter);
+      },
+      onError: () => {
+        setMyFyghter(null);
+        // TODO: Error message
+      },
     });
   };
 
@@ -91,15 +113,15 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
     const tx: ContractTransaction = await fyghters.rename(myFyghterId, newName);
 
-    optimisticUpdate(
+    optimisticUpdate({
       tx,
-      () => {
+      onOptimistic: () => {
         dispatch({ type: RENAME, payload: { name: newName } });
       },
-      () => {
+      onError: () => {
         dispatch({ type: RENAME, payload: { name: oldName } });
-      }
-    );
+      },
+    });
   };
 
   const changeMyFyghterSkin = async (newSkin: string): Promise<void> => {
@@ -114,52 +136,48 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       newSkin
     );
 
-    optimisticUpdate(
+    optimisticUpdate({
       tx,
-      () => {
+      onOptimistic: () => {
         dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
       },
-      () => {
+      onError: () => {
         dispatch({ type: RENAME, payload: { name: oldSkin } });
-      }
-    );
+        // TODO: Error mesage with reason
+      },
+    });
   };
 
   const attackAnEnemy = async (enemyId: BigNumber): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters, provider },
+      metamask: { contract: fyghters },
     } = state;
 
     const tx: ContractTransaction = await fyghters.attack(myFyghterId, enemyId);
 
-    provider.once(tx.hash, ({ status }: ContractReceipt) => {
-      if (!status) {
-        // TODO: Error message
-      }
-    });
+    optimisticUpdate({
+      tx,
+      onOptimistic: () => {},
+      onSuccess: (receipt: ContractReceipt) => {
+        const [log] = receipt.logs
+          .map((log: Event) => fyghters.interface.parseLog(log))
+          .filter(({ name }) => name == "Attack")
+          .map(({ args }) => args);
+        const [myFighterId, enemyId, winnerId] = log;
 
-    const filter = fyghters.filters.Attack(myFyghterId, null, null);
-    fyghters.once(
-      filter,
-      async (
-        myFighterId: BigNumber,
-        enemyId: BigNumber,
-        winnerId: BigNumber
-      ) => {
         if (winnerId.eq(myFighterId)) {
           incrementMyFyghterXp();
         } else {
           incrementEnemyXp(enemyId);
         }
-      }
-    );
+      },
+      onError: () => {
+        // TODO: Error message
+      },
+    });
   };
 
-  //
-  // Note: This low level code needed to get past events is the way that ethers.js v4 works
-  // See more: https://github.com/marcelomorgado/fyght/issues/78
-  //
   const loadEnemies = async (): Promise<void> => {
     const {
       metamask: { contract: fyghters, provider, account },
