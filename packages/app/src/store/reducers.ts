@@ -5,7 +5,7 @@ import {
   INCREMENT_ENEMY_XP,
   INCREMENT_MY_FIGHTER_XP,
   LOAD_ENEMIES,
-  CREATE_FYGHTER,
+  SET_MY_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
   UPDATE_METAMASK_NETWORK,
   INITIALIZE_METAMASK,
@@ -57,7 +57,7 @@ const myFyghterReducer = (
         ...state,
         xp: BigNumber.from(state.xp).add(BigNumber.from("1")),
       };
-    case CREATE_FYGHTER:
+    case SET_MY_FYGHTER:
       return myFyghter;
     default:
       return state;

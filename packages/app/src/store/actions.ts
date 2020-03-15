@@ -1,7 +1,12 @@
-import { ethers, ContractTransaction, Event } from "ethers";
+import {
+  ethers,
+  ContractTransaction,
+  Event,
+  Transaction,
+  ContractReceipt,
+  Contract,
+} from "ethers";
 import { BigNumber } from "ethers";
-import { getAllEvents } from "../helpers";
-import { MyFyghter } from "../components/presentational/MyFyghter";
 
 const { getAddress } = ethers.utils;
 
@@ -10,7 +15,7 @@ export const CHANGE_SKIN = "CHANGE_SKIN";
 export const INCREMENT_MY_FIGHTER_XP = "INCREMENT_MY_FIGHTER_XP";
 export const INCREMENT_ENEMY_XP = "INCREMENT_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
-export const CREATE_FYGHTER = "CREATE_FYGHTER";
+export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
@@ -32,7 +37,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
   const setMyFyghter = (myFyghter: Fyghter): void =>
-    dispatch({ type: CREATE_FYGHTER, payload: { myFyghter } });
+    dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
   const createFyghter = async (name: string): Promise<void> => {
     const {
@@ -42,6 +47,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     try {
       const tx: ContractTransaction = await fyghters.create(name);
       await tx.wait();
+      console.log(tx);
 
       // TODO: Get event from transaction
       const filter = fyghters.filters.NewFyghter(null, null, null);
@@ -56,89 +62,98 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     }
   };
 
-  const renameMyFyghter = async (name: string): void => {
+  const optimisticUpdate = async (
+    tx: Transaction,
+    onSuccess: () => void,
+    onError: () => void
+  ): Promise<void> => {
     const {
-      myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters },
+      metamask: { provider },
     } = state;
 
-    try {
-      const tx: ContractTransaction = await fyghters.rename(myFyghterId, name);
-      await tx.wait();
+    // Optimistic update
+    onSuccess();
 
-      // TODO: Wait for event to update store
-      dispatch({ type: RENAME, payload: { name } });
-    } catch (e) {
-      console.log(e);
-    }
+    provider.once(tx.hash, (receipt: ContractReceipt) => {
+      const { status } = receipt;
+      if (!status) {
+        onError();
+      }
+    });
   };
 
-  const changeMyFyghterSkin = async (skin: string): Promise<void> => {
+  const renameMyFyghter = async (newName: string): void => {
     const {
-      myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters, provider },
+      myFyghter,
+      metamask: { contract: fyghters },
     } = state;
+    const { id: myFyghterId, name: oldName } = myFyghter;
 
-    try {
-      const tx: ContractTransaction = await fyghters.changeSkin(
-        myFyghterId,
-        skin
-      );
-      await tx.wait();
-      const r: TransactionReceipt = await provider.getTransactionReceipt(
-        tx.hash
-      );
+    const tx: ContractTransaction = await fyghters.rename(myFyghterId, newName);
 
-      if (r.status == 1) {
-        dispatch({ type: CHANGE_SKIN, payload: { skin } });
-      } else {
-        // TODO: Create a global message component
-        // setErrorMessage("Unexpected error.");
+    optimisticUpdate(
+      tx,
+      () => {
+        dispatch({ type: RENAME, payload: { name: newName } });
+      },
+      () => {
+        dispatch({ type: RENAME, payload: { name: oldName } });
       }
-    } catch (e) {
-      console.log(e);
+    );
+  };
 
-      if (e && e.data && e.data.message) {
-        // TODO: Is it possible to get error without exception?
-        // TODO: Create a global message component
-        // setErrorMessage(e.data.message);
+  const changeMyFyghterSkin = async (newSkin: string): Promise<void> => {
+    const {
+      myFyghter,
+      metamask: { contract: fyghters },
+    } = state;
+    const { id: myFyghterId, skin: oldSkin } = myFyghter;
+
+    const tx: ContractTransaction = await fyghters.changeSkin(
+      myFyghterId,
+      newSkin
+    );
+
+    optimisticUpdate(
+      tx,
+      () => {
+        dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
+      },
+      () => {
+        dispatch({ type: RENAME, payload: { name: oldSkin } });
       }
-    }
+    );
   };
 
   const attackAnEnemy = async (enemyId: BigNumber): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters },
+      metamask: { contract: fyghters, provider },
     } = state;
 
-    try {
-      const tx: ContractTransaction = await fyghters.attack(
-        myFyghterId,
-        enemyId
-      );
-      await tx.wait();
+    const tx: ContractTransaction = await fyghters.attack(myFyghterId, enemyId);
 
-      // TODO: Get event from transaction
-      // TODO: Fix many events reading
-      const filter = fyghters.filters.Attack(null, null, null);
-      fyghters.on(
-        filter,
-        async (
-          myFighterId: BigNumber,
-          enemyId: BigNumber,
-          winnerId: BigNumber
-        ) => {
-          if (winnerId.eq(myFighterId)) {
-            incrementMyFyghterXp();
-          } else {
-            incrementEnemyXp(enemyId);
-          }
+    provider.once(tx.hash, ({ status }: ContractReceipt) => {
+      if (!status) {
+        // TODO: Error message
+      }
+    });
+
+    const filter = fyghters.filters.Attack(myFyghterId, null, null);
+    fyghters.once(
+      filter,
+      async (
+        myFighterId: BigNumber,
+        enemyId: BigNumber,
+        winnerId: BigNumber
+      ) => {
+        if (winnerId.eq(myFighterId)) {
+          incrementMyFyghterXp();
+        } else {
+          incrementEnemyXp(enemyId);
         }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+      }
+    );
   };
 
   //

@@ -18,7 +18,7 @@
     "start": "npm run clean && npm run stop && npm run ganache:start && npm run truffle:migrate",
     "stop": "npm run ganache:stop",
     "test": "npm run clean && npx --no-install truffle test",
-    "ganache:start": "npx --no-install ganache-cli --mnemonic 'during page myth behave wish detail fantasy immune west release legend deliver' --networkId 1234 > ganache.log 2>&1 &",
+    "ganache:start": "npx --no-install ganache-cli --mnemonic 'during page myth behave wish detail fantasy immune west release legend deliver' --networkId 1234 --noVMErrorsOnRPCResponse true > ganache.log 2>&1 &",
     "ganache:stop": "kill `ps ax | grep ganache-cli | grep -v grep | awk '{print $1}'` 2> /dev/null; exit 0",
     "truffle:migrate": "npx --no-install truffle migrate --network local",
     "lint": "npx --no-install eslint './test/{*.js,**/*.js}' && npx --no-install prettier -c './test/{*.js,**/*.js}'",
