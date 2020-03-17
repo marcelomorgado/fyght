@@ -47,7 +47,11 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCa
 export const FyghterRenamingModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { renameMyFyghter, setErrorMessage } = useFyghtContext();
+  const {
+    renameMyFyghter,
+    setErrorMessage,
+    state: { myFyghter },
+  } = useFyghtContext();
 
   const onSave = async ({ name }: { name: string }): Promise<void> => {
     try {
@@ -66,6 +70,7 @@ export const FyghterRenamingModal: React.FC = () => {
         onClick={(): void => {
           setVisible(true);
         }}
+        loading={!myFyghter.id ? true : false}
       >
         Rename
       </Button>

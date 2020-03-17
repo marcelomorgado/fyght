@@ -26,19 +26,31 @@ type Props = {
 
 export const ChallengeModal: React.FC<Props> = ({ enemyId }: Props) => {
   const [isVisible, setVisible] = useState(false);
+  const [challengeRunning, setChallengeRunning] = useState(false);
 
-  const { challengeAnEnemy } = useFyghtContext();
+  const {
+    challengeAnEnemy,
+    state: { myFyghter },
+  } = useFyghtContext();
 
-  // TODO: Review UX interaction
-  const onAttack = async (): void => {
-    setVisible(true);
-    await challengeAnEnemy(enemyId);
-    setVisible(false);
+  const onAttack = (): void => {
+    // setVisible(true);
+    setChallengeRunning(true);
+    challengeAnEnemy(enemyId, () => {
+      // setVisible(false);
+      setChallengeRunning(false);
+    });
   };
 
   return (
     <div>
-      <Button type="primary" block={true} onClick={onAttack}>
+      <Button
+        type="primary"
+        block={true}
+        onClick={onAttack}
+        loading={challengeRunning ? true : false}
+        disabled={myFyghter && myFyghter.id ? false : true}
+      >
         Challenge!
       </Button>
       <ChallengeView

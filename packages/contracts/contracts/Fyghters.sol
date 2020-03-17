@@ -12,7 +12,7 @@ contract Fyghters is ERC721 {
     uint256 constant ONE = 1 * 10**18;
 
     event FyghterCreated(address indexed owner, uint256 id, string name);
-    event FyghtOcurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
+    event ChallengeOccurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
     event SkinChanged(uint256 indexed id, string newSkin);
     event FyghterRenamed(uint256 indexed id, string newName);
 
@@ -68,7 +68,7 @@ contract Fyghters is ERC721 {
 
         fyghters[winnerId].xp++;
         _checkForSkinUpdate(winnerId);
-        emit FyghtOcurred(_challengerId, _targetId, winnerId);
+        emit ChallengeOccurred(_challengerId, _targetId, winnerId);
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {

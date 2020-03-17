@@ -162,7 +162,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     });
   };
 
-  const challengeAnEnemy = async (enemyId: BigNumber): Promise<void> => {
+  const challengeAnEnemy = async (enemyId: BigNumber, whenFinish: () => {}): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
       metamask: { contract: fyghters },
@@ -173,18 +173,20 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       onSuccess: (receipt: ContractReceipt) => {
         const [log] = receipt.logs
           .map((log: Event) => fyghters.interface.parseLog(log))
-          .filter(({ name }) => name == "ChallengeOccured")
+          .filter(({ name }) => name == "ChallengeOccurred")
           .map(({ args }) => args);
         const [myFighterId, enemyId, winnerId] = log;
 
-        if (winnerId.eq(myFighterId)) {
+        if (winnerId == myFighterId) {
           incrementMyFyghterXp();
         } else {
           incrementEnemyXp(enemyId);
         }
+        whenFinish();
       },
       onError: (errorMessage: string) => {
         setErrorMessage(errorMessage);
+        whenFinish();
       },
     });
   };

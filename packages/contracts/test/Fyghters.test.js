@@ -97,7 +97,7 @@ contract("Fyghters", (accounts) => {
       const tx = await fyght.challenge(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
 
       // then
-      const [challengeEvent] = tx.receipt.logs.filter(({ event }) => event === "FyghtOcurred");
+      const [challengeEvent] = tx.receipt.logs.filter(({ event }) => event === "ChallengeOccurred");
       const {
         args: { winnerId },
       } = challengeEvent;
