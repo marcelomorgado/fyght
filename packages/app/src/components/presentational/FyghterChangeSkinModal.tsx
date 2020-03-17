@@ -34,13 +34,9 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, 
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={async (): Promise<void> => {
-        try {
-          const values = await form.validateFields();
-          form.resetFields();
-          onSave(values);
-        } catch (e) {
-          // TODO: Handle error
-        }
+        const values = await form.validateFields();
+        form.resetFields();
+        onSave(values);
       }}
     >
       {errorMessage ? <Alert message={errorMessage} type="error" /> : <></>}
@@ -71,7 +67,10 @@ export const FyghterChangeSkinModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { changeMyFyghterSkin } = useFyghtContext();
+  const {
+    changeMyFyghterSkin,
+    state: { myFyghter },
+  } = useFyghtContext();
 
   const onSave = async ({ skin }: { skin: string }): Promise<void> => {
     changeMyFyghterSkin(skin);
@@ -86,6 +85,7 @@ export const FyghterChangeSkinModal: React.FC = () => {
         onClick={(): void => {
           setVisible(true);
         }}
+        loading={!myFyghter.id ? true : false}
       >
         Change skin
       </Button>

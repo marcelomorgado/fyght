@@ -21,13 +21,9 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({ visible, onCa
       okText="Save"
       onCancel={onCancel}
       onOk={async (): Promise<void> => {
-        try {
-          const values = await form.validateFields();
-          form.resetFields();
-          onCreate(values);
-        } catch (e) {
-          // TODO: Handle error
-        }
+        const values = await form.validateFields();
+        form.resetFields();
+        onCreate(values);
       }}
     >
       <Form form={form} layout="vertical" name="form_in_modal">
@@ -51,11 +47,15 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({ visible, onCa
 export const FyghterCreationModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { createFyghter } = useFyghtContext();
+  const { createFyghter, setErrorMessage } = useFyghtContext();
 
-  const onSave = async ({ name }: { name: string }): Promise<void> => {
-    createFyghter(name);
-    setVisible(false);
+  const onCreate = async ({ name }: { name: string }): Promise<void> => {
+    try {
+      createFyghter(name);
+      setVisible(false);
+    } catch (e) {
+      setErrorMessage("Unexpected error when creating Fyghter.");
+    }
   };
 
   return (
@@ -75,7 +75,7 @@ export const FyghterCreationModal: React.FC = () => {
         onCancel={(): void => {
           setVisible(false);
         }}
-        onCreate={onSave}
+        onCreate={onCreate}
       />
     </div>
   );

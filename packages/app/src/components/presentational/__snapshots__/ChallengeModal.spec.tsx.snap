@@ -1,18 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AttackModal should render the component 1`] = `
+exports[`ChallengeModal should render the component 1`] = `
 <div>
   <Button
     block={true}
+    disabled={false}
     ghost={false}
     htmlType="button"
     loading={false}
     onClick={[Function]}
     type="primary"
   >
-    Attack
+    Challenge!
   </Button>
-  <EnamyAttackView
+  <ChallengeView
     onCancel={[Function]}
     onOk={[Function]}
     visible={false}

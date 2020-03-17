@@ -31,7 +31,7 @@ export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
 // eslint-disable-next-line no-undef
 const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
 
-interface NewFyghter {
+interface FyghterCreated {
   owner: string;
   id: BigNumber;
   name: string;
@@ -83,9 +83,10 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         }
       });
     } catch (e) {
-      const { data } = e;
-      const { message } = data;
-      const errorMessage = message.replace("VM Exception while processing transaction: revert ", "");
+      const errorMessage =
+        e.data && e.data.message
+          ? e.data.message.replace("VM Exception while processing transaction: revert ", "")
+          : "Unexpected error";
       onError(errorMessage);
     }
   };
@@ -109,7 +110,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       onSuccess: async (receipt: ContractReceipt) => {
         const [log] = receipt.logs
           .map((log: Event) => fyghters.interface.parseLog(log))
-          .filter(({ name }) => name == "Attack")
+          .filter(({ name }) => name == "FyghterCreated")
           .map(({ args }) => args);
         const [, id] = log;
         const myFyghter = await fyghters.fyghters(id);
@@ -122,7 +123,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     });
   };
 
-  const renameMyFyghter = async (newName: string): void => {
+  const renameMyFyghter = async (newName: string): Promise<void> => {
     const {
       myFyghter,
       metamask: { contract: fyghters },
@@ -154,35 +155,37 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
       },
       onError: (errorMessage: string) => {
-        dispatch({ type: RENAME, payload: { name: oldSkin } });
+        dispatch({ type: CHANGE_SKIN, payload: { skin: oldSkin } });
         setErrorMessage(errorMessage);
       },
     });
   };
 
-  const attackAnEnemy = async (enemyId: BigNumber): Promise<void> => {
+  const challengeAnEnemy = async (enemyId: BigNumber, whenFinish: () => {}): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
       metamask: { contract: fyghters },
     } = state;
 
     optimisticUpdate({
-      txPromise: fyghters.attack(myFyghterId, enemyId),
+      txPromise: fyghters.challenge(myFyghterId, enemyId),
       onSuccess: (receipt: ContractReceipt) => {
         const [log] = receipt.logs
           .map((log: Event) => fyghters.interface.parseLog(log))
-          .filter(({ name }) => name == "Attack")
+          .filter(({ name }) => name == "ChallengeOccurred")
           .map(({ args }) => args);
         const [myFighterId, enemyId, winnerId] = log;
 
-        if (winnerId.eq(myFighterId)) {
+        if (winnerId == myFighterId) {
           incrementMyFyghterXp();
         } else {
           incrementEnemyXp(enemyId);
         }
+        whenFinish();
       },
       onError: (errorMessage: string) => {
         setErrorMessage(errorMessage);
+        whenFinish();
       },
     });
   };
@@ -197,12 +200,12 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       return;
     }
 
-    const filter = fyghters.filters.NewFyghter(null, null, null);
+    const filter = fyghters.filters.FyghterCreated(null, null, null);
     const logs = await fyghters.queryFilter(filter, 0, "latest");
     const enemiesIds = logs
       .map((l: Event) => l.args)
-      .filter(({ owner }: NewFyghter) => getAddress(owner) !== getAddress(account))
-      .map(({ id }: NewFyghter) => id);
+      .filter(({ owner }: FyghterCreated) => getAddress(owner) !== getAddress(account))
+      .map(({ id }: FyghterCreated) => id);
 
     const enemiesPromises = enemiesIds.map((id: BigNumber) => fyghters.fyghters(id));
     const enemies: Fyghter[] = await Promise.all(enemiesPromises);
@@ -215,9 +218,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       metamask: { contract: fyghters, account },
     } = state;
 
-    const filter = fyghters.filters.NewFyghter(getAddress(account), null, null);
+    const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
     const logs = await fyghters.queryFilter(filter, 0, "latest");
-    const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: NewFyghter) => id);
+    const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: FyghterCreated) => id);
 
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
@@ -273,12 +276,13 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   return {
     renameMyFyghter,
     changeMyFyghterSkin,
-    attackAnEnemy,
+    challengeAnEnemy,
     loadEnemies,
     loadMyFyghter,
     setMetamaskAccount,
     setMetamaskNetworkId,
     initializeMetamask,
     createFyghter,
+    setErrorMessage,
   };
 };
