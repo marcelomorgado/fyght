@@ -91,7 +91,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     }
   };
 
-  // TODO: Disable buttons until tx confirmation
   const createFyghter = async (name: string): Promise<void> => {
     const {
       metamask: { contract: fyghters },
