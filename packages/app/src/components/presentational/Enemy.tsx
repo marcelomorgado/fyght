@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "antd";
-import { AttackModal } from "./AttackModal";
+import { ChallengeModal } from "./ChallengeModal";
 import { SkinAvatar } from "./SkinAvatar";
 import { AvatarSize } from "../../constants";
 
@@ -14,7 +14,7 @@ export const Enemy: React.FC<Props> = ({ enemy: { id, skin, name, xp } }: Props)
       <SkinAvatar skin={skin} size={AvatarSize.MEDIUM} />
       <p></p>
       <p>{`XP: ${xp}`}</p>
-      <AttackModal enemyId={id} />
+      <ChallengeModal enemyId={id} />
     </Card>
   );
 };

@@ -6,13 +6,13 @@ import { useFyghtContext } from "../../store";
 import gifs from "../../assets/img/*.gif";
 import { BigNumber } from "ethers";
 
-interface EnamyAttackViewProps {
+interface ChallengeViewProps {
   visible: boolean;
   onOk: () => void;
   onCancel: () => void;
 }
 
-const EnamyAttackView: React.FC<EnamyAttackViewProps> = ({ visible, onCancel, onOk }) => {
+const ChallengeView: React.FC<ChallengeViewProps> = ({ visible, onCancel, onOk }) => {
   return (
     <Modal width={370} visible={visible} title="Attacking in progress..." okText="OK" onCancel={onCancel} onOk={onOk}>
       <img alt="loading..." src={gifs["loading"]} width={320} />
@@ -24,27 +24,24 @@ type Props = {
   enemyId: BigNumber;
 };
 
-export const AttackModal: React.FC<Props> = ({ enemyId }: Props) => {
+export const ChallengeModal: React.FC<Props> = ({ enemyId }: Props) => {
   const [isVisible, setVisible] = useState(false);
 
-  const { attackAnEnemy } = useFyghtContext();
+  const { challengeAnEnemy } = useFyghtContext();
 
   // TODO: Review UX interaction
-  const onAttack = (): void => {
+  const onAttack = async (): void => {
     setVisible(true);
-    const secondsToGo = 2;
-    setTimeout(() => {
-      attackAnEnemy(enemyId);
-      setVisible(false);
-    }, secondsToGo * 1000);
+    await challengeAnEnemy(enemyId);
+    setVisible(false);
   };
 
   return (
     <div>
       <Button type="primary" block={true} onClick={onAttack}>
-        Attack
+        Challenge!
       </Button>
-      <EnamyAttackView
+      <ChallengeView
         visible={isVisible}
         onCancel={(): void => {
           setVisible(false);

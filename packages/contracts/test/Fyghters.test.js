@@ -24,7 +24,7 @@ contract("Fyghters", (accounts) => {
     // then
     const balanceAfter = await fyght.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
-    expectEvent(tx, "NewFyghter", {
+    expectEvent(tx, "FyghterCreated", {
       owner: aliceAddress,
       id: ALICES_FYGHTER_ID,
       name: fyghterName,
@@ -69,7 +69,7 @@ contract("Fyghters", (accounts) => {
     });
   });
 
-  describe("calculateAttackerProbability", () => {
+  describe("calculateChallengerProbability", () => {
     it("should calculate the win probability", async () => {
       // given
       const alice = await fyght.fyghters(ALICES_FYGHTER_ID);
@@ -78,15 +78,15 @@ contract("Fyghters", (accounts) => {
       expect(`${bob.xp}`).to.equal("1");
 
       // when
-      const probability = await fyght.calculateAttackerProbability(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID);
+      const probability = await fyght.calculateChallengerProbability(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID);
 
       // then
       expect(`${probability}`).to.equal(`${new BN("50").mul(new BN(`${1e18}`))}`);
     });
   });
 
-  describe("attack", () => {
-    it("should do an attack", async () => {
+  describe("challenge", () => {
+    it("should do a challenge", async () => {
       // given
       const alice = await fyght.fyghters(ALICES_FYGHTER_ID);
       const bob = await fyght.fyghters(BOBS_FYGHTER_ID);
@@ -94,13 +94,13 @@ contract("Fyghters", (accounts) => {
       expect(`${bob.xp}`).to.equal("1");
 
       // when
-      const tx = await fyght.attack(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
+      const tx = await fyght.challenge(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
 
       // then
-      const [attackEvent] = tx.receipt.logs.filter(({ event }) => event === "Attack");
+      const [challengeEvent] = tx.receipt.logs.filter(({ event }) => event === "FyghtOcurred");
       const {
         args: { winnerId },
-      } = attackEvent;
+      } = challengeEvent;
       expect([`${ALICES_FYGHTER_ID}`, `${BOBS_FYGHTER_ID}`]).to.include(`${winnerId}`);
       const winner = await fyght.fyghters(winnerId);
       expect(`${winner.xp}`).to.equal("2");
@@ -122,7 +122,7 @@ contract("Fyghters", (accounts) => {
       const minXpNeeded = 80;
       for (let i = 0; i < minXpNeeded * 2; ++i) {
         // eslint-disable-next-line no-await-in-loop
-        await fyght.attack(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
+        await fyght.challenge(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
       }
 
       const alice = await fyght.fyghters(ALICES_FYGHTER_ID);

@@ -1,15 +1,15 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 import * as FyghterContext from "../../store";
-import { AttackModal } from "./AttackModal";
+import { ChallengeModal } from "./ChallengeModal";
 import { BigNumber } from "ethers";
 
-describe("AttackModal", () => {
+describe("ChallengeModal", () => {
   test("should render the component", () => {
-    const contextValues = { attackAnEnemy: jest.fn() };
+    const contextValues = { challengeAnEnemy: jest.fn() };
 
     jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
-    expect(shallow(<AttackModal enemyId={BigNumber.from(2)} />)).toMatchSnapshot();
+    expect(shallow(<ChallengeModal enemyId={BigNumber.from(2)} />)).toMatchSnapshot();
   });
 });

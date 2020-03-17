@@ -21,13 +21,9 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCa
       okText="Save"
       onCancel={onCancel}
       onOk={async (): Promise<void> => {
-        try {
-          const values = await form.validateFields();
-          form.resetFields();
-          onSave(values);
-        } catch (e) {
-          // TODO: Handle error
-        }
+        const values = await form.validateFields();
+        form.resetFields();
+        onSave(values);
       }}
     >
       <Form form={form} layout="vertical" name="form_in_modal">
@@ -51,11 +47,15 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCa
 export const FyghterRenamingModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { renameMyFyghter } = useFyghtContext();
+  const { renameMyFyghter, setErrorMessage } = useFyghtContext();
 
   const onSave = async ({ name }: { name: string }): Promise<void> => {
-    renameMyFyghter(name);
-    setVisible(false);
+    try {
+      renameMyFyghter(name);
+      setVisible(false);
+    } catch (e) {
+      setErrorMessage("Unexpected error when creating Fyghter.");
+    }
   };
 
   return (

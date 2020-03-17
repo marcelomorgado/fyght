@@ -11,9 +11,8 @@ contract Fyghters is ERC721 {
     string constant MASTER_SKIN = "master";
     uint256 constant ONE = 1 * 10**18;
 
-    // TODO: Standard names
-    event NewFyghter(address indexed owner, uint256 id, string name);
-    event Attack(uint256 indexed attackerId, uint256 targetId, uint256 winnerId);
+    event FyghterCreated(address indexed owner, uint256 id, string name);
+    event FyghtOcurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
     event SkinChanged(uint256 indexed id, string newSkin);
     event FyghterRenamed(uint256 indexed id, string newName);
 
@@ -54,7 +53,7 @@ contract Fyghters is ERC721 {
         uint256 _id = fyghters.length;
         fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1}));
         _mint(msg.sender, _id);
-        emit NewFyghter(msg.sender, _id, _name);
+        emit FyghterCreated(msg.sender, _id, _name);
     }
 
     function rename(uint256 _fyghterId, string calldata _newName) external onlyOwnerOf(_fyghterId) {
@@ -62,14 +61,14 @@ contract Fyghters is ERC721 {
         emit FyghterRenamed(_fyghterId, _newName);
     }
 
-    function attack(uint256 _attackerId, uint256 _targetId) external onlyOwnerOf(_attackerId) {
-        uint256 attackVictoryProbability = calculateAttackerProbability(_attackerId, _targetId);
+    function challenge(uint256 _challengerId, uint256 _targetId) external onlyOwnerOf(_challengerId) {
+        uint256 challengerVictoryProbability = calculateChallengerProbability(_challengerId, _targetId);
 
-        uint256 winnerId = (_random() <= attackVictoryProbability) ? _attackerId : _targetId;
+        uint256 winnerId = (_random() <= challengerVictoryProbability) ? _challengerId : _targetId;
 
         fyghters[winnerId].xp++;
         _checkForSkinUpdate(winnerId);
-        emit Attack(_attackerId, _targetId, winnerId);
+        emit FyghtOcurred(_challengerId, _targetId, winnerId);
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
@@ -87,15 +86,15 @@ contract Fyghters is ERC721 {
         emit SkinChanged(_fyghterId, _newSkin);
     }
 
-    function calculateAttackerProbability(uint256 _attackerId, uint256 _targetId)
+    function calculateChallengerProbability(uint256 _challengerId, uint256 _targetId)
         public
         view
         returns (uint256 winProbability)
     {
-        Fyghter memory attacker = fyghters[_attackerId];
+        Fyghter memory challenger = fyghters[_challengerId];
         Fyghter memory target = fyghters[_targetId];
 
-        winProbability = attacker.xp.mul(ONE).div(attacker.xp.add(target.xp)).mul(100);
+        winProbability = challenger.xp.mul(ONE).div(challenger.xp.add(target.xp)).mul(100);
     }
 
     function _checkForSkinUpdate(uint256 _fyghterId) internal view returns (string memory newSkin) {

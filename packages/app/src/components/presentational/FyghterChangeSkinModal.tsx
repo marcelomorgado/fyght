@@ -34,13 +34,9 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, 
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={async (): Promise<void> => {
-        try {
-          const values = await form.validateFields();
-          form.resetFields();
-          onSave(values);
-        } catch (e) {
-          // TODO: Handle error
-        }
+        const values = await form.validateFields();
+        form.resetFields();
+        onSave(values);
       }}
     >
       {errorMessage ? <Alert message={errorMessage} type="error" /> : <></>}
