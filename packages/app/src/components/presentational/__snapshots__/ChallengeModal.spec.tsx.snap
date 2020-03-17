@@ -4,6 +4,7 @@ exports[`ChallengeModal should render the component 1`] = `
 <div>
   <Button
     block={true}
+    disabled={false}
     ghost={false}
     htmlType="button"
     loading={false}
