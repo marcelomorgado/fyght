@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
-import { useFyghtContext } from "../../store";
+import { useFyghtContext } from "../../context";
 import { AvatarSize } from "../../constants";
 
 // interface Values {

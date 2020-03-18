@@ -1,6 +1,6 @@
 import React, { useState as useStateMock } from "react";
 import { shallow } from "enzyme";
-import * as FyghterContext from "../../store";
+import * as FyghterContext from "../../context";
 import { EnemiesContainer } from "./EnemiesContainer";
 import { storeMocks } from "../../testHelpers";
 

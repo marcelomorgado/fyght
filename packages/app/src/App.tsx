@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import FyghtScreen from "./components/screens/FyghtScreen";
-import { FyghtProvider } from "./store";
+import { FyghtProvider } from "./context";
 
 render(
   <FyghtProvider>

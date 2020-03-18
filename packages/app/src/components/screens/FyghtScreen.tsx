@@ -3,7 +3,7 @@ import { Layout, Row, Col, Button, Alert, Spin } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
-import { useFyghtContext } from "../../store";
+import { useFyghtContext } from "../../context";
 
 const { Content, Footer } = Layout;
 
