@@ -2,6 +2,7 @@ pragma solidity 0.6.2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "./Dai.sol";
 
 contract Fyghters is ERC721 {
     using SafeMath for uint256;
@@ -10,6 +11,11 @@ contract Fyghters is ERC721 {
     uint8 constant MASTER_MIN_XP = 100;
     string constant MASTER_SKIN = "master";
     uint256 constant ONE = 1 * 10**18;
+    // TODO: Move to .env file
+    uint256 constant MIN_DEPOSIT = ONE * 5;
+    uint256 constant BET_VALUE = ONE * 5;
+
+    Dai private dai;
 
     event FyghterCreated(address indexed owner, uint256 id, string name);
     event ChallengeOccurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
@@ -21,6 +27,7 @@ contract Fyghters is ERC721 {
         string name;
         string skin;
         uint256 xp;
+        uint256 balance;
     }
 
     struct Skin {
@@ -36,7 +43,10 @@ contract Fyghters is ERC721 {
         _;
     }
 
-    constructor() public {
+    constructor(Dai _dai) public {
+        dai = _dai;
+
+        // Skins table
         skins.push(Skin({skin: "naked", xpNeeded: 0}));
         skins.push(Skin({skin: "normal_guy", xpNeeded: 10}));
         skins.push(Skin({skin: "karate_kid", xpNeeded: 15}));
@@ -50,8 +60,10 @@ contract Fyghters is ERC721 {
 
     function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
+        require(dai.allowance(msg.sender, address(this)) >= MIN_DEPOSIT, "Dai allowance is less than the minimum.");
+
         uint256 _id = fyghters.length;
-        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1}));
+        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1, balance: MIN_DEPOSIT}));
         _mint(msg.sender, _id);
         emit FyghterCreated(msg.sender, _id, _name);
     }
