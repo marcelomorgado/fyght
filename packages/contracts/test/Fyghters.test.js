@@ -1,15 +1,24 @@
 const Fyghters = artifacts.require("Fyghters");
+const Dai = artifacts.require("Dai");
 const { BN, expectEvent, expectRevert } = require("./helpers");
 
 const ALICES_FYGHTER_ID = new BN("0");
 const BOBS_FYGHTER_ID = new BN("1");
 
-contract("Fyghters", (accounts) => {
-  const [aliceAddress, bobAddress] = accounts;
+const APPROVAL_VALUE = `${100e18}`; // 100$
+
+// TODO: Move to .env file
+const MIN_DEPOSIT = `${5e18}`; // 5$
+
+contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
   let fyght;
+  let dai;
 
   beforeEach(async () => {
-    fyght = await Fyghters.new();
+    dai = await Dai.new();
+    fyght = await Fyghters.new(dai.address);
+    await dai.approve(fyght.address, APPROVAL_VALUE, { from: aliceAddress });
+    await dai.approve(fyght.address, APPROVAL_VALUE, { from: bobAddress });
   });
 
   beforeEach(async () => {
@@ -22,6 +31,10 @@ contract("Fyghters", (accounts) => {
     const tx = await fyght.create(fyghterName, { from: aliceAddress });
 
     // then
+    const { name, balance } = await fyght.fyghters(ALICES_FYGHTER_ID);
+    expect(name).to.equal(fyghterName);
+    expect(`${balance}`).to.equal(MIN_DEPOSIT);
+
     const balanceAfter = await fyght.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
     expectEvent(tx, "FyghterCreated", {
@@ -40,6 +53,14 @@ contract("Fyghters", (accounts) => {
 
       // then
       await expectRevert(tx, "Each user can have just one fyghter.");
+    });
+
+    it("shouldn't be able to create fyghter without min allowance", async () => {
+      // when
+      const tx = fyght.create("Bruce", { from: carlAddress });
+
+      // then
+      await expectRevert(tx, "Dai allowance is less than the minimum.");
     });
   });
 
