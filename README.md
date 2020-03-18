@@ -29,6 +29,8 @@ npm start
 
 It'll start `ganache-cli`, deploy the smart contracts and start the web app.
 
+Note: Use this wallet here: `during page myth behave wish detail fantasy immune west release legend deliver`
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
@@ -37,4 +39,3 @@ All images used on this project are available under Creative Commons Attribution
 
 - naked, normal_guy, karate_kid, japonese, monk, ninja, no_one, demon by [TGBB](https://piq.codeus.net/u/TGBB) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 - master by [a5m00thcrimin4l](https://piq.codeus.net/u/a5m00thcrimin4l) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
-- pencil by [Tom](https://piq.codeus.net/u/Tom) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
