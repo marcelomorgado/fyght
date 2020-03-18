@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
-import { useFyghtContext } from "../../store";
+import { useFyghtContext } from "../../context";
 
 // interface Values {}
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
-import { useFyghtContext } from "../../store";
+import { useFyghtContext } from "../../context";
 
 export const EnemiesContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
