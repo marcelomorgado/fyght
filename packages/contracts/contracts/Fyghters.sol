@@ -61,6 +61,7 @@ contract Fyghters is ERC721 {
     function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
         require(dai.allowance(msg.sender, address(this)) >= MIN_DEPOSIT, "Dai allowance is less than the minimum.");
+        require(dai.transferFrom(msg.sender, address(this), MIN_DEPOSIT), "Error when depositing Dais");
 
         uint256 _id = fyghters.length;
         fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1, balance: MIN_DEPOSIT}));
