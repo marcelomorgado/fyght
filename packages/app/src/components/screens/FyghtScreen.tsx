@@ -64,12 +64,6 @@ export const FyghtScreen: React.FC = () => {
         </Header>
         <Content style={{ padding: "0 50px", marginTop: 64 }}> */}
       <Content style={{ padding: "0 50px", marginTop: 25 }}>
-        <Alert
-          message="Funded wallet"
-          description="during page myth behave wish detail fantasy immune west release legend deliver"
-          type="info"
-          showIcon
-        />
         <div style={{ margin: "16px 0" }}></div>
         {errorMessage ? <Alert message={errorMessage} type="error" closable showIcon /> : null}
         <div style={{ margin: "16px 0" }}></div>
