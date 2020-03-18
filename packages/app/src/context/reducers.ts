@@ -20,7 +20,7 @@ export const initialState: FyghtContext = {
     networkId: null,
     account: null,
     ethereum: null,
-    contract: null,
+    contracts: { fyghters: null, dai: null },
     provider: null,
     loading: true,
   },
@@ -80,7 +80,7 @@ const errorMessageReducer = (state: string, action: Action): string => {
 
 const metamaskReducer = (state: MetamaskContext = initialState.metamask, action: Action): MetamaskContext => {
   const { type, payload } = action;
-  const { networkId, account, ethereum, contract, provider } = payload;
+  const { networkId, account, ethereum, contracts, provider } = payload;
 
   switch (type) {
     case UPDATE_METAMASK_ACCOUNT:
@@ -91,7 +91,7 @@ const metamaskReducer = (state: MetamaskContext = initialState.metamask, action:
       return {
         ...state,
         account,
-        contract,
+        contracts,
         provider,
         ethereum,
         networkId,

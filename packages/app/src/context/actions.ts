@@ -28,8 +28,11 @@ export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
 
+// FIXME!
 // eslint-disable-next-line no-undef
-const { FYGHTERS_CONTRACT_ADDRESS } = process.env;
+// const { FYGHTERS_CONTRACT_ADDRESS, DAI_CONTRACT_ADDRESS } = process.env;
+const FYGHTERS_CONTRACT_ADDRESS = "0x45b929b8fdf5d2a04b4ff756110b3f07b954efda";
+const DAI_CONTRACT_ADDRESS = "0x49de9b5f6c0dc3e22e9af986477cac01dbe82659";
 
 interface FyghterCreated {
   owner: string;
@@ -93,7 +96,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   const createFyghter = async (name: string): Promise<void> => {
     const {
-      metamask: { contract: fyghters },
+      metamask: {
+        contracts: { fyghters },
+      },
     } = state;
 
     optimisticUpdate({
@@ -126,7 +131,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const renameMyFyghter = async (newName: string): Promise<void> => {
     const {
       myFyghter,
-      metamask: { contract: fyghters },
+      metamask: {
+        contracts: { fyghters },
+      },
     } = state;
     const { id: myFyghterId, name: oldName } = myFyghter;
 
@@ -145,7 +152,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const changeMyFyghterSkin = async (newSkin: string): Promise<void> => {
     const {
       myFyghter,
-      metamask: { contract: fyghters },
+      metamask: {
+        contracts: { fyghters },
+      },
     } = state;
     const { id: myFyghterId, skin: oldSkin } = myFyghter;
 
@@ -164,7 +173,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
   const challengeAnEnemy = async (enemyId: BigNumber, whenFinish: () => {}): Promise<void> => {
     const {
       myFyghter: { id: myFyghterId },
-      metamask: { contract: fyghters },
+      metamask: {
+        contracts: { fyghters },
+      },
     } = state;
 
     optimisticUpdate({
@@ -192,7 +203,11 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   const loadEnemies = async (): Promise<void> => {
     const {
-      metamask: { contract: fyghters, provider, account },
+      metamask: {
+        contracts: { fyghters },
+        provider,
+        account,
+      },
     } = state;
 
     if (!fyghters || !provider) {
@@ -202,6 +217,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
     const filter = fyghters.filters.FyghterCreated(null, null, null);
     const logs = await fyghters.queryFilter(filter, 0, "latest");
+
     const enemiesIds = logs
       .map((l: Event) => l.args)
       .filter(({ owner }: FyghterCreated) => getAddress(owner) !== getAddress(account))
@@ -215,7 +231,10 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   const loadMyFyghter = async (): Promise<void> => {
     const {
-      metamask: { contract: fyghters, account },
+      metamask: {
+        contracts: { fyghters },
+        account,
+      },
     } = state;
 
     const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
@@ -253,7 +272,11 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const FYGHTERS_CONTRACT_ABI = require("../contracts/Fyghters.json").abi;
-      const contract = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signer);
+      const DAI_CONTRACT_ABI = require("../contracts/Dai.json").abi;
+
+      const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signer);
+
+      const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signer);
 
       const [account] = await ethereum.enable();
 
@@ -263,7 +286,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         type: INITIALIZE_METAMASK,
         payload: {
           ...metamask,
-          contract,
+          contracts: { fyghters, dai },
           ethereum,
           account,
           provider,
