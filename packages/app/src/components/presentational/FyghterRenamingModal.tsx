@@ -10,9 +10,10 @@ interface FyghterRenamingFormProps {
   // See more: https://github.com/ant-design/ant-design/issues/21195
   onSave: (values: {}) => void;
   onCancel: () => void;
+  name: string;
 }
 
-const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCancel, onSave }) => {
+const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCancel, onSave, name }) => {
   const [form] = Form.useForm();
   return (
     <Modal
@@ -26,7 +27,14 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCa
         onSave(values);
       }}
     >
-      <Form form={form} layout="vertical" name="form_in_modal">
+      <Form
+        form={form}
+        layout="vertical"
+        name="form_in_modal"
+        initialValues={{
+          name,
+        }}
+      >
         <Form.Item
           name="name"
           label="Name"
@@ -75,6 +83,7 @@ export const FyghterRenamingModal: React.FC = () => {
         Rename
       </Button>
       <FyghterRenamingForm
+        name={myFyghter.name}
         visible={isVisible}
         onCancel={(): void => {
           setVisible(false);
