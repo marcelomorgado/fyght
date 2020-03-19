@@ -12,7 +12,7 @@ declare namespace NodeJS {
 
 interface FyghtContext {
   myFyghter: Fyghter;
-  enemies: Array<Fyghter>;
+  enemies: Array<Enemy>;
   errorMessage: string;
   metamask: MetamaskContext;
 }
@@ -33,6 +33,11 @@ interface Fyghter {
   name: string;
   xp: import("ethers").BigNumber;
   balance: import("ethers").BigNumber;
+}
+
+interface Enemy {
+  fyghter: Fyghter;
+  winProbability: import("ethers").BigNumber;
 }
 
 interface Action {

@@ -19,6 +19,9 @@ exports[`Enemy should render the component 1`] = `
   <p>
     XP: 1
   </p>
+  <p>
+    Balance: $0.000000000000000005
+  </p>
   <Component
     enemyId={
       BigNumber {

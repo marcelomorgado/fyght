@@ -47,7 +47,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   const incrementEnemyXp = (enemyId: BigNumber): void => dispatch({ type: INCREMENT_ENEMY_XP, payload: { enemyId } });
 
-  const setEnemies = (enemies: Fyghter[]): void => dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
+  const setEnemies = (enemies: Enemy[]): void => dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
   const setMyFyghter = (myFyghter: Fyghter): void => dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
@@ -136,6 +136,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           skin: Skin.NAKED,
           name,
           xp: BigNumber.from("1"),
+          balance: BigNumber.from(MIN_DEPOSIT),
         };
         setMyFyghter(myFyghter);
       },
@@ -229,6 +230,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         provider,
         account,
       },
+      myFyghter,
     } = state;
 
     if (!fyghters || !provider) {
@@ -244,8 +246,19 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       .filter(({ owner }: FyghterCreated) => getAddress(owner) !== getAddress(account))
       .map(({ id }: FyghterCreated) => id);
 
-    const enemiesPromises = enemiesIds.map((id: BigNumber) => fyghters.fyghters(id));
-    const enemies: Fyghter[] = await Promise.all(enemiesPromises);
+    const loadEnemy = async (id: BigNumber): Promise<Enemy> => {
+      const fyghter: Fyghter = await fyghters.fyghters(id);
+      let winProbability = null;
+
+      if (myFyghter) {
+        const { id: myFyghterId } = myFyghter;
+        winProbability = await fyghters.calculateChallengerProbability(myFyghterId, id);
+      }
+      return { fyghter, winProbability };
+    };
+
+    const enemiesPromises = enemiesIds.map((id: BigNumber) => loadEnemy(id));
+    const enemies: Enemy[] = await Promise.all(enemiesPromises);
 
     setEnemies(enemies);
   };
