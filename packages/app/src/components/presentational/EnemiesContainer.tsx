@@ -38,7 +38,7 @@ export const EnemiesContainer: React.FC = () => {
         Enemies
       </Divider>
       <Row gutter={[16, 24]}>
-        {enemies.map((enemy: Fyghter, i: number) => (
+        {enemies.map((enemy: Enemy, i: number) => (
           <Col key={i} className="gutter-row" span={4}>
             <Enemy enemy={enemy} />
           </Col>
