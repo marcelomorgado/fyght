@@ -33,6 +33,7 @@ export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
 // const { FYGHTERS_CONTRACT_ADDRESS, DAI_CONTRACT_ADDRESS } = process.env;
 const FYGHTERS_CONTRACT_ADDRESS = "0x45b929b8fdf5d2a04b4ff756110b3f07b954efda";
 const DAI_CONTRACT_ADDRESS = "0x49de9b5f6c0dc3e22e9af986477cac01dbe82659";
+const MIN_DEPOSIT = `${5e18}`;
 
 interface FyghterCreated {
   owner: string;
@@ -54,12 +55,12 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     dispatch({ type: SET_ERROR_MESSAGE, payload: { errorMessage } });
 
   const optimisticUpdate = async ({
-    txPromise,
+    doTransaction,
     onOptimistic,
     onSuccess,
     onError,
   }: {
-    txPromise: Promise<ContractTransaction>;
+    doTransaction: () => Promise<ContractTransaction>;
     onOptimistic?: () => void;
     onSuccess?: (receipt?: ContractReceipt) => void;
     onError: (errorMessage: string, receipt?: ContractReceipt) => void;
@@ -73,7 +74,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     }
 
     try {
-      const tx: ContractTransaction = await txPromise;
+      const tx: ContractTransaction = await doTransaction();
 
       provider.once(tx.hash, (receipt: ContractReceipt) => {
         const { status } = receipt;
@@ -94,15 +95,41 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     }
   };
 
-  const createFyghter = async (name: string): Promise<void> => {
+  const loadMyFyghter = async (): Promise<void> => {
     const {
       metamask: {
         contracts: { fyghters },
+        account,
+      },
+    } = state;
+
+    const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
+    const logs = await fyghters.queryFilter(filter, 0, "latest");
+    const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: FyghterCreated) => id);
+
+    if (myFyghterId) {
+      const myFyghter = await fyghters.fyghters(myFyghterId);
+      setMyFyghter(myFyghter);
+    } else {
+      setMyFyghter(null);
+    }
+  };
+
+  const createFyghter = async (name: string): Promise<void> => {
+    const {
+      metamask: {
+        contracts: { fyghters, dai },
       },
     } = state;
 
     optimisticUpdate({
-      txPromise: fyghters.create(name),
+      doTransaction: async () => {
+        // TODO: Create a button for this?
+        await dai.mint(MIN_DEPOSIT);
+        // TODO: Call for approval only if needed
+        await dai.approve(fyghters.address, MIN_DEPOSIT);
+        return fyghters.create(name);
+      },
       onOptimistic: () => {
         const myFyghter: Fyghter = {
           id: null,
@@ -112,14 +139,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         };
         setMyFyghter(myFyghter);
       },
-      onSuccess: async (receipt: ContractReceipt) => {
-        const [log] = receipt.logs
-          .map((log: Event) => fyghters.interface.parseLog(log))
-          .filter(({ name }) => name == "FyghterCreated")
-          .map(({ args }) => args);
-        const [, id] = log;
-        const myFyghter = await fyghters.fyghters(id);
-        setMyFyghter(myFyghter);
+      onSuccess: async () => {
+        loadMyFyghter();
       },
       onError: (errorMessage: string) => {
         setMyFyghter(null);
@@ -138,7 +159,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     const { id: myFyghterId, name: oldName } = myFyghter;
 
     optimisticUpdate({
-      txPromise: fyghters.rename(myFyghterId, newName),
+      doTransaction: () => fyghters.rename(myFyghterId, newName),
       onOptimistic: () => {
         dispatch({ type: RENAME, payload: { name: newName } });
       },
@@ -159,7 +180,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     const { id: myFyghterId, skin: oldSkin } = myFyghter;
 
     optimisticUpdate({
-      txPromise: fyghters.changeSkin(myFyghterId, newSkin),
+      doTransaction: () => fyghters.changeSkin(myFyghterId, newSkin),
       onOptimistic: () => {
         dispatch({ type: CHANGE_SKIN, payload: { skin: newSkin } });
       },
@@ -179,7 +200,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     } = state;
 
     optimisticUpdate({
-      txPromise: fyghters.challenge(myFyghterId, enemyId),
+      doTransaction: () => fyghters.challenge(myFyghterId, enemyId),
       onSuccess: (receipt: ContractReceipt) => {
         const [log] = receipt.logs
           .map((log: Event) => fyghters.interface.parseLog(log))
@@ -227,26 +248,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     const enemies: Fyghter[] = await Promise.all(enemiesPromises);
 
     setEnemies(enemies);
-  };
-
-  const loadMyFyghter = async (): Promise<void> => {
-    const {
-      metamask: {
-        contracts: { fyghters },
-        account,
-      },
-    } = state;
-
-    const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
-    const logs = await fyghters.queryFilter(filter, 0, "latest");
-    const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: FyghterCreated) => id);
-
-    if (myFyghterId) {
-      const myFyghter = await fyghters.fyghters(myFyghterId);
-      setMyFyghter(myFyghter);
-    } else {
-      setMyFyghter(null);
-    }
   };
 
   const setMetamaskAccount = (account: string): void =>
