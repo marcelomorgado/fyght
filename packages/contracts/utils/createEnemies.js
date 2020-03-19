@@ -10,15 +10,16 @@ module.exports = async (callback) => {
   const fyghters = await Fyghters.deployed();
   const dai = await Dai.deployed();
 
-  const accounts = (await web3.eth.getAccounts()).slice(1, 5);
+  const accounts = await web3.eth.getAccounts();
+  const enemiesAccounts = accounts.slice(1, 5);
 
   const names = ["Bruce", "Chuck", "Jean", "Jackie"];
 
   console.log("Creating enemies...");
 
-  for (let i = 0; i < accounts.length; ++i) {
+  for (let i = 0; i < enemiesAccounts.length; ++i) {
     const name = names[i];
-    const from = accounts[i];
+    const from = enemiesAccounts[i];
     console.log(`Creating enemy... [name = ${name}, owner = ${from}]`);
 
     const { tx: tx1 } = await dai.mint(APPROVAL_AMOUNT, { from });
