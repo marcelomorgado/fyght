@@ -8,7 +8,8 @@ const BOBS_FYGHTER_ID = new BN("1");
 const APPROVAL_AMOUNT = `${100e18}`; // 100$
 
 // TODO: Move to .env file
-const MIN_DEPOSIT = `${5e18}`; // 5$
+const MIN_DEPOSIT = `${5e18}`;
+const BET_VALUE = `${5e18}`;
 
 contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
   let fyghters;
@@ -108,25 +109,34 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     });
   });
 
-  describe("challenge", () => {
+  // TODO: Non winner determinism
+  describe.only("challenge", () => {
     it("should do a challenge", async () => {
       // given
-      const alice = await fyghters.fyghters(ALICES_FYGHTER_ID);
-      const bob = await fyghters.fyghters(BOBS_FYGHTER_ID);
-      expect(`${alice.xp}`).to.equal("1");
-      expect(`${bob.xp}`).to.equal("1");
+      const winnerId = ALICES_FYGHTER_ID;
+      const loserId = BOBS_FYGHTER_ID;
+      const initialXp = "1";
+      const winnerAddress = aliceAddress;
+
+      const { xp: winnerXpBefore, balance: winnerBalanceBefore } = await fyghters.fyghters(winnerId);
+      const { xp: loserXpBefore, balance: loserBalanceBefore } = await fyghters.fyghters(loserId);
+      expect(`${winnerXpBefore}`).to.equal(initialXp);
+      expect(`${loserXpBefore}`).to.equal(initialXp);
+      expect(`${winnerBalanceBefore}`).to.equal(MIN_DEPOSIT);
+      expect(`${loserBalanceBefore}`).to.equal(MIN_DEPOSIT);
 
       // when
-      const tx = await fyghters.challenge(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
+      await fyghters.challenge(winnerId, loserId, { from: winnerAddress });
 
       // then
-      const [challengeEvent] = tx.receipt.logs.filter(({ event }) => event === "ChallengeOccurred");
-      const {
-        args: { winnerId },
-      } = challengeEvent;
-      expect([`${ALICES_FYGHTER_ID}`, `${BOBS_FYGHTER_ID}`]).to.include(`${winnerId}`);
-      const winner = await fyghters.fyghters(winnerId);
-      expect(`${winner.xp}`).to.equal("2");
+
+      const { xp: winnerXpAfter, balance: winnerBalanceAfter } = await fyghters.fyghters(winnerId);
+      const { xp: loserXpAfter, balance: loserBalanceAfter } = await fyghters.fyghters(loserId);
+
+      expect(`${winnerXpAfter}`).to.equal("2");
+      expect(`${loserXpAfter}`).to.equal(`${loserXpBefore}`);
+      expect(`${loserBalanceAfter}`).to.equal(`${loserBalanceBefore.sub(new BN(BET_VALUE))}`);
+      expect(`${winnerBalanceAfter}`).to.equal(`${winnerBalanceBefore.add(new BN(BET_VALUE))}`);
     });
   });
 

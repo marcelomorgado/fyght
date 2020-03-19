@@ -74,14 +74,23 @@ contract Fyghters is ERC721 {
         emit FyghterRenamed(_fyghterId, _newName);
     }
 
-    function challenge(uint256 _challengerId, uint256 _targetId) external onlyOwnerOf(_challengerId) {
-        uint256 challengerVictoryProbability = calculateChallengerProbability(_challengerId, _targetId);
+    function challenge(uint256 _myFyghterId, uint256 _enemyId) external onlyOwnerOf(_myFyghterId) {
+        require(fyghters[_myFyghterId].balance >= BET_VALUE, "Your fyghter doesn't have enough balance");
+        require(fyghters[_enemyId].balance >= BET_VALUE, "The enemy doesn't have enough balance");
 
-        uint256 winnerId = (_random() <= challengerVictoryProbability) ? _challengerId : _targetId;
+        uint256 challengerVictoryProbability = calculateChallengerProbability(_myFyghterId, _enemyId);
 
+        uint256 winnerId = (_random() <= challengerVictoryProbability) ? _myFyghterId : _enemyId;
+        uint256 loserId = winnerId == _myFyghterId ? _enemyId : _myFyghterId;
+
+        // TODO: Share pot based on probability
         fyghters[winnerId].xp++;
+        fyghters[winnerId].balance = fyghters[winnerId].balance.add(BET_VALUE);
+        fyghters[loserId].balance = fyghters[loserId].balance.sub(BET_VALUE);
+
         _checkForSkinUpdate(winnerId);
-        emit ChallengeOccurred(_challengerId, _targetId, winnerId);
+
+        emit ChallengeOccurred(_myFyghterId, _enemyId, winnerId);
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
