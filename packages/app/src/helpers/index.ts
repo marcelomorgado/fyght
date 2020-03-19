@@ -59,3 +59,8 @@ export const skins = [
 ];
 
 export const formatDai = (wei: BigNumber): string => `$${ethers.utils.formatEther(wei)}`;
+export const formatPercent = (value: BigNumber): string => {
+  if (!value) return "N/A";
+  const percent = ethers.utils.formatEther(value);
+  return `${percent}%`;
+};

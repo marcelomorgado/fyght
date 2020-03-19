@@ -29,14 +29,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x02",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x02",
+                "_isBigNumber": true,
+              },
+              "name": "Charlie",
+              "skin": "naked",
+              "xp": BigNumber {
+                "_hex": "0x01",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Charlie",
-            "skin": "naked",
-            "xp": BigNumber {
-              "_hex": "0x01",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }
@@ -51,14 +61,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x03",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x03",
+                "_isBigNumber": true,
+              },
+              "name": "Saul",
+              "skin": "ninja",
+              "xp": BigNumber {
+                "_hex": "0x0a",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Saul",
-            "skin": "ninja",
-            "xp": BigNumber {
-              "_hex": "0x0a",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }
@@ -73,14 +93,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x04",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x04",
+                "_isBigNumber": true,
+              },
+              "name": "Julian",
+              "skin": "naked",
+              "xp": BigNumber {
+                "_hex": "0x01",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Julian",
-            "skin": "naked",
-            "xp": BigNumber {
-              "_hex": "0x01",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }
@@ -95,14 +125,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x05",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "name": "Brad",
+              "skin": "master",
+              "xp": BigNumber {
+                "_hex": "0x59",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Brad",
-            "skin": "master",
-            "xp": BigNumber {
-              "_hex": "0x59",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }
@@ -117,14 +157,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x06",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x06",
+                "_isBigNumber": true,
+              },
+              "name": "Frank",
+              "skin": "no_one",
+              "xp": BigNumber {
+                "_hex": "0x47",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Frank",
-            "skin": "no_one",
-            "xp": BigNumber {
-              "_hex": "0x47",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }
@@ -139,14 +189,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x07",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x07",
+                "_isBigNumber": true,
+              },
+              "name": "Brian",
+              "skin": "monk",
+              "xp": BigNumber {
+                "_hex": "0x1e",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Brian",
-            "skin": "monk",
-            "xp": BigNumber {
-              "_hex": "0x1e",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }
@@ -161,14 +221,24 @@ exports[`EnemiesContainer after loading loading 1`] = `
       <Component
         enemy={
           Object {
-            "id": BigNumber {
-              "_hex": "0x08",
-              "_isBigNumber": true,
+            "fyghter": Object {
+              "balance": BigNumber {
+                "_hex": "0x05",
+                "_isBigNumber": true,
+              },
+              "id": BigNumber {
+                "_hex": "0x08",
+                "_isBigNumber": true,
+              },
+              "name": "Fred",
+              "skin": "karate_kid",
+              "xp": BigNumber {
+                "_hex": "0x0a",
+                "_isBigNumber": true,
+              },
             },
-            "name": "Fred",
-            "skin": "karate_kid",
-            "xp": BigNumber {
-              "_hex": "0x0a",
+            "winProbability": BigNumber {
+              "_hex": "0x32",
               "_isBigNumber": true,
             },
           }

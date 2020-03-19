@@ -47,15 +47,15 @@ const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Actio
   }
 };
 
-const enemiesReducer = (state: Array<Fyghter> = initialState.enemies, action: Action): Array<Fyghter> => {
+const enemiesReducer = (state: Array<Enemy> = initialState.enemies, action: Action): Array<Enemy> => {
   const { type, payload } = action;
   const { enemyId, enemies } = payload;
 
   switch (type) {
     case INCREMENT_ENEMY_XP:
       return state.map(e => {
-        if (e.id.eq(enemyId)) {
-          return { ...e, xp: BigNumber.from(e.xp).add(BigNumber.from("1")) };
+        if (e.fyghter.id.eq(enemyId)) {
+          return { ...e, fyghter: { ...e.fyghter, xp: BigNumber.from(e.fyghter.xp).add(BigNumber.from("1")) } };
         } else {
           return e;
         }
