@@ -32,6 +32,7 @@ interface Fyghter {
   skin: string;
   name: string;
   xp: import("ethers").BigNumber;
+  balance: import("ethers").BigNumber;
 }
 
 interface Action {
