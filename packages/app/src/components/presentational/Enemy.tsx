@@ -20,7 +20,7 @@ export const Enemy: React.FC<Props> = ({
     winProbability,
   },
 }: Props) => {
-  const probability = winProbability ? winProbability.div(BigNumber.from("100")) : BigNumber.from("0");
+  const probability = winProbability ? winProbability : BigNumber.from("0");
   const pot = BigNumber.from(BET_VALUE)
     .mul(BigNumber.from("2"))
     .div(BigNumber.from(ETHER));
@@ -33,7 +33,7 @@ export const Enemy: React.FC<Props> = ({
       <p></p>
       <p>{`XP: ${xp}`}</p>
       <p>{`Balance: ${formatDai(balance)}`}</p>
-      <p>{`Win probability: ${formatPercent(winProbability)}`}</p>
+      <p>{`Win probability: ${formatPercent(probability)}`}</p>
 
       <p>{`Gain if win: +${formatDai(prize)}`}</p>
       <p>{`Loss if lose: -${formatDai(prize)}`}</p>
