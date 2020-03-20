@@ -192,37 +192,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     });
   };
 
-  const challengeAnEnemy = async (enemyId: BigNumber, whenFinish: () => {}): Promise<void> => {
-    const {
-      myFyghter: { id: myFyghterId },
-      metamask: {
-        contracts: { fyghters },
-      },
-    } = state;
-
-    optimisticUpdate({
-      doTransaction: () => fyghters.challenge(myFyghterId, enemyId),
-      onSuccess: (receipt: ContractReceipt) => {
-        const [log] = receipt.logs
-          .map((log: Event) => fyghters.interface.parseLog(log))
-          .filter(({ name }) => name == "ChallengeOccurred")
-          .map(({ args }) => args);
-        const [myFighterId, enemyId, winnerId] = log;
-
-        if (winnerId == myFighterId) {
-          incrementMyFyghterXp();
-        } else {
-          incrementEnemyXp(enemyId);
-        }
-        whenFinish();
-      },
-      onError: (errorMessage: string) => {
-        setErrorMessage(errorMessage);
-        whenFinish();
-      },
-    });
-  };
-
   const loadEnemies = async (): Promise<void> => {
     const {
       metamask: {
@@ -261,6 +230,41 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     const enemies: Enemy[] = await Promise.all(enemiesPromises);
 
     setEnemies(enemies);
+  };
+
+  const challengeAnEnemy = async (enemyId: BigNumber, whenFinish: () => {}): Promise<void> => {
+    const {
+      myFyghter: { id: myFyghterId },
+      metamask: {
+        contracts: { fyghters },
+      },
+    } = state;
+
+    optimisticUpdate({
+      doTransaction: () => fyghters.challenge(myFyghterId, enemyId),
+      onSuccess: (receipt: ContractReceipt) => {
+        // TODO: Re-fetch or change state only?
+        // const [log] = receipt.logs
+        //   .map((log: Event) => fyghters.interface.parseLog(log))
+        //   .filter(({ name }) => name == "ChallengeOccurred")
+        //   .map(({ args }) => args);
+        // const [myFighterId, enemyId, winnerId] = log;
+        // if (winnerId == myFighterId) {
+        //   incrementMyFyghterXp();
+        // } else {
+        //   incrementEnemyXp(enemyId);
+        // }
+
+        loadMyFyghter();
+        // TODO: load just the enemy
+        loadEnemies();
+        whenFinish();
+      },
+      onError: (errorMessage: string) => {
+        setErrorMessage(errorMessage);
+        whenFinish();
+      },
+    });
   };
 
   const setMetamaskAccount = (account: string): void =>

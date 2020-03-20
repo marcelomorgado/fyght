@@ -22,7 +22,7 @@ export const MyFyghterContainer: React.FC = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [myFyghter, account]);
 
   const hasFyghter = !isLoading && myFyghter !== null;
 

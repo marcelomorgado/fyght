@@ -1,5 +1,6 @@
 import { Skin } from "../constants";
 import { ethers, BigNumber } from "ethers";
+import numeral from "numeral";
 
 export const skins = [
   {
@@ -59,9 +60,5 @@ export const skins = [
 ];
 
 export const formatWei = (wei: BigNumber): string => ethers.utils.formatEther(wei);
-export const formatDai = (wei: BigNumber): string => `$${ethers.utils.formatEther(wei)}`;
-export const formatPercent = (value: BigNumber): string => {
-  if (!value) return "N/A";
-  const percent = formatWei(value);
-  return `${percent}%`;
-};
+export const formatDai = (wei: BigNumber): string => numeral(formatWei(wei)).format("$0,0.00");
+export const formatPercent = (value: BigNumber): string => numeral(formatWei(value)).format("0.00%");
