@@ -78,19 +78,27 @@ contract Fyghters is ERC721 {
         require(fyghters[_myFyghterId].balance >= BET_VALUE, "Your fyghter doesn't have enough balance");
         require(fyghters[_enemyId].balance >= BET_VALUE, "The enemy doesn't have enough balance");
 
-        uint256 challengerVictoryProbability = calculateChallengerProbability(_myFyghterId, _enemyId);
+        uint256 winProbability = calculateChallengerProbability(_myFyghterId, _enemyId);
+        uint256 winnerId = (_random() <= winProbability) ? _myFyghterId : _enemyId;
 
-        uint256 winnerId = (_random() <= challengerVictoryProbability) ? _myFyghterId : _enemyId;
-        uint256 loserId = winnerId == _myFyghterId ? _enemyId : _myFyghterId;
+        processChallengeResult(_myFyghterId, _enemyId, winnerId, winProbability);
+    }
 
-        // TODO: Share pot based on probability
-        fyghters[winnerId].xp++;
-        fyghters[winnerId].balance = fyghters[winnerId].balance.add(BET_VALUE);
-        fyghters[loserId].balance = fyghters[loserId].balance.sub(BET_VALUE);
+    function processChallengeResult(uint256 _myFyghterId, uint256 _enemyId, uint256 _winnerId, uint256 _winProbability)
+        internal
+    {
+        uint256 loserId = _winnerId == _myFyghterId ? _enemyId : _myFyghterId;
 
-        _checkForSkinUpdate(winnerId);
+        uint256 pot = BET_VALUE.mul(2);
+        uint256 prize = pot.sub(pot.mul(_winProbability).div(ONE));
 
-        emit ChallengeOccurred(_myFyghterId, _enemyId, winnerId);
+        fyghters[_winnerId].xp++;
+        fyghters[_winnerId].balance = fyghters[_winnerId].balance.add(prize);
+        fyghters[loserId].balance = fyghters[loserId].balance.sub(prize);
+
+        _checkForSkinUpdate(_winnerId);
+
+        emit ChallengeOccurred(_myFyghterId, _enemyId, _winnerId);
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
@@ -108,6 +116,7 @@ contract Fyghters is ERC721 {
         emit SkinChanged(_fyghterId, _newSkin);
     }
 
+    // TODO: Rename
     function calculateChallengerProbability(uint256 _challengerId, uint256 _targetId)
         public
         view
@@ -116,7 +125,7 @@ contract Fyghters is ERC721 {
         Fyghter memory challenger = fyghters[_challengerId];
         Fyghter memory target = fyghters[_targetId];
 
-        winProbability = challenger.xp.mul(ONE).div(challenger.xp.add(target.xp)).mul(100);
+        winProbability = challenger.xp.mul(ONE).div(challenger.xp.add(target.xp));
     }
 
     function _checkForSkinUpdate(uint256 _fyghterId) internal view returns (string memory newSkin) {
@@ -133,7 +142,7 @@ contract Fyghters is ERC721 {
     * See more: https://github.com/marcelomorgado/fyght/issues/71
     */
     function _random() internal view returns (uint256) {
-        return (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE;
+        return ((uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE).div(100);
     }
 
     function _isSkinValid(string memory skin) private view returns (bool isSkinValid) {

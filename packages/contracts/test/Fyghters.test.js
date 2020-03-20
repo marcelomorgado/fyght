@@ -1,44 +1,45 @@
-const Fyghters = artifacts.require("Fyghters");
+const FyghtersMock = artifacts.require("mocks/FyghtersMock");
 const Dai = artifacts.require("Dai");
 const { BN, expectEvent, expectRevert } = require("./helpers");
 
 const ALICES_FYGHTER_ID = new BN("0");
 const BOBS_FYGHTER_ID = new BN("1");
 
-const APPROVAL_AMOUNT = `${100e18}`; // 100$
+const ONE_ETHER = new BN(`${1e18}`);
 
 // TODO: Move to .env file
-const MIN_DEPOSIT = `${5e18}`;
-const BET_VALUE = `${5e18}`;
+const APPROVAL_AMOUNT = new BN("100").mul(ONE_ETHER);
+const MIN_DEPOSIT = new BN("5").mul(ONE_ETHER);
+const BET_VALUE = MIN_DEPOSIT;
 
 contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
-  let fyghters;
+  let fyghtersMock;
   let dai;
 
   beforeEach(async () => {
     dai = await Dai.new();
-    fyghters = await Fyghters.new(dai.address);
+    fyghtersMock = await FyghtersMock.new(dai.address);
     await dai.mint(APPROVAL_AMOUNT, { from: aliceAddress });
-    await dai.approve(fyghters.address, APPROVAL_AMOUNT, { from: aliceAddress });
+    await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: aliceAddress });
     await dai.mint(APPROVAL_AMOUNT, { from: bobAddress });
-    await dai.approve(fyghters.address, APPROVAL_AMOUNT, { from: bobAddress });
+    await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: bobAddress });
   });
 
   beforeEach(async () => {
     // given
     const fyghterName = "Bruce lee";
-    const balanceBefore = await fyghters.balanceOf(aliceAddress);
+    const balanceBefore = await fyghtersMock.balanceOf(aliceAddress);
     expect(`${balanceBefore}`).to.be.equal("0");
 
     // when
-    const tx = await fyghters.create(fyghterName, { from: aliceAddress });
+    const tx = await fyghtersMock.create(fyghterName, { from: aliceAddress });
 
     // then
-    const { name, balance } = await fyghters.fyghters(ALICES_FYGHTER_ID);
+    const { name, balance } = await fyghtersMock.fyghters(ALICES_FYGHTER_ID);
     expect(name).to.equal(fyghterName);
-    expect(`${balance}`).to.equal(MIN_DEPOSIT);
+    expect(`${balance}`).to.equal(`${MIN_DEPOSIT}`);
 
-    const balanceAfter = await fyghters.balanceOf(aliceAddress);
+    const balanceAfter = await fyghtersMock.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
     expectEvent(tx, "FyghterCreated", {
       owner: aliceAddress,
@@ -46,13 +47,13 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       name: fyghterName,
     });
 
-    await fyghters.create("Chuck", { from: bobAddress });
+    await fyghtersMock.create("Chuck", { from: bobAddress });
   });
 
   describe("create", () => {
     it("shouldn't have more than one fyghter", async () => {
       // when
-      const tx = fyghters.create("Second fyghter", { from: aliceAddress });
+      const tx = fyghtersMock.create("Second fyghter", { from: aliceAddress });
 
       // then
       await expectRevert(tx, "Each user can have just one fyghter.");
@@ -60,7 +61,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
 
     it("shouldn't be able to create fyghter without min allowance", async () => {
       // when
-      const tx = fyghters.create("Bruce", { from: carlAddress });
+      const tx = fyghtersMock.create("Bruce", { from: carlAddress });
 
       // then
       await expectRevert(tx, "Dai allowance is less than the minimum.");
@@ -73,10 +74,10 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       const newName = "Charlie";
 
       // when
-      const tx = await fyghters.rename(ALICES_FYGHTER_ID, newName, { from: aliceAddress });
+      const tx = await fyghtersMock.rename(ALICES_FYGHTER_ID, newName, { from: aliceAddress });
 
       // then
-      const { name } = await fyghters.fyghters(ALICES_FYGHTER_ID);
+      const { name } = await fyghtersMock.fyghters(ALICES_FYGHTER_ID);
       expect(name).to.equal(newName);
       expectEvent(tx, "FyghterRenamed", {
         id: ALICES_FYGHTER_ID,
@@ -86,7 +87,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
 
     it("shouldn't change sking if isn't the owner", async () => {
       // when
-      const tx = fyghters.rename(ALICES_FYGHTER_ID, "Never", { from: bobAddress });
+      const tx = fyghtersMock.rename(ALICES_FYGHTER_ID, "Never", { from: bobAddress });
 
       // then
       await expectRevert(tx, "This operaction only can be done by the owner.");
@@ -96,21 +97,20 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
   describe("calculateChallengerProbability", () => {
     it("should calculate the win probability", async () => {
       // given
-      const alice = await fyghters.fyghters(ALICES_FYGHTER_ID);
-      const bob = await fyghters.fyghters(BOBS_FYGHTER_ID);
+      const alice = await fyghtersMock.fyghters(ALICES_FYGHTER_ID);
+      const bob = await fyghtersMock.fyghters(BOBS_FYGHTER_ID);
       expect(`${alice.xp}`).to.equal("1");
       expect(`${bob.xp}`).to.equal("1");
 
       // when
-      const probability = await fyghters.calculateChallengerProbability(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID);
+      const probability = await fyghtersMock.calculateChallengerProbability(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID);
 
       // then
-      expect(`${probability}`).to.equal(`${new BN("50").mul(new BN(`${1e18}`))}`);
+      expect(`${probability}`).to.equal(`${new BN("50").mul(new BN(`${1e16}`))}`);
     });
   });
 
-  // TODO: Non winner determinism
-  describe.only("challenge", () => {
+  describe("challenge", () => {
     it("should do a challenge", async () => {
       // given
       const winnerId = ALICES_FYGHTER_ID;
@@ -118,65 +118,73 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       const initialXp = "1";
       const winnerAddress = aliceAddress;
 
-      const { xp: winnerXpBefore, balance: winnerBalanceBefore } = await fyghters.fyghters(winnerId);
-      const { xp: loserXpBefore, balance: loserBalanceBefore } = await fyghters.fyghters(loserId);
+      const { xp: winnerXpBefore, balance: winnerBalanceBefore } = await fyghtersMock.fyghters(winnerId);
+      const { xp: loserXpBefore, balance: loserBalanceBefore } = await fyghtersMock.fyghters(loserId);
       expect(`${winnerXpBefore}`).to.equal(initialXp);
       expect(`${loserXpBefore}`).to.equal(initialXp);
-      expect(`${winnerBalanceBefore}`).to.equal(MIN_DEPOSIT);
-      expect(`${loserBalanceBefore}`).to.equal(MIN_DEPOSIT);
+      expect(`${winnerBalanceBefore}`).to.equal(`${MIN_DEPOSIT}`);
+      expect(`${loserBalanceBefore}`).to.equal(`${MIN_DEPOSIT}`);
+
+      const winProbability = new BN("50").mul(new BN(`${1e16}`));
 
       // when
-      await fyghters.challenge(winnerId, loserId, { from: winnerAddress });
+      await fyghtersMock.deterministicChallenge(winnerId, loserId, winnerId, winProbability, { from: winnerAddress });
 
       // then
+      const pot = new BN(BET_VALUE).mul(new BN(2));
+      const prize = pot.sub(pot.mul(winProbability).div(ONE_ETHER));
 
-      const { xp: winnerXpAfter, balance: winnerBalanceAfter } = await fyghters.fyghters(winnerId);
-      const { xp: loserXpAfter, balance: loserBalanceAfter } = await fyghters.fyghters(loserId);
+      const { xp: winnerXpAfter, balance: winnerBalanceAfter } = await fyghtersMock.fyghters(winnerId);
+      const { xp: loserXpAfter, balance: loserBalanceAfter } = await fyghtersMock.fyghters(loserId);
 
       expect(`${winnerXpAfter}`).to.equal("2");
       expect(`${loserXpAfter}`).to.equal(`${loserXpBefore}`);
-      expect(`${loserBalanceAfter}`).to.equal(`${loserBalanceBefore.sub(new BN(BET_VALUE))}`);
-      expect(`${winnerBalanceAfter}`).to.equal(`${winnerBalanceBefore.add(new BN(BET_VALUE))}`);
+      expect(`${winnerBalanceAfter}`).to.equal(`${winnerBalanceBefore.add(prize)}`);
+      expect(`${loserBalanceAfter}`).to.equal(`${loserBalanceBefore.sub(prize)}`);
     });
   });
 
   describe("changeSkin", () => {
     it("shouldn't change skin if hasn't enough xp", async () => {
       // when
-      const tx = fyghters.changeSkin(ALICES_FYGHTER_ID, "normal_guy", { from: aliceAddress });
+      const tx = fyghtersMock.changeSkin(ALICES_FYGHTER_ID, "normal_guy", { from: aliceAddress });
 
       // then
       await expectRevert(tx, "The fyghter has no enough XP to change skin.");
     });
 
-    // TODO: This test case is slow, to create a mock contract that will allow changing a fyghter xp
     it("should change the skin", async () => {
       // given
+      const fyghterId = ALICES_FYGHTER_ID;
+      const fyghterAddress = aliceAddress;
       const minXpNeeded = 80;
-      for (let i = 0; i < minXpNeeded * 2; ++i) {
-        // eslint-disable-next-line no-await-in-loop
-        await fyghters.challenge(ALICES_FYGHTER_ID, BOBS_FYGHTER_ID, { from: aliceAddress });
-      }
-
-      const alice = await fyghters.fyghters(ALICES_FYGHTER_ID);
-      const bob = await fyghters.fyghters(BOBS_FYGHTER_ID);
-      const better = alice.xp.gt(bob.xp)
-        ? { fyghter: alice, owner: aliceAddress }
-        : { fyghter: bob, owner: bobAddress };
-      expect(better.fyghter.xp.gte(new BN(`${minXpNeeded}`))).to.be.true;
       const newSkin = "normal_guy";
 
+      await fyghtersMock.changeFyghterXp(fyghterId, `${new BN(`${minXpNeeded}`)}`, { from: aliceAddress });
+
       // when
-      const tx = await fyghters.changeSkin(better.fyghter.id, newSkin, { from: better.owner });
+      const tx = await fyghtersMock.changeSkin(fyghterId, newSkin, { from: fyghterAddress });
+
+      // then
       expectEvent(tx, "SkinChanged", {
-        id: better.fyghter.id,
+        id: fyghterId,
         newSkin,
       });
 
-      const { skin } = await fyghters.fyghters(better.fyghter.id);
+      const { skin } = await fyghtersMock.fyghters(fyghterId);
       expect(skin).to.equal(newSkin);
     });
 
-    it("shouldn't change sking if isn't the owner", async () => {});
+    it("shouldn't change sking if isn't the owner", async () => {
+      // given
+      const fyghterId = ALICES_FYGHTER_ID;
+      const newSkin = "normal_guy";
+
+      // when
+      const tx = fyghtersMock.changeSkin(fyghterId, newSkin, { from: bobAddress });
+
+      // then
+      await expectRevert(tx, "This operaction only can be done by the owner.");
+    });
   });
 });
