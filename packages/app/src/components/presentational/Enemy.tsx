@@ -3,7 +3,7 @@ import { Card, Alert } from "antd";
 import { ChallengeModal } from "./ChallengeModal";
 import { SkinAvatar } from "./SkinAvatar";
 import { AvatarSize } from "../../constants";
-import { formatDai, formatPercent } from "../../helpers";
+import { formatDai, formatPercent, calculateGainAndLoss } from "../../helpers";
 import { BigNumber } from "ethers";
 import { EnemyBalance } from "./EnemyBalance";
 
@@ -11,10 +11,6 @@ type Props = {
   myFyghter: Fyghter;
   enemy: Enemy;
 };
-
-// TODO: Move to .env
-const BET_VALUE = `${5e18}`;
-const ETHER = `${1e18}`;
 
 const GainOrLoss: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumber }) => {
   const color = value.lt(BigNumber.from(0)) ? "red" : "blue";
@@ -33,15 +29,7 @@ export const Enemy: React.FC<Props> = ({
     winProbability,
   },
 }: Props) => {
-  const probability = winProbability ? winProbability : BigNumber.from("0");
-  // TODO: Call smart contract
-  const gainIfWin = BigNumber.from(BET_VALUE)
-    .mul(BigNumber.from(ETHER).sub(probability))
-    .div(ETHER);
-  const lossIfLose = BigNumber.from(BET_VALUE)
-    .mul(probability)
-    .div(BigNumber.from(ETHER))
-    .mul(BigNumber.from(-1));
+  const { gainIfWin, lossIfLose } = calculateGainAndLoss(winProbability);
 
   const enemyHasEnoughBalance = balance.gte(gainIfWin);
 
@@ -70,7 +58,7 @@ export const Enemy: React.FC<Props> = ({
         <>
           <p>
             {`Win probability: `}
-            <WinProbability value={probability} />
+            <WinProbability value={winProbability || BigNumber.from("0")} />
           </p>
           <p>
             {`Gain if win: `}

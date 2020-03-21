@@ -62,3 +62,19 @@ export const skins = [
 export const formatWei = (wei: BigNumber): string => ethers.utils.formatEther(wei);
 export const formatDai = (wei: BigNumber): string => numeral(formatWei(wei)).format("$0,0.00");
 export const formatPercent = (value: BigNumber): string => numeral(formatWei(value)).format("0.00%");
+
+export const calculateGainAndLoss = (winProbability: BigNumber): { gainIfWin: BigNumber; lossIfLose: BigNumber } => {
+  // TODO: Read the betValue from the smart contract
+  const BET_VALUE = `${5e18}`;
+  const ONE = `${1e18}`;
+
+  const probability = winProbability ? winProbability : BigNumber.from("0");
+  const gainIfWin = BigNumber.from(BET_VALUE)
+    .mul(BigNumber.from(ONE).sub(probability))
+    .div(ONE);
+  const lossIfLose = BigNumber.from(BET_VALUE)
+    .mul(probability)
+    .div(BigNumber.from(ONE))
+    .mul(BigNumber.from(-1));
+  return { gainIfWin, lossIfLose };
+};

@@ -48,6 +48,7 @@ export const FyghtScreen: React.FC = () => {
     return <>{`Please, connect to the local network (http://localhost:8545)`}</>;
   }
 
+  // TODO: Add effect when updating messages
   return (
     <Layout>
       {/* <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>

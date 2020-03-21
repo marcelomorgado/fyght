@@ -211,7 +211,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
     if (myFyghter && myFyghter.id) {
       const { id: myFyghterId } = myFyghter;
-      winProbability = await fyghters.calculateChallengerProbability(myFyghterId, id);
+      winProbability = await fyghters.calculateWinProbability(myFyghterId, id);
     }
     return { fyghter, winProbability };
   };
