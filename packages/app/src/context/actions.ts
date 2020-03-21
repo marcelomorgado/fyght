@@ -218,6 +218,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   // TODO: To investigate will it's being called constantly
   // Put a console.log to see the issue
+  // Refs: https://github.com/marcelomorgado/fyght/issues/128
   const fetchAllEnemies = async (): Promise<void> => {
     const {
       metamask: {

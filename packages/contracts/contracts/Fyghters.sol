@@ -58,6 +58,14 @@ contract Fyghters is ERC721 {
         skins.push(Skin({skin: MASTER_SKIN, xpNeeded: MASTER_MIN_XP}));
     }
 
+    function getMinimumDeposit() external pure returns (uint256) {
+        return MIN_DEPOSIT;
+    }
+
+    function getBetValue() external pure returns (uint256) {
+        return BET_VALUE;
+    }
+
     function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
         require(dai.allowance(msg.sender, address(this)) >= MIN_DEPOSIT, "Dai allowance is less than the minimum.");

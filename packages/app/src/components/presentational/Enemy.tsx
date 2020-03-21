@@ -34,6 +34,7 @@ export const Enemy: React.FC<Props> = ({
   },
 }: Props) => {
   const probability = winProbability ? winProbability : BigNumber.from("0");
+  // TODO: Call smart contract
   const gainIfWin = BigNumber.from(BET_VALUE)
     .mul(BigNumber.from(ETHER).sub(probability))
     .div(ETHER);
