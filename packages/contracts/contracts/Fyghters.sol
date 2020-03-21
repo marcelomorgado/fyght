@@ -87,10 +87,15 @@ contract Fyghters is ERC721 {
     function processChallengeResult(uint256 _myFyghterId, uint256 _enemyId, uint256 _winnerId, uint256 _winProbability)
         internal
     {
-        uint256 loserId = _winnerId == _myFyghterId ? _enemyId : _myFyghterId;
+        uint256 prize;
 
-        uint256 pot = BET_VALUE.mul(2);
-        uint256 prize = pot.sub(pot.mul(_winProbability).div(ONE));
+        if (_myFyghterId == _winnerId) {
+            prize = BET_VALUE.mul(ONE.sub(_winProbability)).div(ONE);
+        } else {
+            prize = BET_VALUE.mul(_winProbability).div(ONE);
+        }
+
+        uint256 loserId = _winnerId == _myFyghterId ? _enemyId : _myFyghterId;
 
         fyghters[_winnerId].xp++;
         fyghters[_winnerId].balance = fyghters[_winnerId].balance.add(prize);
