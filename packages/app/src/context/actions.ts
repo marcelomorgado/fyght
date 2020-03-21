@@ -27,6 +27,7 @@ export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
 export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
+export const SET_INFO_MESSAGE = "SET_INFO_MESSAGE";
 
 // FIXME!
 // eslint-disable-next-line no-undef
@@ -53,6 +54,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
   const setErrorMessage = (errorMessage: string): void =>
     dispatch({ type: SET_ERROR_MESSAGE, payload: { errorMessage } });
+
+  const setInfoMessage = (infoMessage: string): void => dispatch({ type: SET_INFO_MESSAGE, payload: { infoMessage } });
 
   const optimisticUpdate = async ({
     doTransaction,
@@ -244,16 +247,18 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       doTransaction: () => fyghters.challenge(myFyghterId, enemyId),
       onSuccess: (receipt: ContractReceipt) => {
         // TODO: Re-fetch or change state only?
-        // const [log] = receipt.logs
-        //   .map((log: Event) => fyghters.interface.parseLog(log))
-        //   .filter(({ name }) => name == "ChallengeOccurred")
-        //   .map(({ args }) => args);
-        // const [myFighterId, enemyId, winnerId] = log;
-        // if (winnerId == myFighterId) {
-        //   incrementMyFyghterXp();
-        // } else {
-        //   incrementEnemyXp(enemyId);
-        // }
+        const [log] = receipt.logs
+          .map((log: Event) => fyghters.interface.parseLog(log))
+          .filter(({ name }) => name == "ChallengeOccurred")
+          .map(({ args }) => args);
+        const [myFyghterId, enemyId, winnerId] = log;
+        if (winnerId.eq(myFyghterId)) {
+          //incrementMyFyghterXp();
+          setInfoMessage("You won!");
+        } else {
+          //incrementEnemyXp(enemyId);
+          setInfoMessage("You lose!");
+        }
 
         loadMyFyghter();
         // TODO: load just the enemy
@@ -325,5 +330,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     initializeMetamask,
     createFyghter,
     setErrorMessage,
+    setInfoMessage,
   };
 };
