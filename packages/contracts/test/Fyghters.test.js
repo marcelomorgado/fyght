@@ -8,14 +8,13 @@ const BOB_FYGHTER_ID = new BN("1");
 
 const ONE = new BN(`${1e18}`);
 
-// TODO: Move to .env file
 const APPROVAL_AMOUNT = new BN("100").mul(ONE);
-const MIN_DEPOSIT = new BN("5").mul(ONE);
-const BET_VALUE = MIN_DEPOSIT;
 
 contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
   let fyghtersMock;
   let dai;
+  let minDeposit;
+  let betValue;
 
   //
   // Utils
@@ -31,8 +30,6 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     // given
     const { xp: challengerXpBefore, balance: challengerBalanceBefore } = await fyghtersMock.fyghters(winnerId);
     const { xp: targetXpBefore, balance: targetBalanceBefore } = await fyghtersMock.fyghters(targetId);
-    expect(`${challengerBalanceBefore}`).to.equal(`${MIN_DEPOSIT}`);
-    expect(`${targetBalanceBefore}`).to.equal(`${MIN_DEPOSIT}`);
 
     // when
     await fyghtersMock.deterministicChallenge(challengerId, targetId, winnerId, winProbability, {
@@ -60,6 +57,9 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
 
   beforeEach(async () => {
     // given
+    minDeposit = await fyghtersMock.getMinimumDeposit();
+    betValue = await fyghtersMock.getBetValue();
+
     const fyghterName = "Bruce lee";
     const balanceBefore = await fyghtersMock.balanceOf(aliceAddress);
     expect(`${balanceBefore}`).to.be.equal("0");
@@ -70,7 +70,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     // then
     const { name, balance } = await fyghtersMock.fyghters(ALICE_FYGHTER_ID);
     expect(name).to.equal(fyghterName);
-    expect(`${balance}`).to.equal(`${MIN_DEPOSIT}`);
+    expect(`${balance}`).to.equal(`${minDeposit}`);
 
     const balanceAfter = await fyghtersMock.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
@@ -81,6 +81,24 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     });
 
     await fyghtersMock.create("Chuck", { from: bobAddress });
+  });
+
+  describe("getters", () => {
+    it("getMinimumDeposit", async () => {
+      // when
+      const value = await fyghtersMock.getMinimumDeposit();
+
+      // then
+      expect(`${value}`).to.equal(`${new BN("5").mul(ONE)}`);
+    });
+
+    it("getBetValue", async () => {
+      // when
+      const value = await fyghtersMock.getBetValue();
+
+      // then
+      expect(`${value}`).to.equal(`${new BN("5").mul(ONE)}`);
+    });
   });
 
   describe("create", () => {
@@ -153,7 +171,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       it("should do a challenge (winning a 50% bet)", async () => {
         // given
         const winProbability = new BN(`${50e16}`); // 50%
-        const expectedPrize = new BN(BET_VALUE).div(new BN("2"));
+        const expectedPrize = betValue.div(new BN("2"));
 
         // when-then
         await expectChallenge({
@@ -169,7 +187,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       it("should do a challenge (winning a 75% bet)", async () => {
         // given
         const winProbability = new BN(`${75e16}`); // 75%
-        const expectedPrize = new BN(BET_VALUE).div(new BN("4"));
+        const expectedPrize = betValue.div(new BN("4"));
 
         // when-then
         await expectChallenge({
@@ -185,7 +203,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       it("should do a challenge (winning a 1% bet)", async () => {
         // given
         const winProbability = new BN(`${1e16}`); // 1%
-        const expectedPrize = new BN(BET_VALUE).mul(ONE.sub(winProbability)).div(ONE);
+        const expectedPrize = betValue.mul(ONE.sub(winProbability)).div(ONE);
 
         // when-then
         await expectChallenge({
