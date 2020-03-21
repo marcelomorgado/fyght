@@ -1,7 +1,7 @@
 import {
   RENAME,
   CHANGE_SKIN,
-  LOAD_ENEMIES,
+  SET_ENEMIES,
   SET_MY_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
   UPDATE_METAMASK_NETWORK,
@@ -9,7 +9,6 @@ import {
   SET_ERROR_MESSAGE,
   SET_INFO_MESSAGE,
 } from "./actions";
-import { BigNumber } from "ethers";
 
 export const initialState: FyghtContext = {
   myFyghter: null,
@@ -43,18 +42,10 @@ const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Actio
 
 const enemiesReducer = (state: Array<Enemy> = initialState.enemies, action: Action): Array<Enemy> => {
   const { type, payload } = action;
-  const { enemyId, enemies } = payload;
+  const { enemies, enemy } = payload;
 
   switch (type) {
-    // case INCREMENT_ENEMY_XP:
-    //   return state.map(e => {
-    //     if (e.fyghter.id.eq(enemyId)) {
-    //       return { ...e, fyghter: { ...e.fyghter, xp: BigNumber.from(e.fyghter.xp).add(BigNumber.from("1")) } };
-    //     } else {
-    //       return e;
-    //     }
-    //   });
-    case LOAD_ENEMIES:
+    case SET_ENEMIES:
       return enemies;
     default:
       return state;
