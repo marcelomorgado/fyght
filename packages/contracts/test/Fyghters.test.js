@@ -145,7 +145,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     });
   });
 
-  describe("calculateChallengerProbability", () => {
+  describe("calculateWinProbability", () => {
     it("should calculate the win probability", async () => {
       // given
       const alice = await fyghtersMock.fyghters(ALICE_FYGHTER_ID);
@@ -154,7 +154,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       expect(`${bob.xp}`).to.equal("1");
 
       // when
-      const probability = await fyghtersMock.calculateChallengerProbability(ALICE_FYGHTER_ID, BOB_FYGHTER_ID);
+      const probability = await fyghtersMock.calculateWinProbability(ALICE_FYGHTER_ID, BOB_FYGHTER_ID);
 
       // then
       expect(`${probability}`).to.equal(`${new BN(`${50e16}`)}`);
@@ -225,12 +225,12 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       it("should accept if fyghters have enough balances", async () => {
         // given
         const challengerBalance = new BN(`${750e16}`); // $7.50
-        await fyghtersMock.changeFyghterBalance(challengerId, challengerBalance);
+        await fyghtersMock.updateBalance(challengerId, challengerBalance);
 
         const targetBalance = new BN(`${250e16}`); // $2.50
-        await fyghtersMock.changeFyghterBalance(targetId, targetBalance);
+        await fyghtersMock.updateBalance(targetId, targetBalance);
 
-        const winProbability = await fyghtersMock.calculateChallengerProbability(challengerId, targetId);
+        const winProbability = await fyghtersMock.calculateWinProbability(challengerId, targetId);
         expect(`${winProbability}`).to.equal(`${50e16}`); // 50%
 
         const { gainIfWin, lossIfLose } = await fyghtersMock.calculateGainAndLoss(winProbability);
@@ -244,12 +244,12 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       it("shouldn't accept if fyghters have insufficient balances", async () => {
         // given
         const challengerBalance = new BN(`${100e16}`); // $1.00
-        await fyghtersMock.changeFyghterBalance(challengerId, challengerBalance);
+        await fyghtersMock.updateBalance(challengerId, challengerBalance);
 
         const targetBalance = new BN(`${249e16}`); // $2.49
-        await fyghtersMock.changeFyghterBalance(targetId, targetBalance);
+        await fyghtersMock.updateBalance(targetId, targetBalance);
 
-        const winProbability = await fyghtersMock.calculateChallengerProbability(challengerId, targetId);
+        const winProbability = await fyghtersMock.calculateWinProbability(challengerId, targetId);
         expect(`${winProbability}`).to.equal(`${50e16}`); // 50%
 
         const { gainIfWin, lossIfLose } = await fyghtersMock.calculateGainAndLoss(winProbability);
@@ -281,7 +281,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       const minXpNeeded = 80;
       const newSkin = "normal_guy";
 
-      await fyghtersMock.changeFyghterXp(fyghterId, `${new BN(`${minXpNeeded}`)}`, { from: aliceAddress });
+      await fyghtersMock.updateXp(fyghterId, `${new BN(`${minXpNeeded}`)}`, { from: aliceAddress });
 
       // when
       const tx = await fyghtersMock.changeSkin(fyghterId, newSkin, { from: fyghterAddress });

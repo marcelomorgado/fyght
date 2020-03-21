@@ -11,7 +11,6 @@ contract Fyghters is ERC721 {
     uint8 constant MASTER_MIN_XP = 100;
     string constant MASTER_SKIN = "master";
     uint256 constant ONE = 1 * 10**18;
-    // TODO: Move to .env file
     uint256 constant MIN_DEPOSIT = ONE * 5;
     uint256 constant BET_VALUE = ONE * 5;
 
@@ -88,7 +87,7 @@ contract Fyghters is ERC721 {
     }
 
     function challenge(uint256 _challengerId, uint256 _targetId) external onlyOwnerOf(_challengerId) {
-        uint256 winProbability = calculateChallengerProbability(_challengerId, _targetId);
+        uint256 winProbability = calculateWinProbability(_challengerId, _targetId);
         (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(winProbability);
 
         require(fyghters[_challengerId].balance >= lossIfLose, "Your fyghter doesn't have enough balance.");
@@ -134,8 +133,7 @@ contract Fyghters is ERC721 {
         emit SkinChanged(_fyghterId, _newSkin);
     }
 
-    // TODO: Rename
-    function calculateChallengerProbability(uint256 _challengerId, uint256 _targetId)
+    function calculateWinProbability(uint256 _challengerId, uint256 _targetId)
         public
         view
         returns (uint256 winProbability)
