@@ -1,15 +1,6 @@
 declare module "*.png";
 declare module "*.gif";
 
-// TODO: Review this boilerplate
-declare namespace NodeJS {
-  export interface ProcessEnv {
-    NODE_ENV: "dev";
-    FYGHTERS_CONTRACT_ADDRESS: string;
-    DAI_CONTRACT_ADDRESS: string;
-  }
-}
-
 interface Messages {
   errorMessage: string;
   infoMessage: string;

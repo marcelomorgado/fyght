@@ -19,7 +19,7 @@ const { getAddress } = ethers.utils;
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
-export const LOAD_ENEMIES = "LOAD_ENEMIES";
+export const SET_ENEMIES = "SET_ENEMIES";
 export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
 export const UPDATE_METAMASK_NETWORK = "UPDATE_METAMASK_NETWORK";
@@ -27,11 +27,19 @@ export const INITIALIZE_METAMASK = "INITIALIZE_METAMASK";
 export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
 export const SET_INFO_MESSAGE = "SET_INFO_MESSAGE";
 
-// FIXME!
+// Note: Parcel doesn't support process.env es6 destructuring
+//
+
+// Refs:
+// https://github.com/parcel-bundler/parcel/issues/2299#issuecomment-439768971
+// https://en.parceljs.org/env.html
+
 // eslint-disable-next-line no-undef
-// const { FYGHTERS_CONTRACT_ADDRESS, DAI_CONTRACT_ADDRESS } = process.env;
-const FYGHTERS_CONTRACT_ADDRESS = "0x45b929b8fdf5d2a04b4ff756110b3f07b954efda";
-const DAI_CONTRACT_ADDRESS = "0x49de9b5f6c0dc3e22e9af986477cac01dbe82659";
+const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
+// eslint-disable-next-line no-undef
+const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
+
+// Get from contract
 const MIN_DEPOSIT = `${5e18}`;
 
 interface FyghterCreated {
@@ -42,7 +50,7 @@ interface FyghterCreated {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createActions = (dispatch: any, state: FyghtContext): any => {
-  const setEnemies = (enemies: Enemy[]): void => dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
+  const setEnemies = (enemies: Enemy[]): void => dispatch({ type: SET_ENEMIES, payload: { enemies } });
 
   const setMyFyghter = (myFyghter: Fyghter): void => dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
 
@@ -84,7 +92,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         }
       });
     } catch (e) {
-      console.log(e);
+      console.debug(e);
       const errorMessage =
         e.data && e.data.message
           ? e.data.message.replace("VM Exception while processing transaction: revert ", "")
@@ -94,7 +102,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     }
   };
 
-  const loadMyFyghter = async (): Promise<void> => {
+  const fetchMyFyghter = async (): Promise<void> => {
     const {
       metamask: {
         contracts: { fyghters },
@@ -121,9 +129,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
 
     optimisticUpdate({
       doTransaction: async () => {
-        // TODO: Create a button for this?
+        // TODO: Create a button for this? (Refs: https://github.com/marcelomorgado/fyght/issues/118)
         await dai.mint(MIN_DEPOSIT);
-        // TODO: Call for approval only if needed
+        // TODO: Call for approval only if needed (Refs: https://github.com/marcelomorgado/fyght/issues/118)
         await dai.approve(fyghters.address, MIN_DEPOSIT);
         return fyghters.create(name);
       },
@@ -138,7 +146,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         setMyFyghter(myFyghter);
       },
       onSuccess: async () => {
-        loadMyFyghter();
+        fetchMyFyghter();
       },
       onError: (errorMessage: string) => {
         setMyFyghter(null);
@@ -189,7 +197,28 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     });
   };
 
-  const loadEnemies = async (): Promise<void> => {
+  const loadEnemy = async (id: BigNumber): Promise<Enemy> => {
+    const {
+      metamask: {
+        contracts: { fyghters },
+      },
+      myFyghter,
+    } = state;
+
+    const fyghter: Fyghter = await fyghters.fyghters(id);
+
+    let winProbability = null;
+
+    if (myFyghter && myFyghter.id) {
+      const { id: myFyghterId } = myFyghter;
+      winProbability = await fyghters.calculateChallengerProbability(myFyghterId, id);
+    }
+    return { fyghter, winProbability };
+  };
+
+  // TODO: To investigate will it's being called constantly
+  // Put a console.log to see the issue
+  const fetchAllEnemies = async (): Promise<void> => {
     const {
       metamask: {
         contracts: { fyghters },
@@ -211,17 +240,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       .map((l: Event) => l.args)
       .filter(({ owner }: FyghterCreated) => getAddress(owner) !== getAddress(account))
       .map(({ id }: FyghterCreated) => id);
-
-    const loadEnemy = async (id: BigNumber): Promise<Enemy> => {
-      const fyghter: Fyghter = await fyghters.fyghters(id);
-      let winProbability = null;
-
-      if (myFyghter && myFyghter.id) {
-        const { id: myFyghterId } = myFyghter;
-        winProbability = await fyghters.calculateChallengerProbability(myFyghterId, id);
-      }
-      return { fyghter, winProbability };
-    };
 
     const enemiesPromises = enemiesIds.map((id: BigNumber) => loadEnemy(id));
     const enemies: Enemy[] = await Promise.all(enemiesPromises);
@@ -251,9 +269,9 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
           setInfoMessage("You lose!");
         }
 
-        loadMyFyghter();
-        // TODO: load just the enemy
-        loadEnemies();
+        fetchMyFyghter();
+        // TODO: fetch only the enemy
+        fetchAllEnemies();
         whenFinish();
       },
       onError: (errorMessage: string) => {
@@ -314,8 +332,8 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     renameMyFyghter,
     changeMyFyghterSkin,
     challengeAnEnemy,
-    loadEnemies,
-    loadMyFyghter,
+    fetchAllEnemies,
+    fetchMyFyghter,
     setMetamaskAccount,
     setMetamaskNetworkId,
     initializeMetamask,

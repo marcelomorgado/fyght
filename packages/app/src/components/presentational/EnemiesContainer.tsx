@@ -12,12 +12,12 @@ export const EnemiesContainer: React.FC = () => {
       enemies,
       metamask: { account },
     },
-    loadEnemies,
+    fetchAllEnemies,
   } = useFyghtContext();
 
   useEffect(() => {
     const init = async (): Promise<void> => {
-      await loadEnemies();
+      await fetchAllEnemies();
       setLoading(false);
     };
     init();
