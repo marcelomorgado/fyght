@@ -19,8 +19,6 @@ const { getAddress } = ethers.utils;
 
 export const RENAME = "RENAME";
 export const CHANGE_SKIN = "CHANGE_SKIN";
-export const INCREMENT_MY_FIGHTER_XP = "INCREMENT_MY_FIGHTER_XP";
-export const INCREMENT_ENEMY_XP = "INCREMENT_ENEMY_XP";
 export const LOAD_ENEMIES = "LOAD_ENEMIES";
 export const SET_MY_FYGHTER = "SET_MY_FYGHTER";
 export const UPDATE_METAMASK_ACCOUNT = "UPDATE_METAMASK_ACCOUNT";
@@ -44,10 +42,6 @@ interface FyghterCreated {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createActions = (dispatch: any, state: FyghtContext): any => {
-  const incrementMyFyghterXp = (): void => dispatch({ type: INCREMENT_MY_FIGHTER_XP, payload: {} });
-
-  const incrementEnemyXp = (enemyId: BigNumber): void => dispatch({ type: INCREMENT_ENEMY_XP, payload: { enemyId } });
-
   const setEnemies = (enemies: Enemy[]): void => dispatch({ type: LOAD_ENEMIES, payload: { enemies } });
 
   const setMyFyghter = (myFyghter: Fyghter): void => dispatch({ type: SET_MY_FYGHTER, payload: { myFyghter } });
@@ -246,17 +240,14 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     optimisticUpdate({
       doTransaction: () => fyghters.challenge(myFyghterId, enemyId),
       onSuccess: (receipt: ContractReceipt) => {
-        // TODO: Re-fetch or change state only?
         const [log] = receipt.logs
           .map((log: Event) => fyghters.interface.parseLog(log))
           .filter(({ name }) => name == "ChallengeOccurred")
           .map(({ args }) => args);
-        const [myFyghterId, enemyId, winnerId] = log;
+        const [myFyghterId, , winnerId] = log;
         if (winnerId.eq(myFyghterId)) {
-          //incrementMyFyghterXp();
           setInfoMessage("You won!");
         } else {
-          //incrementEnemyXp(enemyId);
           setInfoMessage("You lose!");
         }
 
