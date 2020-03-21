@@ -87,10 +87,12 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         }
       });
     } catch (e) {
+      console.log(e);
       const errorMessage =
         e.data && e.data.message
           ? e.data.message.replace("VM Exception while processing transaction: revert ", "")
           : "Unexpected error";
+
       onError(errorMessage);
     }
   };
@@ -110,8 +112,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
     if (myFyghterId) {
       const myFyghter = await fyghters.fyghters(myFyghterId);
       setMyFyghter(myFyghter);
-    } else {
-      setMyFyghter(null);
     }
   };
 
@@ -219,7 +219,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
       const fyghter: Fyghter = await fyghters.fyghters(id);
       let winProbability = null;
 
-      if (myFyghter) {
+      if (myFyghter && myFyghter.id) {
         const { id: myFyghterId } = myFyghter;
         winProbability = await fyghters.calculateChallengerProbability(myFyghterId, id);
       }

@@ -77,6 +77,8 @@ export const FyghterChangeSkinModal: React.FC = () => {
     setVisible(false);
   };
 
+  const isLoading = !myFyghter || !myFyghter.id ? true : false;
+
   return (
     <div>
       <Button
@@ -85,7 +87,7 @@ export const FyghterChangeSkinModal: React.FC = () => {
         onClick={(): void => {
           setVisible(true);
         }}
-        loading={!myFyghter.id ? true : false}
+        loading={isLoading}
       >
         Change skin
       </Button>

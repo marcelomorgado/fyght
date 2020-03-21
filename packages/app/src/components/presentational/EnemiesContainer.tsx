@@ -8,9 +8,9 @@ export const EnemiesContainer: React.FC = () => {
 
   const {
     state: {
+      myFyghter,
       enemies,
       metamask: { account },
-      myFyghter,
     },
     loadEnemies,
   } = useFyghtContext();
@@ -40,7 +40,7 @@ export const EnemiesContainer: React.FC = () => {
       <Row gutter={[16, 24]}>
         {enemies.map((enemy: Enemy, i: number) => (
           <Col key={i} className="gutter-row" span={4}>
-            <Enemy enemy={enemy} />
+            <Enemy enemy={enemy} myFyghter={myFyghter} />
           </Col>
         ))}
       </Row>
