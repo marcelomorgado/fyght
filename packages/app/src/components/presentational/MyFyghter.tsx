@@ -4,7 +4,7 @@ import { FyghterRenamingModal } from "./FyghterRenamingModal";
 import { FyghterChangeSkinModal } from "./FyghterChangeSkinModal";
 import { SkinAvatar } from "./SkinAvatar";
 import { AvatarSize } from "../../constants";
-import { FyghterBalance } from "./FyghterBalance";
+import { MyFyghterBalance } from "./MyFyghterBalance";
 
 type Props = {
   fyghter: Fyghter;
@@ -18,7 +18,7 @@ export const MyFyghter: React.FC<Props> = ({ fyghter: { skin, name, xp, balance 
       <p>{`XP: ${xp}`}</p>
       <p>
         {`Balance: `}
-        <FyghterBalance value={balance} />
+        <MyFyghterBalance value={balance} />
       </p>
       <FyghterRenamingModal />
       <p></p>
