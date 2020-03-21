@@ -34,19 +34,22 @@ export const Enemy: React.FC<Props> = ({
   },
 }: Props) => {
   const probability = winProbability ? winProbability : BigNumber.from("0");
-  const pot = BigNumber.from(BET_VALUE).mul(BigNumber.from("2"));
-  const prize = pot.mul(probability).div(BigNumber.from(ETHER));
-  const ifWin = pot.sub(prize);
-  const ifLose = prize.mul(BigNumber.from(-1));
+  const ifWin = BigNumber.from(BET_VALUE)
+    .mul(BigNumber.from(ETHER).sub(probability))
+    .div(ETHER);
+  const ifLose = BigNumber.from(BET_VALUE)
+    .mul(probability)
+    .div(BigNumber.from(ETHER))
+    .mul(BigNumber.from(-1));
 
-  const enoughBalance = balance.gte(BigNumber.from(BET_VALUE));
+  const enemyHasEnoughBalance = balance.gte(ifWin);
 
   let warningMessage = null;
   if (!myFyghter) {
     warningMessage = "You have to create your fyghter to be able to do challenges.";
-  } else if (!myFyghter.balance.gte(BigNumber.from(BET_VALUE))) {
+  } else if (!myFyghter.balance.gte(ifLose)) {
     warningMessage = "Your fyghter with insufficient funds.";
-  } else if (!enoughBalance) {
+  } else if (!enemyHasEnoughBalance) {
     warningMessage = "Enemy with insufficient funds.";
   }
 
