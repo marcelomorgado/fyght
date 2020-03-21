@@ -21,6 +21,7 @@ const GainOrLoss: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumbe
   return <span style={{ color }}>{`${formatDai(value)}`}</span>;
 };
 
+// TODO: Compare with gainIfWin
 const WinProbability: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumber }) => {
   const color = value.lt(BigNumber.from(`${5e17}`)) ? "red" : "blue";
   return <span style={{ color }}>{`${formatPercent(value)}`}</span>;

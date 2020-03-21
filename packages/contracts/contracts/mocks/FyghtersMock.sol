@@ -11,7 +11,13 @@ contract FyghtersMock is Fyghters {
         processChallengeResult(_myFyghterId, _enemyId, _winnerId, _winProbability);
     }
 
+    // TODO: Move to updateXp
     function changeFyghterXp(uint256 _fyghterId, uint256 _xp) public {
         fyghters[_fyghterId].xp = _xp;
+    }
+
+    // TODO: Move to updateBalance
+    function changeFyghterBalance(uint256 _fyghterId, uint256 _balance) public {
+        fyghters[_fyghterId].balance = _balance;
     }
 }
