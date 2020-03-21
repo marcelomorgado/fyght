@@ -42,7 +42,7 @@ const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Actio
 
 const enemiesReducer = (state: Array<Enemy> = initialState.enemies, action: Action): Array<Enemy> => {
   const { type, payload } = action;
-  const { enemies, enemy } = payload;
+  const { enemies } = payload;
 
   switch (type) {
     case SET_ENEMIES:

@@ -13,6 +13,6 @@ describe("ChallengeModal", () => {
 
     jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
 
-    expect(shallow(<ChallengeModal enemyId={BigNumber.from(2)} />)).toMatchSnapshot();
+    expect(shallow(<ChallengeModal enemyId={BigNumber.from(2)} disabled={false} />)).toMatchSnapshot();
   });
 });
