@@ -61,7 +61,7 @@ contract Fyghters is ERC721 {
     function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
         require(dai.allowance(msg.sender, address(this)) >= MIN_DEPOSIT, "Dai allowance is less than the minimum.");
-        require(dai.transferFrom(msg.sender, address(this), MIN_DEPOSIT), "Error when depositing Dais");
+        require(dai.transferFrom(msg.sender, address(this), MIN_DEPOSIT), "Error when depositing Dais.");
 
         uint256 _id = fyghters.length;
         fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1, balance: MIN_DEPOSIT}));
@@ -74,28 +74,33 @@ contract Fyghters is ERC721 {
         emit FyghterRenamed(_fyghterId, _newName);
     }
 
-    function challenge(uint256 _myFyghterId, uint256 _enemyId) external onlyOwnerOf(_myFyghterId) {
-        require(fyghters[_myFyghterId].balance >= BET_VALUE, "Your fyghter doesn't have enough balance");
-        require(fyghters[_enemyId].balance >= BET_VALUE, "The enemy doesn't have enough balance");
-
-        uint256 winProbability = calculateChallengerProbability(_myFyghterId, _enemyId);
-        uint256 winnerId = (_random() <= winProbability) ? _myFyghterId : _enemyId;
-
-        processChallengeResult(_myFyghterId, _enemyId, winnerId, winProbability);
+    function calculateGainAndLoss(uint256 _winProbability) public pure returns (uint256 gainIfWin, uint256 lossIfLose) {
+        gainIfWin = BET_VALUE.mul(ONE.sub(_winProbability)).div(ONE);
+        lossIfLose = BET_VALUE.mul(_winProbability).div(ONE);
     }
 
-    function processChallengeResult(uint256 _myFyghterId, uint256 _enemyId, uint256 _winnerId, uint256 _winProbability)
-        internal
-    {
-        uint256 prize;
+    function challenge(uint256 _challengerId, uint256 _targetId) external onlyOwnerOf(_challengerId) {
+        uint256 winProbability = calculateChallengerProbability(_challengerId, _targetId);
+        (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(winProbability);
 
-        if (_myFyghterId == _winnerId) {
-            prize = BET_VALUE.mul(ONE.sub(_winProbability)).div(ONE);
-        } else {
-            prize = BET_VALUE.mul(_winProbability).div(ONE);
-        }
+        require(fyghters[_challengerId].balance >= lossIfLose, "Your fyghter doesn't have enough balance.");
+        require(fyghters[_targetId].balance >= gainIfWin, "The enemy doesn't have enough balance.");
 
-        uint256 loserId = _winnerId == _myFyghterId ? _enemyId : _myFyghterId;
+        uint256 winnerId = (_random() <= winProbability) ? _challengerId : _targetId;
+
+        processChallengeResult(_challengerId, _targetId, winnerId, winProbability);
+    }
+
+    function processChallengeResult(
+        uint256 _challengerId,
+        uint256 _targetId,
+        uint256 _winnerId,
+        uint256 _winProbability
+    ) internal {
+        (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(_winProbability);
+
+        uint256 prize = (_challengerId == _winnerId) ? gainIfWin : lossIfLose;
+        uint256 loserId = _winnerId == _challengerId ? _targetId : _challengerId;
 
         fyghters[_winnerId].xp++;
         fyghters[_winnerId].balance = fyghters[_winnerId].balance.add(prize);
@@ -103,7 +108,7 @@ contract Fyghters is ERC721 {
 
         _checkForSkinUpdate(_winnerId);
 
-        emit ChallengeOccurred(_myFyghterId, _enemyId, _winnerId);
+        emit ChallengeOccurred(_challengerId, _targetId, _winnerId);
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
