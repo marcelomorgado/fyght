@@ -8,9 +8,10 @@ import { useFyghtContext } from "../../context";
 const { Content, Footer } = Layout;
 
 export const FyghtScreen: React.FC = () => {
+  // TODO: Typed state object
   const {
     state: {
-      errorMessage,
+      messages: { errorMessage, infoMessage },
       metamask: { ethereum, account, networkId, loading },
     },
     setMetamaskAccount,
@@ -66,6 +67,7 @@ export const FyghtScreen: React.FC = () => {
       <Content style={{ padding: "0 50px", marginTop: 25 }}>
         <div style={{ margin: "16px 0" }}></div>
         {errorMessage ? <Alert message={errorMessage} type="error" closable showIcon /> : null}
+        {infoMessage ? <Alert message={infoMessage} type="info" closable showIcon /> : null}
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
           <Row gutter={16}>

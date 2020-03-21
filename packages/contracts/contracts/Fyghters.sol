@@ -113,7 +113,7 @@ contract Fyghters is ERC721 {
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
         Fyghter storage fyghter = fyghters[_fyghterId];
-        require(fyghter.xp >= ALL_SKINS_MIN_XP, "The fyghter has no enough XP to change skin.");
+        require(fyghter.xp >= ALL_SKINS_MIN_XP, "The fyghter hasn't enough XP to change skin.");
 
         require(_isSkinValid(_newSkin), "Invalid skin.");
 

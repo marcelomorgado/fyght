@@ -10,10 +10,15 @@ declare namespace NodeJS {
   }
 }
 
+interface Messages {
+  errorMessage: string;
+  infoMessage: string;
+}
+
 interface FyghtContext {
   myFyghter: Fyghter;
   enemies: Array<Enemy>;
-  errorMessage: string;
+  messages: Messages;
   metamask: MetamaskContext;
 }
 

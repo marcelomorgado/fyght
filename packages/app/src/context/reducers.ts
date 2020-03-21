@@ -9,13 +9,14 @@ import {
   UPDATE_METAMASK_NETWORK,
   INITIALIZE_METAMASK,
   SET_ERROR_MESSAGE,
+  SET_INFO_MESSAGE,
 } from "./actions";
 import { BigNumber } from "ethers";
 
 export const initialState: FyghtContext = {
   myFyghter: null,
   enemies: [],
-  errorMessage: null,
+  messages: { errorMessage: null, infoMessage: null },
   metamask: {
     networkId: null,
     account: null,
@@ -67,12 +68,14 @@ const enemiesReducer = (state: Array<Enemy> = initialState.enemies, action: Acti
   }
 };
 
-const errorMessageReducer = (state: string, action: Action): string => {
+const messagesReducer = (state: Messages, action: Action): Messages => {
   const { type, payload } = action;
-  const { errorMessage } = payload;
+  const { errorMessage, infoMessage } = payload;
   switch (type) {
     case SET_ERROR_MESSAGE:
-      return errorMessage;
+      return { ...state, errorMessage };
+    case SET_INFO_MESSAGE:
+      return { ...state, infoMessage };
     default:
       return state;
   }
@@ -104,11 +107,11 @@ const metamaskReducer = (state: MetamaskContext = initialState.metamask, action:
 };
 
 export const rootReducer = (state: FyghtContext = initialState, action: Action): FyghtContext => {
-  const { myFyghter, enemies, errorMessage, metamask } = state;
+  const { myFyghter, enemies, messages, metamask } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),
     enemies: enemiesReducer(enemies, action),
-    errorMessage: errorMessageReducer(errorMessage, action),
+    messages: messagesReducer(messages, action),
     metamask: metamaskReducer(metamask, action),
   };
 };

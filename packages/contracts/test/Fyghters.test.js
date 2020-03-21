@@ -253,7 +253,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
       const tx = fyghtersMock.changeSkin(ALICE_FYGHTER_ID, "normal_guy", { from: aliceAddress });
 
       // then
-      await expectRevert(tx, "The fyghter has no enough XP to change skin.");
+      await expectRevert(tx, "The fyghter hasn't enough XP to change skin.");
     });
 
     it("should change the skin", async () => {
