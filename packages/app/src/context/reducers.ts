@@ -1,8 +1,6 @@
 import {
   RENAME,
   CHANGE_SKIN,
-  INCREMENT_ENEMY_XP,
-  INCREMENT_MY_FIGHTER_XP,
   LOAD_ENEMIES,
   SET_MY_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
@@ -36,11 +34,6 @@ const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Actio
       return { ...state, name };
     case CHANGE_SKIN:
       return { ...state, skin };
-    case INCREMENT_MY_FIGHTER_XP:
-      return {
-        ...state,
-        xp: BigNumber.from(state.xp).add(BigNumber.from("1")),
-      };
     case SET_MY_FYGHTER:
       return myFyghter;
     default:
@@ -53,14 +46,14 @@ const enemiesReducer = (state: Array<Enemy> = initialState.enemies, action: Acti
   const { enemyId, enemies } = payload;
 
   switch (type) {
-    case INCREMENT_ENEMY_XP:
-      return state.map(e => {
-        if (e.fyghter.id.eq(enemyId)) {
-          return { ...e, fyghter: { ...e.fyghter, xp: BigNumber.from(e.fyghter.xp).add(BigNumber.from("1")) } };
-        } else {
-          return e;
-        }
-      });
+    // case INCREMENT_ENEMY_XP:
+    //   return state.map(e => {
+    //     if (e.fyghter.id.eq(enemyId)) {
+    //       return { ...e, fyghter: { ...e.fyghter, xp: BigNumber.from(e.fyghter.xp).add(BigNumber.from("1")) } };
+    //     } else {
+    //       return e;
+    //     }
+    //   });
     case LOAD_ENEMIES:
       return enemies;
     default:

@@ -5,7 +5,7 @@ import { SkinAvatar } from "./SkinAvatar";
 import { AvatarSize } from "../../constants";
 import { formatDai, formatPercent } from "../../helpers";
 import { BigNumber } from "ethers";
-import { FyghterBalance } from "./FyghterBalance";
+import { EnemyBalance } from "./EnemyBalance";
 
 type Props = {
   myFyghter: Fyghter;
@@ -21,7 +21,6 @@ const GainOrLoss: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumbe
   return <span style={{ color }}>{`${formatDai(value)}`}</span>;
 };
 
-// TODO: Compare with gainIfWin
 const WinProbability: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumber }) => {
   const color = value.lt(BigNumber.from(`${5e17}`)) ? "red" : "blue";
   return <span style={{ color }}>{`${formatPercent(value)}`}</span>;
@@ -35,20 +34,20 @@ export const Enemy: React.FC<Props> = ({
   },
 }: Props) => {
   const probability = winProbability ? winProbability : BigNumber.from("0");
-  const ifWin = BigNumber.from(BET_VALUE)
+  const gainIfWin = BigNumber.from(BET_VALUE)
     .mul(BigNumber.from(ETHER).sub(probability))
     .div(ETHER);
-  const ifLose = BigNumber.from(BET_VALUE)
+  const lossIfLose = BigNumber.from(BET_VALUE)
     .mul(probability)
     .div(BigNumber.from(ETHER))
     .mul(BigNumber.from(-1));
 
-  const enemyHasEnoughBalance = balance.gte(ifWin);
+  const enemyHasEnoughBalance = balance.gte(gainIfWin);
 
   let warningMessage = null;
   if (!myFyghter) {
     warningMessage = "You have to create your fyghter to be able to do challenges.";
-  } else if (!myFyghter.balance.gte(ifLose)) {
+  } else if (!myFyghter.balance.gte(lossIfLose)) {
     warningMessage = "Your fyghter with insufficient funds.";
   } else if (!enemyHasEnoughBalance) {
     warningMessage = "Enemy with insufficient funds.";
@@ -61,7 +60,7 @@ export const Enemy: React.FC<Props> = ({
       <p>{`XP: ${xp}`}</p>
       <p>
         {`Balance: `}
-        <FyghterBalance value={balance} />
+        <EnemyBalance value={balance} gainIfWin={gainIfWin} />
       </p>
 
       {!myFyghter ? (
@@ -74,11 +73,11 @@ export const Enemy: React.FC<Props> = ({
           </p>
           <p>
             {`Gain if win: `}
-            <GainOrLoss value={ifWin} />
+            <GainOrLoss value={gainIfWin} />
           </p>
           <p>
             {`Loss if lose: `}
-            <GainOrLoss value={ifLose} />
+            <GainOrLoss value={lossIfLose} />
           </p>
         </>
       )}
