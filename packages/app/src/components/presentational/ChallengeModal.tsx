@@ -22,9 +22,10 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ visible, onCancel, onOk }
 
 type Props = {
   enemyId: BigNumber;
+  disabled: boolean;
 };
 
-export const ChallengeModal: React.FC<Props> = ({ enemyId }: Props) => {
+export const ChallengeModal: React.FC<Props> = ({ enemyId, disabled }: Props) => {
   const [isVisible, setVisible] = useState(false);
   const [challengeRunning, setChallengeRunning] = useState(false);
 
@@ -42,6 +43,8 @@ export const ChallengeModal: React.FC<Props> = ({ enemyId }: Props) => {
     });
   };
 
+  const buttonDisabled = disabled || !myFyghter || !myFyghter.id;
+
   return (
     <div>
       <Button
@@ -49,7 +52,7 @@ export const ChallengeModal: React.FC<Props> = ({ enemyId }: Props) => {
         block={true}
         onClick={onAttack}
         loading={challengeRunning ? true : false}
-        disabled={myFyghter && myFyghter.id ? false : true}
+        disabled={buttonDisabled}
       >
         Challenge!
       </Button>
