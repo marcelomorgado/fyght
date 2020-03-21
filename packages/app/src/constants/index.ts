@@ -1,3 +1,5 @@
+import { BigNumber } from "ethers";
+
 export enum Skin {
   NAKED = "naked",
   NORMAL_GUY = "normal_guy",
@@ -14,3 +16,8 @@ export enum AvatarSize {
   SMALL = "small",
   MEDIUM = "medium",
 }
+
+export const ONE = BigNumber.from(`${1e18}`);
+
+// TODO: Read the betValue from the smart contract
+export const BET_VALUE = `${5e18}`;

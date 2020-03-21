@@ -92,6 +92,7 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         }
       });
     } catch (e) {
+      // Note: Keeping for now due debug purposes
       console.debug(e);
       const errorMessage =
         e.data && e.data.message
@@ -226,7 +227,6 @@ export const createActions = (dispatch: any, state: FyghtContext): any => {
         provider,
         account,
       },
-      myFyghter,
     } = state;
 
     if (!fyghters || !provider) {

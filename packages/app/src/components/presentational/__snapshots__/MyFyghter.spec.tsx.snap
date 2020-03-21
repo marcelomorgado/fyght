@@ -15,7 +15,15 @@ exports[`MyFyghter should render the component 1`] = `
     XP: 5
   </p>
   <p>
-    Balance: $0.000000000000000005
+    Balance: 
+    <Component
+      value={
+        BigNumber {
+          "_hex": "0x05",
+          "_isBigNumber": true,
+        }
+      }
+    />
   </p>
   <Component />
   <p />

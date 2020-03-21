@@ -3,11 +3,6 @@
 exports[`Enemy should render the component 1`] = `
 <Card
   hoverable={true}
-  style={
-    Object {
-      "height": 405,
-    }
-  }
   title="Charlie"
   type="inner"
 >
@@ -20,15 +15,68 @@ exports[`Enemy should render the component 1`] = `
     XP: 1
   </p>
   <p>
-    Balance: $0.000000000000000005
+    Balance: 
+    <Component
+      gainIfWin={
+        BigNumber {
+          "_hex": "0x4563918244f3ff06",
+          "_isBigNumber": true,
+        }
+      }
+      value={
+        BigNumber {
+          "_hex": "0x05",
+          "_isBigNumber": true,
+        }
+      }
+    />
+  </p>
+  <p>
+    Win probability: 
+    <WinProbability
+      value={
+        BigNumber {
+          "_hex": "0x32",
+          "_isBigNumber": true,
+        }
+      }
+    />
+  </p>
+  <p>
+    Gain if win: 
+    <GainOrLoss
+      value={
+        BigNumber {
+          "_hex": "0x4563918244f3ff06",
+          "_isBigNumber": true,
+        }
+      }
+    />
+  </p>
+  <p>
+    Loss if lose: 
+    <GainOrLoss
+      value={
+        BigNumber {
+          "_hex": "-0xfa",
+          "_isBigNumber": true,
+        }
+      }
+    />
   </p>
   <Component
+    disabled={true}
     enemyId={
       BigNumber {
         "_hex": "0x02",
         "_isBigNumber": true,
       }
     }
+  />
+  <p />
+  <Alert
+    message="Enemy with insufficient funds."
+    type="warning"
   />
 </Card>
 `;
