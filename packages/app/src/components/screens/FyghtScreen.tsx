@@ -8,9 +8,10 @@ import { useFyghtContext } from "../../context";
 const { Content, Footer } = Layout;
 
 export const FyghtScreen: React.FC = () => {
+  // TODO: Typed state object
   const {
     state: {
-      errorMessage,
+      messages: { errorMessage, infoMessage },
       metamask: { ethereum, account, networkId, loading },
     },
     setMetamaskAccount,
@@ -47,6 +48,7 @@ export const FyghtScreen: React.FC = () => {
     return <>{`Please, connect to the local network (http://localhost:8545)`}</>;
   }
 
+  // TODO: Add effect when updating messages
   return (
     <Layout>
       {/* <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
@@ -64,14 +66,9 @@ export const FyghtScreen: React.FC = () => {
         </Header>
         <Content style={{ padding: "0 50px", marginTop: 64 }}> */}
       <Content style={{ padding: "0 50px", marginTop: 25 }}>
-        <Alert
-          message="Funded wallet"
-          description="during page myth behave wish detail fantasy immune west release legend deliver"
-          type="info"
-          showIcon
-        />
         <div style={{ margin: "16px 0" }}></div>
         {errorMessage ? <Alert message={errorMessage} type="error" closable showIcon /> : null}
+        {infoMessage ? <Alert message={infoMessage} type="info" closable showIcon /> : null}
         <div style={{ margin: "16px 0" }}></div>
         <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
           <Row gutter={16}>

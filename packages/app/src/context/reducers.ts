@@ -1,26 +1,24 @@
 import {
   RENAME,
   CHANGE_SKIN,
-  INCREMENT_ENEMY_XP,
-  INCREMENT_MY_FIGHTER_XP,
-  LOAD_ENEMIES,
+  SET_ENEMIES,
   SET_MY_FYGHTER,
   UPDATE_METAMASK_ACCOUNT,
   UPDATE_METAMASK_NETWORK,
   INITIALIZE_METAMASK,
   SET_ERROR_MESSAGE,
+  SET_INFO_MESSAGE,
 } from "./actions";
-import { BigNumber } from "ethers";
 
 export const initialState: FyghtContext = {
   myFyghter: null,
   enemies: [],
-  errorMessage: null,
+  messages: { errorMessage: null, infoMessage: null },
   metamask: {
     networkId: null,
     account: null,
     ethereum: null,
-    contract: null,
+    contracts: { fyghters: null, dai: null },
     provider: null,
     loading: true,
   },
@@ -35,11 +33,6 @@ const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Actio
       return { ...state, name };
     case CHANGE_SKIN:
       return { ...state, skin };
-    case INCREMENT_MY_FIGHTER_XP:
-      return {
-        ...state,
-        xp: BigNumber.from(state.xp).add(BigNumber.from("1")),
-      };
     case SET_MY_FYGHTER:
       return myFyghter;
     default:
@@ -47,32 +40,26 @@ const myFyghterReducer = (state: Fyghter = initialState.myFyghter, action: Actio
   }
 };
 
-const enemiesReducer = (state: Array<Fyghter> = initialState.enemies, action: Action): Array<Fyghter> => {
+const enemiesReducer = (state: Array<Enemy> = initialState.enemies, action: Action): Array<Enemy> => {
   const { type, payload } = action;
-  const { enemyId, enemies } = payload;
+  const { enemies } = payload;
 
   switch (type) {
-    case INCREMENT_ENEMY_XP:
-      return state.map(e => {
-        if (e.id.eq(enemyId)) {
-          return { ...e, xp: BigNumber.from(e.xp).add(BigNumber.from("1")) };
-        } else {
-          return e;
-        }
-      });
-    case LOAD_ENEMIES:
+    case SET_ENEMIES:
       return enemies;
     default:
       return state;
   }
 };
 
-const errorMessageReducer = (state: string, action: Action): string => {
+const messagesReducer = (state: Messages, action: Action): Messages => {
   const { type, payload } = action;
-  const { errorMessage } = payload;
+  const { errorMessage, infoMessage } = payload;
   switch (type) {
     case SET_ERROR_MESSAGE:
-      return errorMessage;
+      return { ...state, errorMessage };
+    case SET_INFO_MESSAGE:
+      return { ...state, infoMessage };
     default:
       return state;
   }
@@ -80,7 +67,7 @@ const errorMessageReducer = (state: string, action: Action): string => {
 
 const metamaskReducer = (state: MetamaskContext = initialState.metamask, action: Action): MetamaskContext => {
   const { type, payload } = action;
-  const { networkId, account, ethereum, contract, provider } = payload;
+  const { networkId, account, ethereum, contracts, provider } = payload;
 
   switch (type) {
     case UPDATE_METAMASK_ACCOUNT:
@@ -91,7 +78,7 @@ const metamaskReducer = (state: MetamaskContext = initialState.metamask, action:
       return {
         ...state,
         account,
-        contract,
+        contracts,
         provider,
         ethereum,
         networkId,
@@ -104,11 +91,11 @@ const metamaskReducer = (state: MetamaskContext = initialState.metamask, action:
 };
 
 export const rootReducer = (state: FyghtContext = initialState, action: Action): FyghtContext => {
-  const { myFyghter, enemies, errorMessage, metamask } = state;
+  const { myFyghter, enemies, messages, metamask } = state;
   return {
     myFyghter: myFyghterReducer(myFyghter, action),
     enemies: enemiesReducer(enemies, action),
-    errorMessage: errorMessageReducer(errorMessage, action),
+    messages: messagesReducer(messages, action),
     metamask: metamaskReducer(metamask, action),
   };
 };

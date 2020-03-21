@@ -27,6 +27,10 @@ exports[`MyFyghterContainer after loading 1`] = `
       <Component
         fyghter={
           Object {
+            "balance": BigNumber {
+              "_hex": "0x05",
+              "_isBigNumber": true,
+            },
             "id": BigNumber {
               "_hex": "0x01",
               "_isBigNumber": true,
@@ -74,4 +78,3 @@ exports[`MyFyghterContainer loading 1`] = `
   </Row>
 </Fragment>
 `;
-

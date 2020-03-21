@@ -2,6 +2,7 @@ pragma solidity 0.6.2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "./Dai.sol";
 
 contract Fyghters is ERC721 {
     using SafeMath for uint256;
@@ -10,6 +11,10 @@ contract Fyghters is ERC721 {
     uint8 constant MASTER_MIN_XP = 100;
     string constant MASTER_SKIN = "master";
     uint256 constant ONE = 1 * 10**18;
+    uint256 constant MIN_DEPOSIT = ONE * 5;
+    uint256 constant BET_VALUE = ONE * 5;
+
+    Dai private dai;
 
     event FyghterCreated(address indexed owner, uint256 id, string name);
     event ChallengeOccurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
@@ -21,6 +26,7 @@ contract Fyghters is ERC721 {
         string name;
         string skin;
         uint256 xp;
+        uint256 balance;
     }
 
     struct Skin {
@@ -36,7 +42,10 @@ contract Fyghters is ERC721 {
         _;
     }
 
-    constructor() public {
+    constructor(Dai _dai) public {
+        dai = _dai;
+
+        // Skins table
         skins.push(Skin({skin: "naked", xpNeeded: 0}));
         skins.push(Skin({skin: "normal_guy", xpNeeded: 10}));
         skins.push(Skin({skin: "karate_kid", xpNeeded: 15}));
@@ -48,10 +57,21 @@ contract Fyghters is ERC721 {
         skins.push(Skin({skin: MASTER_SKIN, xpNeeded: MASTER_MIN_XP}));
     }
 
+    function getMinimumDeposit() external pure returns (uint256) {
+        return MIN_DEPOSIT;
+    }
+
+    function getBetValue() external pure returns (uint256) {
+        return BET_VALUE;
+    }
+
     function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
+        require(dai.allowance(msg.sender, address(this)) >= MIN_DEPOSIT, "Dai allowance is less than the minimum.");
+        require(dai.transferFrom(msg.sender, address(this), MIN_DEPOSIT), "Error when depositing Dais.");
+
         uint256 _id = fyghters.length;
-        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1}));
+        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1, balance: MIN_DEPOSIT}));
         _mint(msg.sender, _id);
         emit FyghterCreated(msg.sender, _id, _name);
     }
@@ -61,19 +81,46 @@ contract Fyghters is ERC721 {
         emit FyghterRenamed(_fyghterId, _newName);
     }
 
+    function calculateGainAndLoss(uint256 _winProbability) public pure returns (uint256 gainIfWin, uint256 lossIfLose) {
+        gainIfWin = BET_VALUE.mul(ONE.sub(_winProbability)).div(ONE);
+        lossIfLose = BET_VALUE.mul(_winProbability).div(ONE);
+    }
+
     function challenge(uint256 _challengerId, uint256 _targetId) external onlyOwnerOf(_challengerId) {
-        uint256 challengerVictoryProbability = calculateChallengerProbability(_challengerId, _targetId);
+        uint256 winProbability = calculateWinProbability(_challengerId, _targetId);
+        (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(winProbability);
 
-        uint256 winnerId = (_random() <= challengerVictoryProbability) ? _challengerId : _targetId;
+        require(fyghters[_challengerId].balance >= lossIfLose, "Your fyghter doesn't have enough balance.");
+        require(fyghters[_targetId].balance >= gainIfWin, "The enemy doesn't have enough balance.");
 
-        fyghters[winnerId].xp++;
-        _checkForSkinUpdate(winnerId);
-        emit ChallengeOccurred(_challengerId, _targetId, winnerId);
+        uint256 winnerId = (_random() <= winProbability) ? _challengerId : _targetId;
+
+        processChallengeResult(_challengerId, _targetId, winnerId, winProbability);
+    }
+
+    function processChallengeResult(
+        uint256 _challengerId,
+        uint256 _targetId,
+        uint256 _winnerId,
+        uint256 _winProbability
+    ) internal {
+        (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(_winProbability);
+
+        uint256 prize = (_challengerId == _winnerId) ? gainIfWin : lossIfLose;
+        uint256 loserId = _winnerId == _challengerId ? _targetId : _challengerId;
+
+        fyghters[_winnerId].xp++;
+        fyghters[_winnerId].balance = fyghters[_winnerId].balance.add(prize);
+        fyghters[loserId].balance = fyghters[loserId].balance.sub(prize);
+
+        _checkForSkinUpdate(_winnerId);
+
+        emit ChallengeOccurred(_challengerId, _targetId, _winnerId);
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
         Fyghter storage fyghter = fyghters[_fyghterId];
-        require(fyghter.xp >= ALL_SKINS_MIN_XP, "The fyghter has no enough XP to change skin.");
+        require(fyghter.xp >= ALL_SKINS_MIN_XP, "The fyghter hasn't enough XP to change skin.");
 
         require(_isSkinValid(_newSkin), "Invalid skin.");
 
@@ -86,7 +133,7 @@ contract Fyghters is ERC721 {
         emit SkinChanged(_fyghterId, _newSkin);
     }
 
-    function calculateChallengerProbability(uint256 _challengerId, uint256 _targetId)
+    function calculateWinProbability(uint256 _challengerId, uint256 _targetId)
         public
         view
         returns (uint256 winProbability)
@@ -94,7 +141,7 @@ contract Fyghters is ERC721 {
         Fyghter memory challenger = fyghters[_challengerId];
         Fyghter memory target = fyghters[_targetId];
 
-        winProbability = challenger.xp.mul(ONE).div(challenger.xp.add(target.xp)).mul(100);
+        winProbability = challenger.xp.mul(ONE).div(challenger.xp.add(target.xp));
     }
 
     function _checkForSkinUpdate(uint256 _fyghterId) internal view returns (string memory newSkin) {
@@ -111,7 +158,7 @@ contract Fyghters is ERC721 {
     * See more: https://github.com/marcelomorgado/fyght/issues/71
     */
     function _random() internal view returns (uint256) {
-        return (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE;
+        return ((uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE).div(100);
     }
 
     function _isSkinValid(string memory skin) private view returns (bool isSkinValid) {

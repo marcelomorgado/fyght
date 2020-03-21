@@ -1,17 +1,15 @@
 declare module "*.png";
 declare module "*.gif";
 
-declare namespace NodeJS {
-  export interface ProcessEnv {
-    NODE_ENV: "dev";
-    FYGHTERS_CONTRACT_ADDRESS: string;
-  }
+interface Messages {
+  errorMessage: string;
+  infoMessage: string;
 }
 
 interface FyghtContext {
   myFyghter: Fyghter;
-  enemies: Array<Fyghter>;
-  errorMessage: string;
+  enemies: Array<Enemy>;
+  messages: Messages;
   metamask: MetamaskContext;
 }
 
@@ -21,7 +19,7 @@ interface MetamaskContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
   provider: Provider;
-  contract: Contract;
+  contracts: { fyghters: Contract; dai: Contract };
   loading: boolean;
 }
 
@@ -30,6 +28,12 @@ interface Fyghter {
   skin: string;
   name: string;
   xp: import("ethers").BigNumber;
+  balance: import("ethers").BigNumber;
+}
+
+interface Enemy {
+  fyghter: Fyghter;
+  winProbability: import("ethers").BigNumber;
 }
 
 interface Action {

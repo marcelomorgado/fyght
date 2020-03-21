@@ -70,6 +70,8 @@ export const FyghterRenamingModal: React.FC = () => {
     }
   };
 
+  const isLoading = !myFyghter || !myFyghter.id ? true : false;
+
   return (
     <div>
       <Button
@@ -78,7 +80,7 @@ export const FyghterRenamingModal: React.FC = () => {
         onClick={(): void => {
           setVisible(true);
         }}
-        loading={!myFyghter.id ? true : false}
+        loading={isLoading}
       >
         Rename
       </Button>

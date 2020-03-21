@@ -8,20 +8,21 @@ export const EnemiesContainer: React.FC = () => {
 
   const {
     state: {
+      myFyghter,
       enemies,
       metamask: { account },
     },
-    loadEnemies,
+    fetchAllEnemies,
   } = useFyghtContext();
 
   useEffect(() => {
     const init = async (): Promise<void> => {
-      await loadEnemies();
+      await fetchAllEnemies();
       setLoading(false);
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, myFyghter]);
 
   if (isLoading) {
     return <>{`Loading ...`}</>;
@@ -37,9 +38,9 @@ export const EnemiesContainer: React.FC = () => {
         Enemies
       </Divider>
       <Row gutter={[16, 24]}>
-        {enemies.map((enemy: Fyghter, i: number) => (
+        {enemies.map((enemy: Enemy, i: number) => (
           <Col key={i} className="gutter-row" span={4}>
-            <Enemy enemy={enemy} />
+            <Enemy enemy={enemy} myFyghter={myFyghter} />
           </Col>
         ))}
       </Row>

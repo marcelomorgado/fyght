@@ -12,17 +12,17 @@ export const MyFyghterContainer: React.FC = () => {
       myFyghter,
       metamask: { account },
     },
-    loadMyFyghter,
+    fetchMyFyghter,
   } = useFyghtContext();
 
   useEffect(() => {
     const init = async (): Promise<void> => {
-      loadMyFyghter();
+      fetchMyFyghter();
       setLoading(false);
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [myFyghter, account]);
 
   const hasFyghter = !isLoading && myFyghter !== null;
 

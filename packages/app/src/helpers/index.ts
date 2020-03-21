@@ -1,4 +1,6 @@
-import { Skin } from "../constants";
+import { Skin, ONE, BET_VALUE } from "../constants";
+import { ethers, BigNumber } from "ethers";
+import numeral from "numeral";
 
 export const skins = [
   {
@@ -57,26 +59,18 @@ export const skins = [
   },
 ];
 
-// export const getTransactionEvents = (
-//   contract: Contract,
-//   receipt: ContractReceipt
-// ): { [eventName: string]: Event } => {
-//   const txEvents: { [eventName: string]: Event } = {};
+export const formatWei = (wei: BigNumber): string => ethers.utils.formatEther(wei);
+export const formatDai = (wei: BigNumber): string => numeral(formatWei(wei)).format("$0,0.00");
+export const formatPercent = (value: BigNumber): string => numeral(formatWei(value)).format("0.00%");
 
-//   // for each log in the transaction receipt
-//   for (const log of receipt.logs) {
-//     // for each event in the ABI
-//     for (const abiEvent of Object.values(contract.interface.events)) {
-//       // if the hash of the ABI event equals the tx receipt log
-//       if (abiEvent.topics[0] == log.topics[0]) {
-//         // Parse the event from the log topics and data
-//         txEvents[abiEvent.name] = abiEvent.parse(log.topics, log.data);
-
-//         // stop looping through the ABI events
-//         break;
-//       }
-//     }
-//   }
-
-//   return txEvents;
-// };
+export const calculateGainAndLoss = (winProbability: BigNumber): { gainIfWin: BigNumber; lossIfLose: BigNumber } => {
+  const probability = winProbability ? winProbability : BigNumber.from("0");
+  const gainIfWin = BigNumber.from(BET_VALUE)
+    .mul(BigNumber.from(ONE).sub(probability))
+    .div(ONE);
+  const lossIfLose = BigNumber.from(BET_VALUE)
+    .mul(probability)
+    .div(BigNumber.from(ONE))
+    .mul(BigNumber.from(-1));
+  return { gainIfWin, lossIfLose };
+};
