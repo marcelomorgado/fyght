@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
-import { useFyghtContext } from "../../context";
+import { useFyghtState } from "../../state";
 
 // interface Values {}
 
@@ -47,15 +47,11 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({ visible, onCa
 export const FyghterCreationModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const { createFyghter, setErrorMessage } = useFyghtContext();
+  const [, { createFyghter }] = useFyghtState();
 
   const onCreate = async ({ name }: { name: string }): Promise<void> => {
-    try {
-      createFyghter(name);
-      setVisible(false);
-    } catch (e) {
-      setErrorMessage("Unexpected error when creating Fyghter.");
-    }
+    createFyghter(name);
+    setVisible(false);
   };
 
   return (

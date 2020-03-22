@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
-import { useFyghtContext } from "../../context";
+import { useFyghtState } from "../../state";
 
 // interface Values {}
 
@@ -55,19 +55,11 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCa
 export const FyghterRenamingModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
-  const {
-    renameMyFyghter,
-    setErrorMessage,
-    state: { myFyghter },
-  } = useFyghtContext();
+  const [{ myFyghter }, { renameMyFyghter }] = useFyghtState();
 
   const onSave = async ({ name }: { name: string }): Promise<void> => {
-    try {
-      renameMyFyghter(name);
-      setVisible(false);
-    } catch (e) {
-      setErrorMessage("Unexpected error when creating Fyghter.");
-    }
+    renameMyFyghter(name);
+    setVisible(false);
   };
 
   const isLoading = !myFyghter || !myFyghter.id ? true : false;

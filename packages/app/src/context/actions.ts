@@ -39,14 +39,8 @@ const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
 // eslint-disable-next-line no-undef
 const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
 
-// Get from contract
+// TODO: Get from constants or contract
 const MIN_DEPOSIT = `${5e18}`;
-
-interface FyghterCreated {
-  owner: string;
-  id: BigNumber;
-  name: string;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createActions = (dispatch: any, state: FyghtContext): any => {

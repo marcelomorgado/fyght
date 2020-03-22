@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { MyFyghter } from "./MyFyghter";
-import { useFyghtContext } from "../../context";
+import { useFyghtState } from "../../state";
 import { FyghterCreationModal } from "./FyghterCreationModal";
 
 export const MyFyghterContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
 
-  const {
-    state: {
+  const [
+    {
       myFyghter,
       metamask: { account },
     },
-    fetchMyFyghter,
-  } = useFyghtContext();
+    { fetchMyFyghter },
+  ] = useFyghtState();
 
   useEffect(() => {
     const init = async (): Promise<void> => {

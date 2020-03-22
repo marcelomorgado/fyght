@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../helpers";
 import { SkinAvatar } from "./SkinAvatar";
-import { useFyghtContext } from "../../context";
+import { useFyghtState } from "../../state";
 import { AvatarSize } from "../../constants";
 
 // interface Values {
@@ -20,11 +20,11 @@ interface FyghterChangeSkinFormProps {
 
 const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, onCancel, onSave, errorMessage }) => {
   const [form] = Form.useForm();
-  const {
-    state: {
+  const [
+    {
       myFyghter: { skin: currentSkin },
     },
-  } = useFyghtContext();
+  ] = useFyghtState();
 
   return (
     <Modal
@@ -67,10 +67,7 @@ export const FyghterChangeSkinModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const {
-    changeMyFyghterSkin,
-    state: { myFyghter },
-  } = useFyghtContext();
+  const [{ myFyghter }, { changeMyFyghterSkin }] = useFyghtState();
 
   const onSave = async ({ skin }: { skin: string }): Promise<void> => {
     changeMyFyghterSkin(skin);

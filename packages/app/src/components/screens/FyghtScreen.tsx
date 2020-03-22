@@ -3,20 +3,20 @@ import { Layout, Row, Col, Button, Alert, Spin } from "antd";
 import "antd/dist/antd.css";
 import { MyFyghterContainer } from "../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../presentational/EnemiesContainer";
-import { useFyghtContext } from "../../context";
+
+import { useFyghtState } from "../../state";
 
 const { Content, Footer } = Layout;
 
 export const FyghtScreen: React.FC = () => {
   // TODO: Typed state object
-  const {
-    state: {
+  const [
+    {
       messages: { errorMessage, infoMessage },
       metamask: { ethereum, account, networkId, loading },
     },
-    setMetamaskAccount,
-    initializeMetamask,
-  } = useFyghtContext();
+    { setMetamaskAccount, initializeMetamask },
+  ] = useFyghtState();
 
   useEffect(() => {
     initializeMetamask();
