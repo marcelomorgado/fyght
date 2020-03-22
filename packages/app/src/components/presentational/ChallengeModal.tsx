@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import { useFyghtContext } from "../../context";
+import { useFyghtState } from "../../state";
 
 // Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
 import gifs from "../../assets/img/*.gif";
@@ -29,10 +29,7 @@ export const ChallengeModal: React.FC<Props> = ({ enemyId, disabled }: Props) =>
   const [isVisible, setVisible] = useState(false);
   const [challengeRunning, setChallengeRunning] = useState(false);
 
-  const {
-    challengeAnEnemy,
-    state: { myFyghter },
-  } = useFyghtContext();
+  const [{ myFyghter }, { challengeAnEnemy }] = useFyghtState();
 
   const onAttack = (): void => {
     // setVisible(true);

@@ -21,3 +21,6 @@ export const ONE = BigNumber.from(`${1e18}`);
 
 // TODO: Read the betValue from the smart contract
 export const BET_VALUE = `${5e18}`;
+
+// TODO: Read the betValue from the smart contract
+export const MIN_DEPOSIT = `${5e18}`;

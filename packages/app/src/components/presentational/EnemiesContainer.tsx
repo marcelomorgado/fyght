@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { Enemy } from "./Enemy";
-import { useFyghtContext } from "../../context";
+import { useFyghtState } from "../../state";
 
 export const EnemiesContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
 
-  const {
-    state: {
+  const [
+    {
       myFyghter,
       enemies,
       metamask: { account },
     },
-    fetchAllEnemies,
-  } = useFyghtContext();
+    { fetchAllEnemies },
+  ] = useFyghtState();
 
   useEffect(() => {
     const init = async (): Promise<void> => {

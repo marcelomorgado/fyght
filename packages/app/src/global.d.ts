@@ -6,7 +6,7 @@ interface Messages {
   infoMessage: string;
 }
 
-interface FyghtContext {
+interface FyghtState {
   myFyghter: Fyghter;
   enemies: Array<Enemy>;
   messages: Messages;
@@ -40,4 +40,10 @@ interface Action {
   type: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload?: any;
+}
+
+interface FyghterCreated {
+  owner: string;
+  id: BigNumber;
+  name: string;
 }
