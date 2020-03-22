@@ -1,6 +1,6 @@
 import * as React from "react";
 import { shallow } from "enzyme";
-import * as FyghterContext from "../../context";
+import * as FyghtState from "../../state";
 import { FyghterRenamingModal } from "./FyghterRenamingModal";
 import { storeMocks } from "../../testHelpers";
 
@@ -8,9 +8,10 @@ const { myFyghter } = storeMocks;
 
 describe("FyghterRenamingModal", () => {
   test("should render the component", () => {
-    const contextValues = { renameMyFyghter: jest.fn(), state: { myFyghter } };
-
-    jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
+    jest
+      .spyOn(FyghtState, "useFyghtState")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .mockImplementation((): any => [{ myFyghter }, { renameMyFyghter: jest.fn() }]);
 
     expect(shallow(<FyghterRenamingModal />)).toMatchSnapshot();
   });

@@ -1,4 +1,4 @@
-import { createStore, createHook, createContainer } from "react-sweet-state";
+import { createStore, createHook } from "react-sweet-state";
 import {
   fetchAllEnemies,
   initializeMetamask,
@@ -45,4 +45,3 @@ const Store = createStore<State, Actions>({
 });
 
 export const useFyghtState = createHook(Store);
-const FyghtStateContainer = createContainer(Store);

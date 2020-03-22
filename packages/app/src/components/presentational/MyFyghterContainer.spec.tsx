@@ -1,6 +1,6 @@
 import React, { useState as useStateMock } from "react";
 import { shallow } from "enzyme";
-import * as FyghterContext from "../../context";
+import * as FyghtState from "../../state";
 import { MyFyghterContainer } from "./MyFyghterContainer";
 import { storeMocks } from "../../testHelpers";
 
@@ -10,10 +10,10 @@ jest.mock("react", () => ({
 }));
 
 describe("MyFyghterContainer", () => {
-  const contextValues = {
-    state: { myFyghter: storeMocks.myFyghter, metamask: { account: "" } },
-  };
-  jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
+  jest
+    .spyOn(FyghtState, "useFyghtState")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .mockImplementation((): any => [{ myFyghter: storeMocks.myFyghter, metamask: { account: "" } }, {}]);
 
   test("loading", () => {
     const stateValues = [true, jest.fn()];

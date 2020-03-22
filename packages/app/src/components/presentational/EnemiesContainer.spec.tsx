@@ -1,6 +1,6 @@
 import React, { useState as useStateMock } from "react";
 import { shallow } from "enzyme";
-import * as FyghterContext from "../../context";
+import * as FyghtState from "../../state";
 import { EnemiesContainer } from "./EnemiesContainer";
 import { storeMocks } from "../../testHelpers";
 
@@ -10,13 +10,10 @@ jest.mock("react", () => ({
 }));
 
 describe("EnemiesContainer", () => {
-  const contextValues = {
-    state: {
-      enemies: storeMocks.enemies,
-      metamask: { account: "" },
-    },
-  };
-  jest.spyOn(FyghterContext, "useFyghtContext").mockImplementation(() => contextValues);
+  jest
+    .spyOn(FyghtState, "useFyghtState")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .mockImplementation((): any => [{ enemies: storeMocks.enemies, metamask: { account: "" } }, {}]);
 
   test("loading", () => {
     const stateValues = [true, jest.fn()];

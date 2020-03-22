@@ -25,7 +25,7 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
   }
 };
 
-export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi) => {
+export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): Promise<void> => {
   const {
     metamask: {
       contracts: { fyghters },
@@ -193,17 +193,17 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
   });
 };
 
-const setMetamaskNetworkId = (networkId: number) => ({ setState, getState }: StoreApi) => {
+const setMetamaskNetworkId = (networkId: number) => ({ setState, getState }: StoreApi): void => {
   const { metamask } = getState();
   setState({ metamask: { ...metamask, networkId } });
 };
 
-export const setMetamaskAccount = (account: string) => ({ setState, getState }: StoreApi) => {
+export const setMetamaskAccount = (account: string) => ({ setState, getState }: StoreApi): void => {
   const { metamask } = getState();
   setState({ metamask: { ...metamask, account } });
 };
 
-export const initializeMetamask = () => async ({ setState, getState, dispatch }: StoreApi) => {
+export const initializeMetamask = () => async ({ setState, getState, dispatch }: StoreApi): Promise<void> => {
   const { metamask } = getState();
 
   const { ethereum } = window;
