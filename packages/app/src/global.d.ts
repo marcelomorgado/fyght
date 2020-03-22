@@ -6,7 +6,7 @@ interface Messages {
   infoMessage: string;
 }
 
-interface FyghtContext {
+interface FyghtState {
   myFyghter: Fyghter;
   enemies: Array<Enemy>;
   messages: Messages;

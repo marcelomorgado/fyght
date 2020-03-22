@@ -1,16 +1,8 @@
 import { createStore, createHook } from "react-sweet-state";
-import {
-  fetchAllEnemies,
-  initializeMetamask,
-  setMetamaskAccount,
-  fetchMyFyghter,
-  challengeAnEnemy,
-  changeMyFyghterSkin,
-  createFyghter,
-  renameMyFyghter,
-} from "./actions";
+import * as actions from "./actions";
 
-type State = FyghtContext;
+type State = FyghtState;
+type Actions = typeof actions;
 
 const initialState: State = {
   myFyghter: null,
@@ -25,19 +17,6 @@ const initialState: State = {
     loading: true,
   },
 };
-
-const actions = {
-  fetchAllEnemies,
-  initializeMetamask,
-  setMetamaskAccount,
-  fetchMyFyghter,
-  challengeAnEnemy,
-  changeMyFyghterSkin,
-  createFyghter,
-  renameMyFyghter,
-};
-
-type Actions = typeof actions;
 
 const Store = createStore<State, Actions>({
   initialState,

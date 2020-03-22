@@ -11,7 +11,7 @@ export const optimisticUpdate = async ({
   onOptimistic?: () => void;
   onSuccess?: (receipt?: ContractReceipt) => void;
   onError: (errorMessage: string, receipt?: ContractReceipt) => void;
-  getState: () => FyghtContext;
+  getState: () => FyghtState;
 }): Promise<void> => {
   const {
     metamask: { provider },
