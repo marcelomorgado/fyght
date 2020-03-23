@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Radio, Row, Alert } from "antd";
+import React from "react";
+import { Modal, Form, Radio, Row, Alert } from "antd";
 import { skins } from "../../../helpers";
 import { SkinAvatar } from "../SkinAvatar";
 import { useFyghtState } from "../../../state";
@@ -9,7 +9,7 @@ import { AvatarSize } from "../../../constants";
 //   skin: string;
 // }
 
-interface FyghterChangeSkinFormProps {
+interface Props {
   visible: boolean;
   // TODO: To use Values type above
   // See more: https://github.com/ant-design/ant-design/issues/21195
@@ -18,8 +18,9 @@ interface FyghterChangeSkinFormProps {
   errorMessage: string;
 }
 
-const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, onCancel, onSave, errorMessage }) => {
+export const ChangeSkinForm: React.FC<Props> = ({ visible, onCancel, onSave, errorMessage }) => {
   const [form] = Form.useForm();
+  // TODO: Move to ChangeSkinButton
   const [
     {
       myFyghter: { skin: currentSkin },
@@ -60,46 +61,5 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, 
         </Form.Item>
       </Form>
     </Modal>
-  );
-};
-
-type Props = {
-  isLoading: boolean;
-};
-
-// TODO: Rename component
-export const FyghterChangeSkinModal: React.FC<Props> = ({ isLoading }: Props) => {
-  const [isVisible, setVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  const [, { changeMyFyghterSkin }] = useFyghtState();
-
-  const onSave = async ({ skin }: { skin: string }): Promise<void> => {
-    changeMyFyghterSkin(skin);
-    setVisible(false);
-  };
-
-  return (
-    <div>
-      <Button
-        type="primary"
-        block={true}
-        onClick={(): void => {
-          setVisible(true);
-        }}
-        loading={isLoading}
-      >
-        Change skin
-      </Button>
-      <FyghterChangeSkinForm
-        visible={isVisible}
-        onCancel={(): void => {
-          setVisible(false);
-          setErrorMessage(null);
-        }}
-        onSave={onSave}
-        errorMessage={errorMessage}
-      />
-    </div>
   );
 };

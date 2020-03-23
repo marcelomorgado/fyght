@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 import { FyghterRenamingModal } from "../FyghterRenamingModal";
-import { FyghterChangeSkinModal } from "../FyghterChangeSkinModal";
+import { ChangeSkinButton } from "../ChangeSkinButton";
 import { SkinAvatar } from "../SkinAvatar";
 import { AvatarSize } from "../../../constants";
 import { MyFyghterBalance } from "./MyFyghterBalance";
@@ -26,7 +26,7 @@ export const MyFyghter: React.FC<Props> = ({ fyghter: { id: fyghterId, skin, nam
       </p>
       <FyghterRenamingModal isLoading={isLoading} />
       <p></p>
-      <FyghterChangeSkinModal isLoading={isLoading} />
+      <ChangeSkinButton isLoading={isLoading} />
       <p></p>
       <DepositButton fyghterId={fyghterId} isLoading={isLoading} />
       <p></p>

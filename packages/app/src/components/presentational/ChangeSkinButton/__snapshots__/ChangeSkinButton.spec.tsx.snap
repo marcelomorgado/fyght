@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FyghterChangeSkinModal should render the component 1`] = `
+exports[`ChangeSkinButton should render the component 1`] = `
 <div>
   <Button
     block={true}
@@ -12,7 +12,7 @@ exports[`FyghterChangeSkinModal should render the component 1`] = `
   >
     Change skin
   </Button>
-  <FyghterChangeSkinForm
+  <Component
     errorMessage={null}
     onCancel={[Function]}
     onSave={[Function]}
