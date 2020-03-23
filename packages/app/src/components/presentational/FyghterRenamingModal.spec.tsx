@@ -13,6 +13,6 @@ describe("FyghterRenamingModal", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .mockImplementation((): any => [{ myFyghter }, { renameMyFyghter: jest.fn() }]);
 
-    expect(shallow(<FyghterRenamingModal />)).toMatchSnapshot();
+    expect(shallow(<FyghterRenamingModal isLoading={false} />)).toMatchSnapshot();
   });
 });

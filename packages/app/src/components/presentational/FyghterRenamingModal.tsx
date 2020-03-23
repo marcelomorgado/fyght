@@ -52,7 +52,12 @@ const FyghterRenamingForm: React.FC<FyghterRenamingFormProps> = ({ visible, onCa
   );
 };
 
-export const FyghterRenamingModal: React.FC = () => {
+type Props = {
+  isLoading: boolean;
+};
+
+// TODO: Rename component
+export const FyghterRenamingModal: React.FC<Props> = ({ isLoading }: Props) => {
   const [isVisible, setVisible] = useState(false);
 
   const [{ myFyghter }, { renameMyFyghter }] = useFyghtState();
@@ -61,8 +66,6 @@ export const FyghterRenamingModal: React.FC = () => {
     renameMyFyghter(name);
     setVisible(false);
   };
-
-  const isLoading = !myFyghter || !myFyghter.id ? true : false;
 
   return (
     <div>

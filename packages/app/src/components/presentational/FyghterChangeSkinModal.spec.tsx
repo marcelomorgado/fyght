@@ -12,6 +12,6 @@ describe("FyghterChangeSkinModal", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .mockImplementation((): any => [{ myFyghter }, { changeMyFyghterSkin: jest.fn() }]);
 
-    expect(shallow(<FyghterChangeSkinModal />)).toMatchSnapshot();
+    expect(shallow(<FyghterChangeSkinModal isLoading={false} />)).toMatchSnapshot();
   });
 });

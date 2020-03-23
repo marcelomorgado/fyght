@@ -10,7 +10,7 @@ const ONE = new BN(`${1e18}`);
 
 const APPROVAL_AMOUNT = new BN("100").mul(ONE);
 
-contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
+contract("Fyghters", ([aliceAddress, bobAddress]) => {
   let fyghtersMock;
   let dai;
   let minDeposit;
@@ -55,9 +55,8 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: bobAddress });
   });
 
-  beforeEach(async () => {
+  beforeEach("should create fyghters", async () => {
     // given
-    minDeposit = await fyghtersMock.getMinimumDeposit();
     betValue = await fyghtersMock.getBetValue();
 
     const fyghterName = "Bruce lee";
@@ -70,7 +69,7 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     // then
     const { name, balance } = await fyghtersMock.fyghters(ALICE_FYGHTER_ID);
     expect(name).to.equal(fyghterName);
-    expect(`${balance}`).to.equal(`${minDeposit}`);
+    expect(`${balance}`).to.equal(`${0}`);
 
     const balanceAfter = await fyghtersMock.balanceOf(aliceAddress);
     expect(`${balanceAfter}`).to.be.equal("1");
@@ -81,6 +80,45 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
     });
 
     await fyghtersMock.create("Chuck", { from: bobAddress });
+  });
+
+  beforeEach("should deposit", async () => {
+    // given
+    minDeposit = await fyghtersMock.getMinimumDeposit();
+
+    // when
+    const txAlice = await fyghtersMock.deposit(ALICE_FYGHTER_ID, minDeposit);
+    const txBob = await fyghtersMock.deposit(BOB_FYGHTER_ID, minDeposit);
+
+    // then
+    expectEvent(txAlice, "Deposited", {
+      id: ALICE_FYGHTER_ID,
+      amount: minDeposit,
+    });
+
+    expectEvent(txBob, "Deposited", {
+      id: BOB_FYGHTER_ID,
+      amount: minDeposit,
+    });
+  });
+
+  describe("withdrawAll", () => {
+    it("should withdraw all fyghter balance", async () => {
+      // given
+      const fyghterId = ALICE_FYGHTER_ID;
+      const ownerBalanceBefore = await dai.balanceOf(aliceAddress);
+      const { balance: fyghterBalanceBefore } = await fyghtersMock.fyghters(fyghterId);
+
+      // when
+      const tx = await fyghtersMock.withdrawAll(fyghterId);
+
+      // then
+      expectEvent(tx, "Withdrawn", { id: fyghterId, amount: fyghterBalanceBefore });
+      const ownerBalanceAfter = await dai.balanceOf(aliceAddress);
+      const { balance: fyghterBalanceAfter } = await fyghtersMock.fyghters(fyghterId);
+      expect(`${fyghterBalanceAfter}`).to.equal("0");
+      expect(`${ownerBalanceAfter}`).to.equal(`${ownerBalanceBefore.add(fyghterBalanceBefore)}`);
+    });
   });
 
   describe("getters", () => {
@@ -108,14 +146,6 @@ contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
 
       // then
       await expectRevert(tx, "Each user can have just one fyghter.");
-    });
-
-    it("shouldn't be able to create fyghter without min allowance", async () => {
-      // when
-      const tx = fyghtersMock.create("Bruce", { from: carlAddress });
-
-      // then
-      await expectRevert(tx, "Dai allowance is less than the minimum.");
     });
   });
 

@@ -4,6 +4,7 @@ const Fyghters = artifacts.require("Fyghters");
 const Dai = artifacts.require("Dai");
 
 const APPROVAL_AMOUNT = `${100e18}`;
+const DEPOSIT_AMOUNT = `${5e18}`;
 
 // FIXME: This script stucks when some tx is rejected
 module.exports = async (callback) => {
@@ -29,6 +30,7 @@ module.exports = async (callback) => {
     console.log(`Fyghters contract allowed to spend tokens: ${tx2}`);
 
     const { tx: tx3 } = await fyghters.create(name, { from });
+    await fyghters.deposit(i, DEPOSIT_AMOUNT, { from });
     console.log(`Fyghter created: ${tx3}`);
   }
 

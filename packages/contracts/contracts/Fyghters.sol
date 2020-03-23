@@ -20,6 +20,8 @@ contract Fyghters is ERC721 {
     event ChallengeOccurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
     event SkinChanged(uint256 indexed id, string newSkin);
     event FyghterRenamed(uint256 indexed id, string newName);
+    event Deposited(uint256 indexed id, uint256 amount);
+    event Withdrawn(uint256 indexed id, uint256 amount);
 
     struct Fyghter {
         uint256 id;
@@ -67,13 +69,25 @@ contract Fyghters is ERC721 {
 
     function create(string calldata _name) external {
         require(balanceOf(msg.sender) == 0, "Each user can have just one fyghter.");
-        require(dai.allowance(msg.sender, address(this)) >= MIN_DEPOSIT, "Dai allowance is less than the minimum.");
-        require(dai.transferFrom(msg.sender, address(this), MIN_DEPOSIT), "Error when depositing Dais.");
 
         uint256 _id = fyghters.length;
-        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1, balance: MIN_DEPOSIT}));
+        fyghters.push(Fyghter({id: _id, name: _name, skin: skins[0].skin, xp: 1, balance: 0}));
         _mint(msg.sender, _id);
         emit FyghterCreated(msg.sender, _id, _name);
+    }
+
+    function deposit(uint256 _fyghterId, uint256 _amount) external {
+        require(dai.transferFrom(msg.sender, address(this), _amount), "Deposit transfer with error.");
+        require(_amount >= MIN_DEPOSIT, "Deposit amount less than the minimum");
+        fyghters[_fyghterId].balance = fyghters[_fyghterId].balance.add(_amount);
+        emit Deposited(_fyghterId, _amount);
+    }
+
+    function withdrawAll(uint256 _fyghterId) external onlyOwnerOf(_fyghterId) {
+        uint256 balance = fyghters[_fyghterId].balance;
+        fyghters[_fyghterId].balance = 0;
+        require(dai.transfer(msg.sender, balance), "Withdraw transfer with error.");
+        emit Withdrawn(_fyghterId, balance);
     }
 
     function rename(uint256 _fyghterId, string calldata _newName) external onlyOwnerOf(_fyghterId) {
@@ -88,11 +102,6 @@ contract Fyghters is ERC721 {
 
     function challenge(uint256 _challengerId, uint256 _targetId) external onlyOwnerOf(_challengerId) {
         uint256 winProbability = calculateWinProbability(_challengerId, _targetId);
-        (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(winProbability);
-
-        require(fyghters[_challengerId].balance >= lossIfLose, "Your fyghter doesn't have enough balance.");
-        require(fyghters[_targetId].balance >= gainIfWin, "The enemy doesn't have enough balance.");
-
         uint256 winnerId = (_random() <= winProbability) ? _challengerId : _targetId;
 
         processChallengeResult(_challengerId, _targetId, winnerId, winProbability);
@@ -105,6 +114,9 @@ contract Fyghters is ERC721 {
         uint256 _winProbability
     ) internal {
         (uint256 gainIfWin, uint256 lossIfLose) = calculateGainAndLoss(_winProbability);
+
+        require(fyghters[_challengerId].balance >= lossIfLose, "Your fyghter doesn't have enough balance.");
+        require(fyghters[_targetId].balance >= gainIfWin, "The enemy doesn't have enough balance.");
 
         uint256 prize = (_challengerId == _winnerId) ? gainIfWin : lossIfLose;
         uint256 loserId = _winnerId == _challengerId ? _targetId : _challengerId;
