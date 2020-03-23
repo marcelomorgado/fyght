@@ -25,8 +25,32 @@ exports[`MyFyghter should render the component 1`] = `
       }
     />
   </p>
-  <Component />
+  <Component
+    isLoading={false}
+  />
   <p />
-  <Component />
+  <Component
+    isLoading={false}
+  />
+  <p />
+  <Component
+    fyghterId={
+      BigNumber {
+        "_hex": "0x01",
+        "_isBigNumber": true,
+      }
+    }
+    isLoading={false}
+  />
+  <p />
+  <Component
+    fyghterId={
+      BigNumber {
+        "_hex": "0x01",
+        "_isBigNumber": true,
+      }
+    }
+    isLoading={false}
+  />
 </Card>
 `;

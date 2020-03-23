@@ -90,7 +90,8 @@ export const FyghtScreen: React.FC = () => {
             </Row> */}
         </div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>fyght - a crypto game</Footer>
+      {/* TODO: Include github link and roadmap */}
+      <Footer style={{ textAlign: "center" }}>fyght - A karate crypto game</Footer>
     </Layout>
   );
 };

@@ -44,6 +44,7 @@ const FyghterCreationForm: React.FC<FyghterCreationFormProps> = ({ visible, onCa
   );
 };
 
+// TODO: Rename component
 export const FyghterCreationModal: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 

@@ -282,7 +282,7 @@
         "id": 2,
         "nodeType": "ImportDirective",
         "scope": 19,
-        "sourceUnit": 1131,
+        "sourceUnit": 1191,
         "src": "24:51:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -293,7 +293,7 @@
         "id": 3,
         "nodeType": "ImportDirective",
         "scope": 19,
-        "sourceUnit": 1555,
+        "sourceUnit": 1615,
         "src": "76:55:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -308,10 +308,10 @@
               "id": 4,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1554,
+              "referencedDeclaration": 1614,
               "src": "149:5:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$1554",
+                "typeIdentifier": "t_contract$_ERC20_$1614",
                 "typeString": "contract ERC20"
               }
             },
@@ -321,9 +321,9 @@
           }
         ],
         "contractDependencies": [
-          880,
-          1554,
-          1623
+          940,
+          1614,
+          1683
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -331,9 +331,9 @@
         "id": 18,
         "linearizedBaseContracts": [
           18,
-          1554,
-          1623,
-          880
+          1614,
+          1683,
+          940
         ],
         "name": "Dai",
         "nodeType": "ContractDefinition",
@@ -406,7 +406,7 @@
                       "name": "_mint",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1444,
+                      "referencedDeclaration": 1504,
                       "src": "208:5:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
@@ -522,7 +522,7 @@
         "id": 2,
         "nodeType": "ImportDirective",
         "scope": 19,
-        "sourceUnit": 1131,
+        "sourceUnit": 1191,
         "src": "24:51:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -533,7 +533,7 @@
         "id": 3,
         "nodeType": "ImportDirective",
         "scope": 19,
-        "sourceUnit": 1555,
+        "sourceUnit": 1615,
         "src": "76:55:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -548,10 +548,10 @@
               "id": 4,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1554,
+              "referencedDeclaration": 1614,
               "src": "149:5:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$1554",
+                "typeIdentifier": "t_contract$_ERC20_$1614",
                 "typeString": "contract ERC20"
               }
             },
@@ -561,9 +561,9 @@
           }
         ],
         "contractDependencies": [
-          880,
-          1554,
-          1623
+          940,
+          1614,
+          1683
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -571,9 +571,9 @@
         "id": 18,
         "linearizedBaseContracts": [
           18,
-          1554,
-          1623,
-          880
+          1614,
+          1683,
+          940
         ],
         "name": "Dai",
         "nodeType": "ContractDefinition",
@@ -646,7 +646,7 @@
                       "name": "_mint",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1444,
+                      "referencedDeclaration": 1504,
                       "src": "208:5:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
@@ -800,7 +800,7 @@
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-22T14:08:22.357Z",
+  "updatedAt": "2020-03-23T19:14:44.659Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {

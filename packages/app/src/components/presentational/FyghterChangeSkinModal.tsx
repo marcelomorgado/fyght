@@ -63,7 +63,12 @@ const FyghterChangeSkinForm: React.FC<FyghterChangeSkinFormProps> = ({ visible, 
   );
 };
 
-export const FyghterChangeSkinModal: React.FC = () => {
+type Props = {
+  isLoading: boolean;
+};
+
+// TODO: Rename component
+export const FyghterChangeSkinModal: React.FC<Props> = ({ isLoading }: Props) => {
   const [isVisible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -73,8 +78,6 @@ export const FyghterChangeSkinModal: React.FC = () => {
     changeMyFyghterSkin(skin);
     setVisible(false);
   };
-
-  const isLoading = !myFyghter || !myFyghter.id ? true : false;
 
   return (
     <div>
