@@ -30,7 +30,7 @@
     "url": "https://github.com/marcelomorgado/fyght/issues"
   },
   "dependencies": {
-    "antd": "4.0.3",
+    "antd": "4.0.4",
     "ethers": "5.0.0-beta.177",
     "numeral": "2.0.6",
     "react": "16.13.1",
