@@ -1,7 +1,7 @@
 import { StoreActionApi } from "react-sweet-state";
 import { ethers, Event, BigNumber, ContractReceipt } from "ethers";
 import { optimisticUpdate } from "../utils";
-import { Skin, MIN_DEPOSIT } from "../../constants";
+import { Skin } from "../../constants";
 import { setErrorMessage, setInfoMessage } from "./messages";
 import { fetchAllEnemies } from "./enemies";
 

@@ -72,7 +72,7 @@ export const FyghterChangeSkinModal: React.FC<Props> = ({ isLoading }: Props) =>
   const [isVisible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [{ myFyghter }, { changeMyFyghterSkin }] = useFyghtState();
+  const [, { changeMyFyghterSkin }] = useFyghtState();
 
   const onSave = async ({ skin }: { skin: string }): Promise<void> => {
     changeMyFyghterSkin(skin);
