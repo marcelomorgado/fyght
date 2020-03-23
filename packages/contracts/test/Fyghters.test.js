@@ -10,7 +10,7 @@ const ONE = new BN(`${1e18}`);
 
 const APPROVAL_AMOUNT = new BN("100").mul(ONE);
 
-contract("Fyghters", ([aliceAddress, bobAddress, carlAddress]) => {
+contract("Fyghters", ([aliceAddress, bobAddress]) => {
   let fyghtersMock;
   let dai;
   let minDeposit;
