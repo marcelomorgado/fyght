@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FyghterRenamingModal should render the component 1`] = `
+exports[`RenameFyghterButton should render the component 1`] = `
 <div>
   <Button
     block={true}
@@ -12,7 +12,7 @@ exports[`FyghterRenamingModal should render the component 1`] = `
   >
     Rename
   </Button>
-  <FyghterRenamingForm
+  <Component
     name="John"
     onCancel={[Function]}
     onSave={[Function]}
