@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FyghterCreationModal should render the component 1`] = `
+exports[`CreateFyghterButton should render the component 1`] = `
 <div>
   You have to create your fyghter!
   <Button
@@ -13,7 +13,7 @@ exports[`FyghterCreationModal should render the component 1`] = `
   >
     Create
   </Button>
-  <FyghterCreationForm
+  <Component
     onCancel={[Function]}
     onCreate={[Function]}
     visible={false}

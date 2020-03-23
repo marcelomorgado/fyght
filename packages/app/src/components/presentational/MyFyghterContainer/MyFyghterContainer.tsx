@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Divider } from "antd";
 import { MyFyghter } from "../MyFyghter";
 import { useFyghtState } from "../../../state";
-import { FyghterCreationModal } from "../FyghterCreationModal";
+import { CreateFyghterButton } from "../CreateFyghterButton";
 
 export const MyFyghterContainer: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ export const MyFyghterContainer: React.FC = () => {
       </Divider>
       <Row gutter={[16, 24]}>
         <Col span={24}>
-          {isLoading ? <>{`Loading...`}</> : !hasFyghter ? <FyghterCreationModal /> : <MyFyghter fyghter={myFyghter} />}
+          {isLoading ? <>{`Loading...`}</> : !hasFyghter ? <CreateFyghterButton /> : <MyFyghter fyghter={myFyghter} />}
         </Col>
       </Row>
     </>
