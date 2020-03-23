@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChangeSkinForm should render the component 1`] = `
+<Modal
+  cancelText="Cancel"
+  confirmLoading={false}
+  maskTransitionName="fade"
+  okText="Save"
+  okType="primary"
+  onCancel={[MockFunction]}
+  onOk={[Function]}
+  title="Change skin"
+  transitionName="zoom"
+  visible={true}
+  width={520}
+>
+  <ForwardRef(InternalForm)
+    form={
+      Object {
+        "__INTERNAL__": Object {},
+        "getFieldError": [Function],
+        "getFieldValue": [Function],
+        "getFieldsError": [Function],
+        "getFieldsValue": [Function],
+        "getInternalHooks": [Function],
+        "isFieldTouched": [Function],
+        "isFieldValidating": [Function],
+        "isFieldsTouched": [Function],
+        "isFieldsValidating": [Function],
+        "resetFields": [Function],
+        "scrollToField": [Function],
+        "setFields": [Function],
+        "setFieldsValue": [Function],
+        "submit": [Function],
+        "validateFields": [Function],
+      }
+    }
+    initialValues={
+      Object {
+        "skin": "normal_guy",
+      }
+    }
+    layout="vertical"
+    name="form_in_modal"
+    style={
+      Object {
+        "marginTop": 30,
+      }
+    }
+  >
+    <FormItem
+      label=""
+      name="skin"
+    >
+      <RadioGroup
+        buttonStyle="outline"
+      >
+        <Row
+          gutter={
+            Array [
+              16,
+              24,
+            ]
+          }
+          justify="center"
+        >
+          <Radio
+            key="0"
+            type="radio"
+            value="naked"
+          >
+            <Component
+              size="small"
+              skin="naked"
+            />
+          </Radio>
+          <Radio
+            key="1"
+            type="radio"
+            value="normal_guy"
+          >
+            <Component
+              size="small"
+              skin="normal_guy"
+            />
+          </Radio>
+          <Radio
+            key="2"
+            type="radio"
+            value="karate_kid"
+          >
+            <Component
+              size="small"
+              skin="karate_kid"
+            />
+          </Radio>
+          <Radio
+            key="3"
+            type="radio"
+            value="japonese"
+          >
+            <Component
+              size="small"
+              skin="japonese"
+            />
+          </Radio>
+          <Radio
+            key="4"
+            type="radio"
+            value="monk"
+          >
+            <Component
+              size="small"
+              skin="monk"
+            />
+          </Radio>
+          <Radio
+            key="5"
+            type="radio"
+            value="ninja"
+          >
+            <Component
+              size="small"
+              skin="ninja"
+            />
+          </Radio>
+          <Radio
+            key="6"
+            type="radio"
+            value="no_one"
+          >
+            <Component
+              size="small"
+              skin="no_one"
+            />
+          </Radio>
+          <Radio
+            key="7"
+            type="radio"
+            value="demon"
+          >
+            <Component
+              size="small"
+              skin="demon"
+            />
+          </Radio>
+          <Radio
+            key="8"
+            type="radio"
+            value="master"
+          >
+            <Component
+              size="small"
+              skin="master"
+            />
+          </Radio>
+        </Row>
+      </RadioGroup>
+    </FormItem>
+  </ForwardRef(InternalForm)>
+</Modal>
+`;

@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateFyghterForm should render the component 1`] = `
+<Modal
+  confirmLoading={false}
+  maskTransitionName="fade"
+  okText="Save"
+  okType="primary"
+  onCancel={[MockFunction]}
+  onOk={[Function]}
+  title="Create a fyghter"
+  transitionName="zoom"
+  visible={true}
+  width={520}
+>
+  <ForwardRef(InternalForm)
+    form={
+      Object {
+        "__INTERNAL__": Object {},
+        "getFieldError": [Function],
+        "getFieldValue": [Function],
+        "getFieldsError": [Function],
+        "getFieldsValue": [Function],
+        "getInternalHooks": [Function],
+        "isFieldTouched": [Function],
+        "isFieldValidating": [Function],
+        "isFieldsTouched": [Function],
+        "isFieldsValidating": [Function],
+        "resetFields": [Function],
+        "scrollToField": [Function],
+        "setFields": [Function],
+        "setFieldsValue": [Function],
+        "submit": [Function],
+        "validateFields": [Function],
+      }
+    }
+    layout="vertical"
+    name="form_in_modal"
+  >
+    <FormItem
+      label="Name"
+      name="name"
+      rules={
+        Array [
+          Object {
+            "message": "Please input the name of the fyghter!",
+            "required": true,
+          },
+        ]
+      }
+    >
+      <Input
+        type="text"
+      />
+    </FormItem>
+  </ForwardRef(InternalForm)>
+</Modal>
+`;
