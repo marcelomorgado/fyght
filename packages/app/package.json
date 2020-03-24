@@ -62,7 +62,7 @@
     "jest": "25.1.0",
     "less": "^3.11.1",
     "parcel-bundler": "1.12.4",
-    "prettier": "2.0.1",
+    "prettier": "2.0.2",
     "react-test-renderer": "16.13.1",
     "ts-jest": "24.3.0",
     "typescript": "3.8.3"
