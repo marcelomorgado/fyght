@@ -2,9 +2,9 @@
 
 exports[`CreateFyghterButton should render the component 1`] = `
 <div>
-  You have to create your fyghter!
   <Button
     block={true}
+    disabled={false}
     ghost={false}
     htmlType="button"
     loading={false}

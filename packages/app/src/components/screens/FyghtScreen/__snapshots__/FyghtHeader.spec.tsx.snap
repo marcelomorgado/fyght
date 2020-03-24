@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FyghtScreen should render the component 1`] = `
+<Header>
+  <Row
+    gutter={0}
+    justify="end"
+  >
+    <Col />
+  </Row>
+</Header>
+`;

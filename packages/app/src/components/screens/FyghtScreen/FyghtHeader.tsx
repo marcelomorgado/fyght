@@ -9,18 +9,17 @@ export const FyghtHeader: React.FC = () => {
     {
       metamask: { ethereum, account },
     },
-    { setMetamaskAccount },
+    { setMetamaskAccount, setErrorMessage },
   ] = useFyghtState();
 
   const onConnect = async (): Promise<void> => {
+    if (!ethereum || !ethereum.isMetaMask) {
+      setErrorMessage("You have to install Metamask to proceed");
+      return;
+    }
     const [account] = await ethereum.enable();
     setMetamaskAccount(account);
   };
-
-  if (!ethereum || !ethereum.isMetaMask) {
-    //return <>{"Please install MetaMask."}</>;
-    console.log("Metmask not installed!");
-  }
 
   return (
     <Header>
@@ -28,7 +27,7 @@ export const FyghtHeader: React.FC = () => {
         <Col>
           {!account ? (
             <Button type="primary" onClick={onConnect}>
-              Connect to metamask
+              Sign in
             </Button>
           ) : null}
         </Col>

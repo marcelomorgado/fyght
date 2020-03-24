@@ -44,6 +44,11 @@ exports[`MyFyghterContainer after loading 1`] = `
           }
         }
       />
+      <p />
+      <Alert
+        message="You have to sign in first!"
+        type="warning"
+      />
     </Col>
   </Row>
 </Fragment>
@@ -74,6 +79,11 @@ exports[`MyFyghterContainer loading 1`] = `
       span={24}
     >
       Loading...
+      <p />
+      <Alert
+        message="You have to sign in first!"
+        type="warning"
+      />
     </Col>
   </Row>
 </Fragment>
