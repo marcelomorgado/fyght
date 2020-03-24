@@ -1,62 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FyghtScreen should render the component 1`] = `
-<Layout>
-  <Content
-    style={
-      Object {
-        "marginTop": 25,
-        "padding": "0 50px",
-      }
-    }
-  >
-    <div
-      style={
-        Object {
-          "margin": "16px 0",
-        }
-      }
-    />
-    <div
-      style={
-        Object {
-          "margin": "16px 0",
-        }
-      }
-    />
-    <div
-      style={
-        Object {
-          "background": "#fff",
-          "minHeight": 380,
-          "padding": 24,
-        }
-      }
-    >
-      <Row
-        gutter={16}
-      >
-        <Col
-          span={3}
-        >
-          <Component />
-        </Col>
-        <Col
-          span={21}
-        >
-          <Component />
-        </Col>
-      </Row>
-    </div>
-  </Content>
-  <Footer
-    style={
-      Object {
-        "textAlign": "center",
-      }
-    }
-  >
-    fyght - A karate crypto game
-  </Footer>
-</Layout>
+<Alert
+  message="Please, connect to the local network (http://localhost:8545)"
+  showIcon={true}
+  type="error"
+/>
 `;

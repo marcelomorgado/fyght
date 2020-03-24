@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Divider } from "antd";
+import { Row, Col, Divider, Alert } from "antd";
 import { MyFyghter } from "../MyFyghter";
 import { useFyghtState } from "../../../state";
 import { CreateFyghterButton } from "../CreateFyghterButton";
@@ -10,7 +10,7 @@ export const MyFyghterContainer: React.FC = () => {
   const [
     {
       myFyghter,
-      metamask: { account },
+      metamask: { account, networkId },
     },
     { fetchMyFyghter },
   ] = useFyghtState();
@@ -22,9 +22,16 @@ export const MyFyghterContainer: React.FC = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, networkId]);
 
   const hasFyghter = !isLoading && myFyghter !== null;
+
+  let warningMessage = null;
+  if (!account) {
+    warningMessage = "You have to sign in first!";
+  } else if (!hasFyghter) {
+    warningMessage = "You have to create your fyghter!";
+  }
 
   return (
     <>
@@ -33,7 +40,21 @@ export const MyFyghterContainer: React.FC = () => {
       </Divider>
       <Row gutter={[16, 24]}>
         <Col span={24}>
-          {isLoading ? <>{`Loading...`}</> : !hasFyghter ? <CreateFyghterButton /> : <MyFyghter fyghter={myFyghter} />}
+          {isLoading ? (
+            <>{`Loading...`}</>
+          ) : !hasFyghter ? (
+            <CreateFyghterButton disabled={!account} />
+          ) : (
+            <MyFyghter fyghter={myFyghter} />
+          )}
+          {warningMessage ? (
+            <>
+              <p></p>
+              <Alert message={warningMessage} type="warning" />
+            </>
+          ) : (
+            <></>
+          )}
         </Col>
       </Row>
     </>

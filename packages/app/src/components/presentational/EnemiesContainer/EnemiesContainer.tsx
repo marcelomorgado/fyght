@@ -10,7 +10,7 @@ export const EnemiesContainer: React.FC = () => {
     {
       myFyghter,
       enemies,
-      metamask: { account },
+      metamask: { account, networkId },
     },
     { fetchAllEnemies },
   ] = useFyghtState();
@@ -22,7 +22,7 @@ export const EnemiesContainer: React.FC = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, myFyghter]);
+  }, [account, networkId, myFyghter]);
 
   if (isLoading) {
     return <>{`Loading ...`}</>;

@@ -44,16 +44,22 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
 
   const { getAddress } = ethers.utils;
 
+  if (!account) {
+    setState({ myFyghter: null });
+    return;
+  }
+
   const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
   const logs = await fyghters.queryFilter(filter, 0, "latest");
   const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: FyghterCreated) => id);
 
-  if (myFyghterId) {
-    const myFyghter = await fyghters.fyghters(myFyghterId);
-    setState({ myFyghter });
-  } else {
+  if (!myFyghterId) {
     setState({ myFyghter: null });
+    return;
   }
+
+  const myFyghter = await fyghters.fyghters(myFyghterId);
+  setState({ myFyghter });
 };
 
 export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => async ({

@@ -8,6 +8,6 @@ describe("CreateFyghterButton", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jest.spyOn(FyghtState, "useFyghtState").mockImplementation((): any => [{}, { createFyghter: jest.fn() }]);
 
-    expect(shallow(<CreateFyghterButton />)).toMatchSnapshot();
+    expect(shallow(<CreateFyghterButton disabled={false} />)).toMatchSnapshot();
   });
 });

@@ -3,10 +3,14 @@ import { Button } from "antd";
 import { useFyghtState } from "../../../state";
 import { CreateFyghterForm } from "./CreateFyghterForm";
 
-export const CreateFyghterButton: React.FC = () => {
+type Props = {
+  disabled: boolean;
+};
+
+export const CreateFyghterButton: React.FC<Props> = ({ disabled }: Props) => {
   const [isVisible, setVisible] = useState(false);
 
-  const [, { createFyghter }] = useFyghtState();
+  const [{ createFyghter }] = useFyghtState();
 
   const onCreate = async ({ name }: { name: string }): Promise<void> => {
     createFyghter(name);
@@ -15,13 +19,13 @@ export const CreateFyghterButton: React.FC = () => {
 
   return (
     <div>
-      {`You have to create your fyghter!`}
       <Button
         type="primary"
         block={true}
         onClick={(): void => {
           setVisible(true);
         }}
+        disabled={disabled}
       >
         Create
       </Button>
