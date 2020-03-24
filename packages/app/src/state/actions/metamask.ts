@@ -73,7 +73,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   const signer = provider.getSigner();
   const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signer);
   const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signer);
-
+  dispatch(setMetamaskAccount(account));
   setState({
     metamask: {
       ...metamask,
