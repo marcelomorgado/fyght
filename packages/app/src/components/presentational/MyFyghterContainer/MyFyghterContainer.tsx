@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Divider } from "antd";
+import { Row, Col, Divider, Alert } from "antd";
 import { MyFyghter } from "../MyFyghter";
 import { useFyghtState } from "../../../state";
 import { CreateFyghterButton } from "../CreateFyghterButton";
@@ -26,6 +26,13 @@ export const MyFyghterContainer: React.FC = () => {
 
   const hasFyghter = !isLoading && myFyghter !== null;
 
+  let warningMessage = null;
+  if (!account) {
+    warningMessage = "You have to sign in first!";
+  } else if (!hasFyghter) {
+    warningMessage = "You have to create your fyghter!";
+  }
+
   return (
     <>
       <Divider orientation="left" style={{ color: "#333", fontWeight: "normal" }}>
@@ -33,7 +40,21 @@ export const MyFyghterContainer: React.FC = () => {
       </Divider>
       <Row gutter={[16, 24]}>
         <Col span={24}>
-          {isLoading ? <>{`Loading...`}</> : !hasFyghter ? <CreateFyghterButton /> : <MyFyghter fyghter={myFyghter} />}
+          {isLoading ? (
+            <>{`Loading...`}</>
+          ) : !hasFyghter ? (
+            <CreateFyghterButton disabled={!account} />
+          ) : (
+            <MyFyghter fyghter={myFyghter} />
+          )}
+          {warningMessage ? (
+            <>
+              <p></p>
+              <Alert message={warningMessage} type="warning" />
+            </>
+          ) : (
+            <></>
+          )}
         </Col>
       </Row>
     </>
