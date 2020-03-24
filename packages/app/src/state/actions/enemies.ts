@@ -38,7 +38,7 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
 
   const enemiesIds = logs
     .map((l: Event) => l.args)
-    .filter(({ owner }: FyghterCreated) => getAddress(owner) !== getAddress(account))
+    .filter(({ owner }: FyghterCreated) => !account || getAddress(owner) !== getAddress(account))
     .map(({ id }: FyghterCreated) => id);
 
   const enemiesPromises = enemiesIds.map((id: BigNumber) => loadEnemy(id));

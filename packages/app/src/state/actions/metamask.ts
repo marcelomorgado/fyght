@@ -44,6 +44,11 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ethereum.autoRefreshOnNetworkChange = false;
   }
 
+  // TODO: Set default (read only) provider using .env network settings
+  let provider = new ethers.providers.JsonRpcProvider();
+  let account = null;
+
+  // Metamask installed
   if (ethereum) {
     // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
     // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
@@ -55,27 +60,29 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
       dispatch(setMetamaskAccount(account));
     });
 
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
+    ({ selectedAddress: account } = ethereum);
 
-    const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signer);
-
-    const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signer);
-
-    const [account] = await ethereum.enable();
-
-    // TODO: It isn't working sometimes
-    const { networkVersion: networkId } = ethereum;
-    setState({
-      metamask: {
-        ...metamask,
-        contracts: { fyghters, dai },
-        ethereum,
-        account,
-        provider,
-        networkId,
-        loading: false,
-      },
-    });
+    if (account) {
+      provider = new ethers.providers.Web3Provider(ethereum);
+    }
   }
+
+  const network = await provider.getNetwork();
+  const { chainId: networkId } = network;
+
+  const signer = provider.getSigner();
+  const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signer);
+  const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signer);
+
+  setState({
+    metamask: {
+      ...metamask,
+      contracts: { fyghters, dai },
+      ethereum,
+      account,
+      provider,
+      networkId,
+      loading: false,
+    },
+  });
 };
