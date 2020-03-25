@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
 import "antd/dist/antd.css";
-import { FyghtScreen } from "./components/screens/FyghtScreen";
+import { MainScreen } from "./components/screens/MainScreen";
 
-render(<FyghtScreen />, document.getElementById("main"));
+render(<MainScreen />, document.getElementById("main"));

@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Layout, Row, Col, Alert, Spin } from "antd";
 import { MyFyghterContainer } from "../../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../../presentational/EnemiesContainer";
-import { FyghtHeader } from "./FyghtHeader";
+import { FyghtHeader } from "../FyghtHeader";
 import { useFyghtState } from "../../../state";
 
 const { Content, Footer } = Layout;
 
-export const FyghtScreen: React.FC = () => {
+export const MainScreen: React.FC = () => {
   const [
     {
       messages: { errorMessage, infoMessage },
@@ -58,4 +58,4 @@ export const FyghtScreen: React.FC = () => {
   );
 };
 
-export default FyghtScreen;
+export default MainScreen;

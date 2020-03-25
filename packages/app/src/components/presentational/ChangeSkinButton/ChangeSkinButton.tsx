@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
 import { useFyghtState } from "../../../state";
-import { ChangeSkinForm } from "./ChangeSkinForm";
+import { ChangeSkinForm } from "../ChangeSkinForm";
 
 type Props = {
   isLoading: boolean;
