@@ -53,7 +53,12 @@ export const MainScreen: React.FC = () => {
         </div>
       </Content>
       {/* TODO: Include github link and roadmap */}
-      <Footer style={{ textAlign: "center" }}>fyght - A karate crypto game</Footer>
+      <Footer style={{ textAlign: "center" }}>
+        <a href="https://github.com/marcelomorgado/fyght" rel="noopener noreferrer" target="_blank">
+          FyGHT
+        </a>{" "}
+        - A karate crypto game
+      </Footer>
     </Layout>
   );
 };
