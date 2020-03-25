@@ -73,6 +73,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="naked"
             />
+                 
+            <p>
+              XP needed: 
+              1
+            </p>
           </Radio>
           <Radio
             key="1"
@@ -83,6 +88,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="normal_guy"
             />
+                 
+            <p>
+              XP needed: 
+              10
+            </p>
           </Radio>
           <Radio
             key="2"
@@ -93,6 +103,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="karate_kid"
             />
+                 
+            <p>
+              XP needed: 
+              15
+            </p>
           </Radio>
           <Radio
             key="3"
@@ -103,6 +118,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="japonese"
             />
+                 
+            <p>
+              XP needed: 
+              25
+            </p>
           </Radio>
           <Radio
             key="4"
@@ -113,6 +133,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="monk"
             />
+                 
+            <p>
+              XP needed: 
+              40
+            </p>
           </Radio>
           <Radio
             key="5"
@@ -123,6 +148,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="ninja"
             />
+                 
+            <p>
+              XP needed: 
+              50
+            </p>
           </Radio>
           <Radio
             key="6"
@@ -133,6 +163,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="no_one"
             />
+                 
+            <p>
+              XP needed: 
+              80
+            </p>
           </Radio>
           <Radio
             key="7"
@@ -143,6 +178,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="demon"
             />
+                 
+            <p>
+              XP needed: 
+              80
+            </p>
           </Radio>
           <Radio
             key="8"
@@ -153,6 +193,11 @@ exports[`ChangeSkinForm should render the component 1`] = `
               size="small"
               skin="master"
             />
+                 
+            <p>
+              XP needed: 
+              100
+            </p>
           </Radio>
         </Row>
       </RadioGroup>

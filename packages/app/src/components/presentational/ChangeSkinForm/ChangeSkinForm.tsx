@@ -51,9 +51,11 @@ export const ChangeSkinForm: React.FC<Props> = ({ visible, onCancel, onSave, err
         <Form.Item name="skin" label="">
           <Radio.Group>
             <Row gutter={[16, 24]} justify="center">
-              {skins.map(({ skin }, i: number) => (
+              {skins.map(({ skin, xpNeeded }, i: number) => (
                 <Radio key={i} value={skin}>
                   <SkinAvatar size={AvatarSize.SMALL} skin={skin} />
+                  {"     "}
+                  <p>XP needed: {xpNeeded}</p>
                 </Radio>
               ))}
             </Row>

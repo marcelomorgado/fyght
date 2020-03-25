@@ -2,5 +2,6 @@
   "eslint.workingDirectories": ["packages/contracts", "packages/app"],
   "solidity.packageDefaultDependenciesContractsDirectory": "",
   "solidity.packageDefaultDependenciesDirectory": "packages/contracts/node_modules",
-  "todo-tree.filtering.excludeGlobs": ["**/node_modules/**"]
+  "todo-tree.filtering.excludeGlobs": ["**/node_modules/**"],
+  "solidity.compileUsingRemoteVersion": "0.6.2+commit.bacdbe57"
 }

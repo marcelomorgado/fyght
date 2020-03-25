@@ -7,9 +7,6 @@ import "./Dai.sol";
 contract Fyghters is ERC721 {
     using SafeMath for uint256;
 
-    uint8 constant ALL_SKINS_MIN_XP = 80;
-    uint8 constant MASTER_MIN_XP = 100;
-    string constant MASTER_SKIN = "master";
     uint256 constant ONE = 1 * 10**18;
     uint256 constant MIN_DEPOSIT = ONE * 5;
     uint256 constant BET_VALUE = ONE * 5;
@@ -38,9 +35,10 @@ contract Fyghters is ERC721 {
 
     Fyghter[] public fyghters;
     Skin[] public skins;
+    mapping(string => uint256) xpNeededForTheSkin;
 
     modifier onlyOwnerOf(uint256 _fyghterId) {
-        require(msg.sender == ownerOf(_fyghterId), "This operaction only can be done by the owner.");
+        require(msg.sender == ownerOf(_fyghterId), "This operation only can be done by the owner.");
         _;
     }
 
@@ -48,15 +46,19 @@ contract Fyghters is ERC721 {
         dai = _dai;
 
         // Skins table
-        skins.push(Skin({skin: "naked", xpNeeded: 0}));
+        skins.push(Skin({skin: "naked", xpNeeded: 1}));
         skins.push(Skin({skin: "normal_guy", xpNeeded: 10}));
         skins.push(Skin({skin: "karate_kid", xpNeeded: 15}));
         skins.push(Skin({skin: "japonese", xpNeeded: 25}));
         skins.push(Skin({skin: "monk", xpNeeded: 40}));
         skins.push(Skin({skin: "ninja", xpNeeded: 50}));
-        skins.push(Skin({skin: "no_one", xpNeeded: ALL_SKINS_MIN_XP}));
+        skins.push(Skin({skin: "no_one", xpNeeded: 80}));
         skins.push(Skin({skin: "demon", xpNeeded: 80}));
-        skins.push(Skin({skin: MASTER_SKIN, xpNeeded: MASTER_MIN_XP}));
+        skins.push(Skin({skin: "master", xpNeeded: 100}));
+
+        for (uint256 i = 0; i < skins.length; ++i) {
+            xpNeededForTheSkin[skins[i].skin] = skins[i].xpNeeded;
+        }
     }
 
     function getMinimumDeposit() external pure returns (uint256) {
@@ -131,14 +133,11 @@ contract Fyghters is ERC721 {
     }
 
     function changeSkin(uint256 _fyghterId, string calldata _newSkin) external onlyOwnerOf(_fyghterId) {
-        Fyghter storage fyghter = fyghters[_fyghterId];
-        require(fyghter.xp >= ALL_SKINS_MIN_XP, "The fyghter hasn't enough XP to change skin.");
-
         require(_isSkinValid(_newSkin), "Invalid skin.");
 
-        if (keccak256(abi.encodePacked(_newSkin)) == keccak256(abi.encodePacked(MASTER_SKIN))) {
-            require(fyghter.xp >= MASTER_MIN_XP, "The fyghter should be a master to use the master skin.");
-        }
+        Fyghter storage fyghter = fyghters[_fyghterId];
+        uint256 xpNeeded = xpNeededForTheSkin[_newSkin];
+        require(fyghter.xp >= xpNeeded, "Your fyghter doesn't have enough XP.");
 
         fyghters[_fyghterId].skin = _newSkin;
 
@@ -173,14 +172,8 @@ contract Fyghters is ERC721 {
         return ((uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE).div(100);
     }
 
-    function _isSkinValid(string memory skin) private view returns (bool isSkinValid) {
-        isSkinValid = false;
-        for (uint256 i = 0; i < skins.length; i++) {
-            if (keccak256(abi.encodePacked(skin)) == keccak256(abi.encodePacked(skins[i].skin))) {
-                isSkinValid = true;
-                break;
-            }
-        }
+    function _isSkinValid(string memory _skin) private view returns (bool isSkinValid) {
+        return xpNeededForTheSkin[_skin] > 0;
     }
 
 }

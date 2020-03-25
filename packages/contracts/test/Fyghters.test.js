@@ -150,7 +150,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
   });
 
   describe("rename", () => {
-    it("should change skin", async () => {
+    it("should rename", async () => {
       // given
       const newName = "Charlie";
 
@@ -166,12 +166,12 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       });
     });
 
-    it("shouldn't change sking if isn't the owner", async () => {
+    it("shouldn't rename if isn't the owner", async () => {
       // when
       const tx = fyghtersMock.rename(ALICE_FYGHTER_ID, "Never", { from: bobAddress });
 
       // then
-      await expectRevert(tx, "This operaction only can be done by the owner.");
+      await expectRevert(tx, "This operation only can be done by the owner.");
     });
   });
 
@@ -301,14 +301,14 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.changeSkin(ALICE_FYGHTER_ID, "normal_guy", { from: aliceAddress });
 
       // then
-      await expectRevert(tx, "The fyghter hasn't enough XP to change skin.");
+      await expectRevert(tx, "Your fyghter doesn't have enough XP.");
     });
 
     it("should change the skin", async () => {
       // given
       const fyghterId = ALICE_FYGHTER_ID;
       const fyghterAddress = aliceAddress;
-      const minXpNeeded = 80;
+      const minXpNeeded = 10;
       const newSkin = "normal_guy";
 
       await fyghtersMock.updateXp(fyghterId, `${new BN(`${minXpNeeded}`)}`, { from: aliceAddress });
@@ -326,7 +326,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       expect(skin).to.equal(newSkin);
     });
 
-    it("shouldn't change sking if isn't the owner", async () => {
+    it("shouldn't change skin if isn't the owner", async () => {
       // given
       const fyghterId = ALICE_FYGHTER_ID;
       const newSkin = "normal_guy";
@@ -335,7 +335,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.changeSkin(fyghterId, newSkin, { from: bobAddress });
 
       // then
-      await expectRevert(tx, "This operaction only can be done by the owner.");
+      await expectRevert(tx, "This operation only can be done by the owner.");
     });
   });
 });
