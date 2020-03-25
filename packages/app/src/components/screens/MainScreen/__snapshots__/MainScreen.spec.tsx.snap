@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FyghtScreen should render the component 1`] = `
+exports[`MainScreen should render the component 1`] = `
 <Alert
   message="Please, connect to the local network (http://localhost:8545)"
   showIcon={true}

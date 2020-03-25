@@ -1,9 +1,9 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 import * as FyghtState from "../../../state";
-import { FyghtScreen } from "./FyghtScreen";
+import { MainScreen } from "./MainScreen";
 
-describe("FyghtScreen", () => {
+describe("MainScreen", () => {
   test("should render the component", () => {
     jest
       .spyOn(FyghtState, "useFyghtState")
@@ -16,6 +16,6 @@ describe("FyghtScreen", () => {
         { setMetamaskAccount: jest.fn(), initializeMetamask: jest.fn() },
       ]);
 
-    expect(shallow(<FyghtScreen />)).toMatchSnapshot();
+    expect(shallow(<MainScreen />)).toMatchSnapshot();
   });
 });

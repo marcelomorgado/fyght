@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Layout, Row, Col, Alert, Spin } from "antd";
 import { MyFyghterContainer } from "../../presentational/MyFyghterContainer";
 import { EnemiesContainer } from "../../presentational/EnemiesContainer";
-import { FyghtHeader } from "./FyghtHeader";
+import { FyghtHeader } from "../FyghtHeader";
 import { useFyghtState } from "../../../state";
 
 const { Content, Footer } = Layout;
 
-export const FyghtScreen: React.FC = () => {
+export const MainScreen: React.FC = () => {
   const [
     {
       messages: { errorMessage, infoMessage },
@@ -53,9 +53,14 @@ export const FyghtScreen: React.FC = () => {
         </div>
       </Content>
       {/* TODO: Include github link and roadmap */}
-      <Footer style={{ textAlign: "center" }}>fyght - A karate crypto game</Footer>
+      <Footer style={{ textAlign: "center" }}>
+        <a href="https://github.com/marcelomorgado/fyght" rel="noopener noreferrer" target="_blank">
+          FyGHT
+        </a>{" "}
+        - A karate crypto game
+      </Footer>
     </Layout>
   );
 };
 
-export default FyghtScreen;
+export default MainScreen;

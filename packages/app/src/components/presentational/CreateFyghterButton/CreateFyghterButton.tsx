@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
 import { useFyghtState } from "../../../state";
-import { CreateFyghterForm } from "./CreateFyghterForm";
+import { CreateFyghterForm } from "../CreateFyghterForm";
 
 type Props = {
   disabled: boolean;
@@ -10,7 +10,7 @@ type Props = {
 export const CreateFyghterButton: React.FC<Props> = ({ disabled }: Props) => {
   const [isVisible, setVisible] = useState(false);
 
-  const [{ createFyghter }] = useFyghtState();
+  const [, { createFyghter }] = useFyghtState();
 
   const onCreate = async ({ name }: { name: string }): Promise<void> => {
     createFyghter(name);

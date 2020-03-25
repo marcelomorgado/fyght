@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
 import { useFyghtState } from "../../../state";
-import { RenameFyghterForm } from "./RenameFyghterForm";
+import { RenameFyghterForm } from "../RenameFyghterForm";
 
 type Props = {
   isLoading: boolean;
