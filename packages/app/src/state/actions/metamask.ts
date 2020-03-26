@@ -1,5 +1,6 @@
 import { StoreActionApi } from "react-sweet-state";
 import { ethers } from "ethers";
+import { fetchBalance } from "./balance";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -54,10 +55,12 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
     ethereum.on("networkChanged", (networkId: number) => {
       dispatch(setMetamaskNetworkId(networkId));
+      dispatch(fetchBalance());
     });
 
     ethereum.on("accountsChanged", ([account]: string[]) => {
       dispatch(setMetamaskAccount(account));
+      dispatch(fetchBalance());
     });
 
     ({ selectedAddress: account } = ethereum);
@@ -85,4 +88,5 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
       loading: false,
     },
   });
+  dispatch(fetchBalance());
 };

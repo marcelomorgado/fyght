@@ -4,6 +4,7 @@ import { optimisticUpdate } from "../utils";
 import { Skin } from "../../constants";
 import { setErrorMessage, setInfoMessage } from "./messages";
 import { fetchAllEnemies } from "./enemies";
+import { fetchBalance } from "./balance";
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -90,6 +91,7 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
       dispatch(fetchMyFyghter());
       // TODO: fetch only the enemy
       dispatch(fetchAllEnemies());
+      dispatch(fetchBalance());
       whenFinish();
     },
     onError: (errorMessage: string) => {
@@ -132,24 +134,17 @@ export const createFyghter = (name: string) => async ({ getState, setState, disp
 
 export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
   getState,
-  setState,
   dispatch,
 }: StoreApi): Promise<void> => {
   const {
-    myFyghter,
     metamask: {
       account,
       contracts: { fyghters, dai },
     },
   } = getState();
 
-  const { balance: oldBalance } = myFyghter;
-
   optimisticUpdate({
     doTransaction: async () => {
-      // TODO: Create a button for this? (Refs: https://github.com/marcelomorgado/fyght/issues/118)
-      await dai.mint(amount);
-
       const allowance = await dai.allowance(account, fyghters.address);
       if (allowance.lt(amount)) {
         await dai.approve(fyghters.address, amount);
@@ -157,44 +152,32 @@ export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
 
       return fyghters.deposit(fyghterId, amount);
     },
-    onOptimistic: () => {
-      setState({ myFyghter: { ...myFyghter, balance: amount } });
-    },
     onSuccess: async () => {
       dispatch(fetchMyFyghter());
+      dispatch(fetchBalance());
     },
     onError: (errorMessage: string) => {
-      setState({ myFyghter: { ...myFyghter, balance: oldBalance } });
       dispatch(setErrorMessage(errorMessage));
     },
     getState,
   });
 };
 
-export const withdrawAll = (fyghterId: BigNumber) => async ({
-  getState,
-  setState,
-  dispatch,
-}: StoreApi): Promise<void> => {
+export const withdrawAll = (fyghterId: BigNumber) => async ({ getState, dispatch }: StoreApi): Promise<void> => {
   const {
-    myFyghter,
     metamask: {
       contracts: { fyghters },
     },
   } = getState();
 
-  const { balance: oldBalance } = myFyghter;
-
   optimisticUpdate({
     doTransaction: async () => fyghters.withdrawAll(fyghterId),
-    onOptimistic: () => {
-      setState({ myFyghter: { ...myFyghter, balance: BigNumber.from(0) } });
-    },
+
     onSuccess: async () => {
       dispatch(fetchMyFyghter());
+      dispatch(fetchBalance());
     },
     onError: (errorMessage: string) => {
-      setState({ myFyghter: { ...myFyghter, balance: oldBalance } });
       dispatch(setErrorMessage(errorMessage));
     },
     getState,

@@ -12,6 +12,7 @@ export const MainScreen: React.FC = () => {
     {
       messages: { errorMessage, infoMessage },
       metamask: { account, networkId, loading },
+      balance: { amount: balanceInWei },
     },
     { initializeMetamask },
   ] = useFyghtState();
@@ -33,7 +34,7 @@ export const MainScreen: React.FC = () => {
   // TODO: Add visutal effect when updating messages
   return (
     <Layout className="layout">
-      <FyghtHeader />
+      <FyghtHeader balanceInWei={balanceInWei} />
       <Content style={{ padding: "0 50px", margin: "16px 0" }}>
         <div className="site-layout-content">
           <div style={{ margin: "16px 0" }}></div>
