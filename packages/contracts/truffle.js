@@ -21,11 +21,13 @@
 const dotenv = require("dotenv");
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
-const dotenvResult = dotenv.config();
-
-if (dotenvResult.error) {
-  throw dotenvResult.error;
-}
+// Note: This check is breaking CI
+//
+// const dotenvResult = dotenv.config();
+//
+// if (dotenvResult.error) {
+//   throw dotenvResult.error;
+// }
 
 const { INFURA_KEY, MNEMONIC } = process.env;
 
