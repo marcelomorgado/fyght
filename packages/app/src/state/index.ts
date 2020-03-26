@@ -1,5 +1,6 @@
 import { createStore, createHook } from "react-sweet-state";
 import * as actions from "./actions";
+import { BigNumber } from "ethers";
 
 type State = FyghtState;
 type Actions = typeof actions;
@@ -16,6 +17,7 @@ const initialState: State = {
     provider: null,
     loading: true,
   },
+  balance: { amount: BigNumber.from(0), loading: false },
 };
 
 const Store = createStore<State, Actions>({

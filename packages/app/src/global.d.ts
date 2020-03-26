@@ -1,28 +1,6 @@
 declare module "*.png";
 declare module "*.gif";
 
-interface Messages {
-  errorMessage: string;
-  infoMessage: string;
-}
-
-interface FyghtState {
-  myFyghter: Fyghter;
-  enemies: Array<Enemy>;
-  messages: Messages;
-  metamask: MetamaskContext;
-}
-
-interface MetamaskContext {
-  networkId: number;
-  account: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ethereum: any;
-  provider: Provider;
-  contracts: { fyghters: Contract; dai: Contract };
-  loading: boolean;
-}
-
 interface Fyghter {
   id: import("ethers").BigNumber;
   skin: string;
@@ -34,6 +12,34 @@ interface Fyghter {
 interface Enemy {
   fyghter: Fyghter;
   winProbability: import("ethers").BigNumber;
+}
+
+interface Messages {
+  errorMessage: string;
+  infoMessage: string;
+}
+
+interface MetamaskState {
+  networkId: number;
+  account: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ethereum: any;
+  provider: Provider;
+  contracts: { fyghters: Contract; dai: Contract };
+  loading: boolean;
+}
+
+interface BalanceState {
+  amount: import("ethers").BigNumber;
+  loading: boolean;
+}
+
+interface FyghtState {
+  myFyghter: Fyghter;
+  enemies: Array<Enemy>;
+  messages: Messages;
+  metamask: MetamaskState;
+  balance: BalanceState;
 }
 
 interface Action {
