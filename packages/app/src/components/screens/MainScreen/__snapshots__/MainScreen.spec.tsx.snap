@@ -2,7 +2,7 @@
 
 exports[`MainScreen should render the component 1`] = `
 <Alert
-  message="Please, connect to the local network (http://localhost:8545)"
+  message="Please, connect to the undefined network"
   showIcon={true}
   type="error"
 />

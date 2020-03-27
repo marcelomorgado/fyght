@@ -7,6 +7,11 @@ import { useFyghtState } from "../../../state";
 
 const { Content, Footer } = Layout;
 
+// eslint-disable-next-line no-undef
+const NETWORK = process.env.NETWORK;
+// eslint-disable-next-line no-undef
+const NETWORK_ID = process.env.NETWORK_ID;
+
 export const MainScreen: React.FC = () => {
   const [
     {
@@ -26,9 +31,8 @@ export const MainScreen: React.FC = () => {
     return <Spin />;
   }
 
-  // TODO: Extract supported network to .env file
-  if (networkId != 1337) {
-    return <Alert message={`Please, connect to the local network (http://localhost:8545)`} type="error" showIcon />;
+  if (networkId.toString() != NETWORK_ID) {
+    return <Alert message={`Please, connect to the ${NETWORK} network`} type="error" showIcon />;
   }
 
   // TODO: Add visutal effect when updating messages
