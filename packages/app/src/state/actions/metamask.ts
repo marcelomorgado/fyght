@@ -10,6 +10,8 @@ import { fetchBalance } from "./balance";
 // https://en.parceljs.org/env.html
 //
 // eslint-disable-next-line no-undef
+const NETWORK = process.env.NETWORK;
+// eslint-disable-next-line no-undef
 const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
 // eslint-disable-next-line no-undef
 const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
@@ -45,9 +47,11 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ethereum.autoRefreshOnNetworkChange = false;
   }
 
-  // TODO: Set default (read only) provider using .env network settings
-  let provider = new ethers.providers.JsonRpcProvider();
+  let provider: any =
+    NETWORK === "ganache" ? new ethers.providers.JsonRpcProvider() : ethers.providers.getDefaultProvider(NETWORK);
+
   let account = null;
+  let signerOrProvider = provider;
 
   // Metamask installed
   if (ethereum) {
@@ -67,15 +71,15 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
 
     if (account) {
       provider = new ethers.providers.Web3Provider(ethereum);
+      signerOrProvider = provider.getSigner();
     }
   }
 
   const network = await provider.getNetwork();
   const { chainId: networkId } = network;
 
-  const signer = provider.getSigner();
-  const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signer);
-  const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signer);
+  const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signerOrProvider);
+  const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signerOrProvider);
   dispatch(setMetamaskAccount(account));
   setState({
     metamask: {

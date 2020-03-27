@@ -24,7 +24,8 @@
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "prestart": "cp ../contracts/build/contracts/* ./src/contracts",
     "start": "npm run start:dev",
-    "start:dev": "NODE_ENV=dev npx --no-install parcel serve src/index.html -p 8080 --open"
+    "start:dev": "NODE_ENV=dev npx --no-install parcel serve src/index.html -p 8080 --open",
+    "start:testnet": "NODE_ENV=testnet npx --no-install parcel serve src/index.html -p 8080 --open"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
