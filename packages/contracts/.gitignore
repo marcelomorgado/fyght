@@ -1,2 +1,7 @@
 ganache.log
 .env
+loom.log
+loom/app.db/
+loom/chaindata/data
+loom/evm.db/
+loom/receipts_db/

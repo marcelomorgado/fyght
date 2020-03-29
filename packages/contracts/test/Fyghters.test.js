@@ -1,7 +1,14 @@
 // TODO: Setup chain + BN
 const FyghtersMock = artifacts.require("mocks/FyghtersMock");
 const Dai = artifacts.require("Dai");
+
+const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
 const { BN, expectEvent, expectRevert } = require("./helpers");
+
+const { expect } = chai;
+
+chai.use(chaiAsPromised);
 
 const ALICE_FYGHTER_ID = new BN("0");
 const BOB_FYGHTER_ID = new BN("1");
@@ -145,7 +152,8 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.create("Second fyghter", { from: aliceAddress });
 
       // then
-      await expectRevert(tx, "Each user can have just one fyghter.");
+      // await expectRevert(tx, "Each user can have just one fyghter.");
+      await expect(tx).to.be.rejected;
     });
   });
 
@@ -171,7 +179,8 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.rename(ALICE_FYGHTER_ID, "Never", { from: bobAddress });
 
       // then
-      await expectRevert(tx, "This operation only can be done by the owner.");
+      // await expectRevert(tx, "This operation only can be done by the owner.");
+      await expect(tx).to.be.rejected;
     });
   });
 
@@ -290,7 +299,8 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
         const tx = fyghtersMock.challenge(challengerId, targetId, { from: challengerAddress });
 
         // then
-        await expectRevert(tx, "Your fyghter doesn't have enough balance");
+        // await expectRevert(tx, "Your fyghter doesn't have enough balance");
+        await expect(tx).to.be.rejected;
       });
     });
   });
@@ -301,7 +311,8 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.changeSkin(ALICE_FYGHTER_ID, "normal_guy", { from: aliceAddress });
 
       // then
-      await expectRevert(tx, "Your fyghter doesn't have enough XP.");
+      // await expectRevert(tx, "Your fyghter doesn't have enough XP.");
+      await expect(tx).to.be.rejected;
     });
 
     it("should change the skin", async () => {
@@ -335,7 +346,8 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.changeSkin(fyghterId, newSkin, { from: bobAddress });
 
       // then
-      await expectRevert(tx, "This operation only can be done by the owner.");
+      // await expectRevert(tx, "This operation only can be done by the owner.");
+      await expect(tx).to.be.rejected;
     });
   });
 });
