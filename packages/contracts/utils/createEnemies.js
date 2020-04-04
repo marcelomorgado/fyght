@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 const Fyghters = artifacts.require("Fyghters");
-const Dai = artifacts.require("Dai");
+const Layer2Dai = artifacts.require("Layer2Dai");
 
 const APPROVAL_AMOUNT = `${100e18}`;
 const DEPOSIT_AMOUNT = `${5e18}`;
@@ -9,7 +9,7 @@ const DEPOSIT_AMOUNT = `${5e18}`;
 // FIXME: This script stucks when some tx is rejected
 module.exports = async (callback) => {
   const fyghters = await Fyghters.deployed();
-  const dai = await Dai.deployed();
+  const dai = await Layer2Dai.deployed();
 
   const accounts = await web3.eth.getAccounts();
   const enemiesAccounts = accounts.slice(1, 5);

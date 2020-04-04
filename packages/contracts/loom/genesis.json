@@ -17,12 +17,12 @@
                     "validatorCount": "21",
                     "oracleAddress": {
                         "chainId": "default",
-                        "local": "ZrSH5XVaC2tdDXu/rUkzX4bkjLU="
+                        "local": "JJ5ZYdzzU8Ac4ZbRGQYPfTkYwAY="
                     }
                 },
                 "validators": [
                     {
-                        "pubKey": "SQQ1tIMjSn0U0voTqCXQHDzjObd8x9oOs3xzY6DY5Xo=",
+                        "pubKey": "p3CTweq2HUnhmRzTptsdfoYNARaeIKvWdmzNZggdjFc=",
                         "power": "10"
                     }
                 ],
@@ -44,7 +44,7 @@
             "init": {
                 "owner": {
                     "chainId": "default",
-                    "local": "ZrSH5XVaC2tdDXu/rUkzX4bkjLU="
+                    "local": "JJ5ZYdzzU8Ac4ZbRGQYPfTkYwAY="
                 }
             }
         },
@@ -56,7 +56,7 @@
             "init": {
                 "owner": {
                     "chainId": "default",
-                    "local": "ZrSH5XVaC2tdDXu/rUkzX4bkjLU="
+                    "local": "JJ5ZYdzzU8Ac4ZbRGQYPfTkYwAY="
                 },
                 "features": [
                     {

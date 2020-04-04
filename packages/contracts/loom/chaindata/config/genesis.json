@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2020-03-29T14:44:03.880930476Z",
+  "genesis_time": "2020-04-04T14:15:09.996008573Z",
   "chain_id": "default",
   "consensus_params": {
     "block_size": {
@@ -17,10 +17,10 @@
   },
   "validators": [
     {
-      "address": "5CCABC47BFFD3EEC8AC93200D2E48C9752A811F4",
+      "address": "23B54C6F487618259C8CDEE918ACC971924A2EA2",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "SQQ1tIMjSn0U0voTqCXQHDzjObd8x9oOs3xzY6DY5Xo="
+        "value": "p3CTweq2HUnhmRzTptsdfoYNARaeIKvWdmzNZggdjFc="
       },
       "power": "10",
       "name": ""

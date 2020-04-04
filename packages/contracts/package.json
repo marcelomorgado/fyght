@@ -15,20 +15,21 @@
   },
   "scripts": {
     "clean": "npx --no-install rimraf build",
-    "start": "npm run clean && npm run stop && npm run ganache:start && npm run truffle:migrate",
-    "stop": "npm run ganache:stop",
+    "prestart": "npm run clean",
+    "start": "npm run ganache:start && npm run loom:start && npm run truffle:migrate",
+    "poststart": "npx --no-install truffle exec utils/createEnemies.js  --network local_loom && npx --no-install truffle compile",
+    "stop": "npm run ganache:stop && npm run loom:stop",
     "test": "npm run truffle:test",
+    "truffle:test": "npm run clean && npx --no-install truffle test",
+    "truffle:migrate": "npm run truffle:migrate:ganache && npm run truffle:migrate:loom",
     "ganache:start": "npx --no-install ganache-cli --mnemonic 'during page myth behave wish detail fantasy immune west release legend deliver' --networkId 1337 --noVMErrorsOnRPCResponse > ganache.log 2>&1 &",
     "ganache:stop": "kill `ps ax | grep ganache-cli | grep -v grep | awk '{print $1}'` 2> /dev/null; exit 0",
-    "truffle:migrate": "npx --no-install truffle migrate --network local",
-    "truffle:test": "npm run clean && npx --no-install truffle test",
+    "truffle:migrate:ganache": "npx --no-install truffle migrate --network local",
     "loom:start": "pushd loom && ./loom run > ../loom.log 2>&1 &",
     "loom:stop": "kill `ps ax | grep loom | grep -v grep | awk '{print $1}'` 2> /dev/null; exit 0",
     "truffle:migrate:loom": "npx --no-install truffle migrate --network local_loom",
-    "truffle:test:loom": "npm run clean && npx --no-install truffle test --network local_loom",
     "lint": "npx --no-install eslint './test/{*.js,**/*.js}' && npx --no-install prettier -c './test/{*.js,**/*.js}'",
-    "lint:fix": "npx --no-install eslint --fix './test/{*.js,**/*.js}' && npx --no-install prettier --write -c './test/{*.js,**/*.js}'",
-    "poststart": "npx --no-install truffle exec utils/createEnemies.js  --network local && npx --no-install truffle compile"
+    "lint:fix": "npx --no-install eslint --fix './test/{*.js,**/*.js}' && npx --no-install prettier --write -c './test/{*.js,**/*.js}'"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
@@ -37,6 +38,7 @@
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "dotenv": "8.2.0",
+    "ethers": "4.0.46",
     "ganache-cli": "6.9.1",
     "loom-truffle-provider": "0.13.0",
     "truffle": "5.1.19",
@@ -50,6 +52,7 @@
     "eslint-config-prettier": "6.10.1",
     "eslint-plugin-import": "2.20.1",
     "prettier": "2.0.2",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "wait-for-expect": "3.0.2"
   }
 }

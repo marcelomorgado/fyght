@@ -1,14 +1,8 @@
 // TODO: Setup chain + BN
 const FyghtersMock = artifacts.require("mocks/FyghtersMock");
-const Dai = artifacts.require("Dai");
+const Layer2Dai = artifacts.require("Layer2Dai");
 
-const chai = require("chai");
-const chaiAsPromised = require("chai-as-promised");
 const { BN, expectEvent, expectRevert } = require("./helpers");
-
-const { expect } = chai;
-
-chai.use(chaiAsPromised);
 
 const ALICE_FYGHTER_ID = new BN("0");
 const BOB_FYGHTER_ID = new BN("1");
@@ -17,7 +11,7 @@ const ONE = new BN(`${1e18}`);
 
 const APPROVAL_AMOUNT = new BN("100").mul(ONE);
 
-contract("Fyghters", ([aliceAddress, bobAddress]) => {
+contract("Fyghters", ([aliceAddress, bobAddress, , , , , , , , gatewayAddress]) => {
   let fyghtersMock;
   let dai;
   let minDeposit;
@@ -54,11 +48,15 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
   };
 
   beforeEach(async () => {
-    dai = await Dai.new();
+    dai = await Layer2Dai.new(gatewayAddress);
     fyghtersMock = await FyghtersMock.new(dai.address);
-    await dai.mint(APPROVAL_AMOUNT, { from: aliceAddress });
+
+    await dai.mintToGateway(APPROVAL_AMOUNT, { from: gatewayAddress });
+    await dai.transfer(aliceAddress, APPROVAL_AMOUNT, { from: gatewayAddress });
     await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: aliceAddress });
-    await dai.mint(APPROVAL_AMOUNT, { from: bobAddress });
+
+    await dai.mintToGateway(APPROVAL_AMOUNT, { from: gatewayAddress });
+    await dai.transfer(bobAddress, APPROVAL_AMOUNT, { from: gatewayAddress });
     await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: bobAddress });
   });
 
@@ -152,8 +150,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.create("Second fyghter", { from: aliceAddress });
 
       // then
-      // await expectRevert(tx, "Each user can have just one fyghter.");
-      await expect(tx).to.be.rejected;
+      await expectRevert(tx, "Each user can have just one fyghter.");
     });
   });
 
@@ -179,8 +176,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.rename(ALICE_FYGHTER_ID, "Never", { from: bobAddress });
 
       // then
-      // await expectRevert(tx, "This operation only can be done by the owner.");
-      await expect(tx).to.be.rejected;
+      await expectRevert(tx, "This operation only can be done by the owner.");
     });
   });
 
@@ -299,8 +295,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
         const tx = fyghtersMock.challenge(challengerId, targetId, { from: challengerAddress });
 
         // then
-        // await expectRevert(tx, "Your fyghter doesn't have enough balance");
-        await expect(tx).to.be.rejected;
+        await expectRevert(tx, "Your fyghter doesn't have enough balance");
       });
     });
   });
@@ -311,8 +306,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.changeSkin(ALICE_FYGHTER_ID, "normal_guy", { from: aliceAddress });
 
       // then
-      // await expectRevert(tx, "Your fyghter doesn't have enough XP.");
-      await expect(tx).to.be.rejected;
+      await expectRevert(tx, "Your fyghter doesn't have enough XP.");
     });
 
     it("should change the skin", async () => {
@@ -346,8 +340,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
       const tx = fyghtersMock.changeSkin(fyghterId, newSkin, { from: bobAddress });
 
       // then
-      // await expectRevert(tx, "This operation only can be done by the owner.");
-      await expect(tx).to.be.rejected;
+      await expectRevert(tx, "This operation only can be done by the owner.");
     });
   });
 });

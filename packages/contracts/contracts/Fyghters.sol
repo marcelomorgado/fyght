@@ -2,7 +2,8 @@ pragma solidity 0.6.2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "./Dai.sol";
+import "./Layer2Dai.sol";
+
 
 contract Fyghters is ERC721 {
     using SafeMath for uint256;
@@ -11,7 +12,7 @@ contract Fyghters is ERC721 {
     uint256 constant MIN_DEPOSIT = ONE * 5;
     uint256 constant BET_VALUE = ONE * 5;
 
-    Dai private dai;
+    Layer2Dai private dai;
 
     event FyghterCreated(address indexed owner, uint256 id, string name);
     event ChallengeOccurred(uint256 indexed challengerId, uint256 targetId, uint256 winnerId);
@@ -42,7 +43,7 @@ contract Fyghters is ERC721 {
         _;
     }
 
-    constructor(Dai _dai) public {
+    constructor(Layer2Dai _dai) public {
         dai = _dai;
 
         // Skins table
@@ -165,9 +166,9 @@ contract Fyghters is ERC721 {
     }
 
     /*
-    * Note: It isn't a safe way to generate random number.
-    * See more: https://github.com/marcelomorgado/fyght/issues/71
-    */
+     * Note: It isn't a safe way to generate random number.
+     * See more: https://github.com/marcelomorgado/fyght/issues/71
+     */
     function _random() internal view returns (uint256) {
         return ((uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 100) * ONE).div(100);
     }
@@ -175,5 +176,4 @@ contract Fyghters is ERC721 {
     function _isSkinValid(string memory _skin) private view returns (bool isSkinValid) {
         return xpNeededForTheSkin[_skin] > 0;
     }
-
 }

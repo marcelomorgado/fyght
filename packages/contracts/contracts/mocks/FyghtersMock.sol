@@ -2,8 +2,9 @@ pragma solidity 0.6.2;
 
 import "../Fyghters.sol";
 
+
 contract FyghtersMock is Fyghters {
-    constructor(Dai _dai) public Fyghters(_dai) {}
+    constructor(Layer2Dai _dai) public Fyghters(_dai) {}
 
     function deterministicChallenge(uint256 _myFyghterId, uint256 _enemyId, uint256 _winnerId, uint256 _winProbability)
         external
