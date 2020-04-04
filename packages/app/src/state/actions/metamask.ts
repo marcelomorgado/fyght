@@ -11,12 +11,16 @@ import { fetchBalance } from "./balance";
 //
 // eslint-disable-next-line no-undef
 const NETWORK = process.env.NETWORK;
+
+// eslint-disable-next-line no-undef
+const LAYER1_DAI_CONTRACT_ADDRESS = process.env.LAYER1_DAI_CONTRACT_ADDRESS;
+const LAYER1_DAI_CONTRACT_ABI = require("../../contracts/Layer1Dai.json").abi;
+// eslint-disable-next-line no-undef
+const LAYER2_DAI_CONTRACT_ADDRESS = process.env.LAYER2_DAI_CONTRACT_ADDRESS;
+const LAYER2_DAI_CONTRACT_ABI = require("../../contracts/Layer2Dai.json").abi;
 // eslint-disable-next-line no-undef
 const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
-// eslint-disable-next-line no-undef
-const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
 const FYGHTERS_CONTRACT_ABI = require("../../contracts/Fyghters.json").abi;
-const DAI_CONTRACT_ABI = require("../../contracts/Dai.json").abi;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -78,13 +82,18 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   const network = await provider.getNetwork();
   const { chainId: networkId } = network;
 
+  // Ethereum contracts
+  const layer1Dai = new ethers.Contract(LAYER1_DAI_CONTRACT_ADDRESS, LAYER1_DAI_CONTRACT_ABI, signerOrProvider);
+
+  // Loom contracts
   const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signerOrProvider);
-  const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signerOrProvider);
+  const layer2Dai = new ethers.Contract(LAYER2_DAI_CONTRACT_ADDRESS, LAYER2_DAI_CONTRACT_ABI, signerOrProvider);
+
   dispatch(setMetamaskAccount(account));
   setState({
     metamask: {
       ...metamask,
-      contracts: { fyghters, dai },
+      contracts: { layer1Dai, fyghters, layer2Dai },
       ethereum,
       account,
       provider,

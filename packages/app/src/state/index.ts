@@ -13,7 +13,7 @@ const initialState: State = {
     networkId: null,
     account: null,
     ethereum: null,
-    contracts: { fyghters: null, dai: null },
+    contracts: { layer1Dai: null, fyghters: null, layer2Dai: null },
     provider: null,
     loading: true,
   },

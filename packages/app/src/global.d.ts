@@ -25,7 +25,7 @@ interface MetamaskState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
   provider: Provider;
-  contracts: { fyghters: Contract; dai: Contract };
+  contracts: { layer1Dai: Contract; fyghters: Contract; layer2Dai: Contract };
   loading: boolean;
 }
 

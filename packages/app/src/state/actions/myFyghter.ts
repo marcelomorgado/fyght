@@ -139,15 +139,15 @@ export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
   const {
     metamask: {
       account,
-      contracts: { fyghters, dai },
+      contracts: { fyghters, layer2Dai },
     },
   } = getState();
 
   optimisticUpdate({
     doTransaction: async () => {
-      const allowance = await dai.allowance(account, fyghters.address);
+      const allowance = await layer2Dai.allowance(account, fyghters.address);
       if (allowance.lt(amount)) {
-        await dai.approve(fyghters.address, amount);
+        await layer2Dai.approve(fyghters.address, amount);
       }
 
       return fyghters.deposit(fyghterId, amount);
