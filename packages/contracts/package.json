@@ -23,7 +23,9 @@
     "truffle:migrate": "npx --no-install truffle migrate --network local",
     "lint": "npx --no-install eslint './test/{*.js,**/*.js}' && npx --no-install prettier -c './test/{*.js,**/*.js}'",
     "lint:fix": "npx --no-install eslint --fix './test/{*.js,**/*.js}' && npx --no-install prettier --write -c './test/{*.js,**/*.js}'",
-    "poststart": "npx --no-install truffle exec utils/createEnemies.js  --network local && npx --no-install truffle compile"
+    "poststart": "npx --no-install truffle exec utils/createEnemies.js  --network local && npx --no-install truffle compile",
+    "deploy:extdev": "npx --no-install truffle deploy --network extdev",
+    "postdeploy:extdev": "cp ./build/contracts/* ../app/src/contracts"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
@@ -31,6 +33,7 @@
   "dependencies": {
     "dotenv": "8.2.0",
     "ganache-cli": "6.9.1",
+    "loom-truffle-provider": "0.13.0",
     "truffle": "5.1.20",
     "truffle-hdwallet-provider": "1.0.17"
   },
