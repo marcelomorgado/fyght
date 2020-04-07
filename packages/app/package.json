@@ -22,8 +22,7 @@
     "prettier": "npx --no-install prettier -c '{src/**/**/*.tsx,src/**/**/*.ts}'",
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
-    "start": "npm run start:dev",
-    "start:dev": "NODE_ENV=dev npx --no-install parcel serve src/index.html -p 8080 --open",
+    "start": "npm run start:testnet",
     "start:testnet": "NODE_ENV=testnet npx --no-install parcel serve src/index.html -p 8080 --open"
   },
   "bugs": {

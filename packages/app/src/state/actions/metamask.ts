@@ -47,8 +47,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ethereum.autoRefreshOnNetworkChange = false;
   }
 
-  let provider: any =
-    NETWORK === "ganache" ? new ethers.providers.JsonRpcProvider() : ethers.providers.getDefaultProvider(NETWORK);
+  let provider: any = ethers.providers.getDefaultProvider(NETWORK);
 
   let account = null;
   let signerOrProvider = provider;
