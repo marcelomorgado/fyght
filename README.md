@@ -20,16 +20,12 @@ After each victory, your fyghter gains +1 XP and <b>become stronger</b>.
 
 ## Running
 
-To play the game locally, just run:
+To play the game on testnet, run:
 
 ```js
 npm i
 npm start
 ```
-
-It'll start `ganache-cli`, deploy the smart contracts and start the web app.
-
-Note: Use this wallet here: `during page myth behave wish detail fantasy immune west release legend deliver`
 
 ## License
 

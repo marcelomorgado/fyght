@@ -4,7 +4,7 @@ import { ChallengeModal } from "../ChallengeModal";
 import { SkinAvatar } from "../SkinAvatar";
 import { AvatarSize } from "../../../constants";
 import { formatDai, formatPercent, calculateGainAndLoss } from "../../../helpers";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 import { EnemyBalance } from "./EnemyBalance";
 
 type Props = {
@@ -13,12 +13,12 @@ type Props = {
 };
 
 const GainOrLoss: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumber }) => {
-  const color = value.lt(BigNumber.from(0)) ? "red" : "blue";
+  const color = value.lt(new BigNumber(0)) ? "red" : "blue";
   return <span style={{ color }}>{`${formatDai(value)}`}</span>;
 };
 
 const WinProbability: React.FC<{ value: BigNumber }> = ({ value }: { value: BigNumber }) => {
-  const color = value.lt(BigNumber.from(`${5e17}`)) ? "red" : "blue";
+  const color = value.lt(new BigNumber(`${5e17}`)) ? "red" : "blue";
   return <span style={{ color }}>{`${formatPercent(value)}`}</span>;
 };
 
@@ -36,7 +36,7 @@ export const Enemy: React.FC<Props> = ({
   let warningMessage = null;
   if (!myFyghter) {
     warningMessage = "You have to create your fyghter to be able to do challenges.";
-  } else if (!myFyghter.balance.gte(lossIfLose)) {
+  } else if (myFyghter.balance.add(lossIfLose).lt(new BigNumber(0))) {
     warningMessage = "Your fyghter with insufficient funds.";
   } else if (!enemyHasEnoughBalance) {
     warningMessage = "Enemy with insufficient funds.";
@@ -58,7 +58,7 @@ export const Enemy: React.FC<Props> = ({
         <>
           <p>
             {`Win probability: `}
-            <WinProbability value={winProbability || BigNumber.from("0")} />
+            <WinProbability value={winProbability || new BigNumber("0")} />
           </p>
           <p>
             {`Gain if win: `}

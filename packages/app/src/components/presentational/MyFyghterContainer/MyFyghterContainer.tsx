@@ -10,7 +10,7 @@ export const MyFyghterContainer: React.FC = () => {
   const [
     {
       myFyghter,
-      metamask: { account, networkId },
+      metamask: { account, networkId, provider },
     },
     { fetchMyFyghter },
   ] = useFyghtState();
@@ -22,7 +22,7 @@ export const MyFyghterContainer: React.FC = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, networkId]);
+  }, [account, networkId, provider]);
 
   const hasFyghter = !isLoading && myFyghter !== null;
 

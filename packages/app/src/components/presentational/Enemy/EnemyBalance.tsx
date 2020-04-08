@@ -1,6 +1,6 @@
 import React from "react";
 import { formatDai } from "../../../helpers";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 
 interface Props {
   value: BigNumber;
