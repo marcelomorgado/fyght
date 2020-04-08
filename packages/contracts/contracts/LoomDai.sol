@@ -5,7 +5,16 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
 contract LoomDai is ERC20 {
-    function mint(uint256 amount) public {
-        _mint(msg.sender, amount);
+    // Transfer Gateway contract address
+    address public gateway;
+
+    constructor(address _gateway) public {
+        gateway = _gateway;
+    }
+
+    // Used by the DAppChain Gateway to mint tokens that have been deposited to the Ethereum Gateway
+    function mintToGateway(uint256 _amount) public {
+        require(msg.sender == gateway, "only the gateway is allowed to mint");
+        _mint(gateway, _amount);
     }
 }

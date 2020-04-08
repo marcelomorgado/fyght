@@ -10,7 +10,7 @@ const ONE = new BN(`${1e18}`);
 
 const APPROVAL_AMOUNT = new BN("100").mul(ONE);
 
-contract("Fyghters", ([aliceAddress, bobAddress]) => {
+contract("Fyghters", ([aliceAddress, bobAddress, loomGatewayAddress]) => {
   let fyghtersMock;
   let loomDai;
   let minDeposit;
@@ -47,11 +47,15 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
   };
 
   beforeEach(async () => {
-    loomDai = await LoomDai.new();
+    loomDai = await LoomDai.new(loomGatewayAddress);
     fyghtersMock = await FyghtersMock.new(loomDai.address);
-    await loomDai.mint(APPROVAL_AMOUNT, { from: aliceAddress });
+
+    await loomDai.mintToGateway(APPROVAL_AMOUNT, { from: loomGatewayAddress });
+    await loomDai.transfer(aliceAddress, APPROVAL_AMOUNT, { from: loomGatewayAddress });
     await loomDai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: aliceAddress });
-    await loomDai.mint(APPROVAL_AMOUNT, { from: bobAddress });
+
+    await loomDai.mintToGateway(APPROVAL_AMOUNT, { from: loomGatewayAddress });
+    await loomDai.transfer(bobAddress, APPROVAL_AMOUNT, { from: loomGatewayAddress });
     await loomDai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: bobAddress });
   });
 
