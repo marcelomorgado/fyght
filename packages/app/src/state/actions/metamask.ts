@@ -111,7 +111,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = EthereumDai;
 
-  const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, signerOrProvider);
+  const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumProvider.getSigner());
 
   const {
     abi: fyghtersABI,
