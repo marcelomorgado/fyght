@@ -20,7 +20,6 @@ exports[`MyFyghter should render the component 1`] = `
       value={
         BigNumber {
           "_hex": "0x05",
-          "_isBigNumber": true,
         }
       }
     />
@@ -37,7 +36,6 @@ exports[`MyFyghter should render the component 1`] = `
     fyghterId={
       BigNumber {
         "_hex": "0x01",
-        "_isBigNumber": true,
       }
     }
     isLoading={false}
@@ -47,7 +45,6 @@ exports[`MyFyghter should render the component 1`] = `
     fyghterId={
       BigNumber {
         "_hex": "0x01",
-        "_isBigNumber": true,
       }
     }
     isLoading={false}

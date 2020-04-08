@@ -66,8 +66,7 @@ export const createNewMapping = async (signer: any) => {
     await mapper.addIdentityMappingAsync(ethereumAddress, loomAddress, loomEthSigner);
     client.disconnect();
   } catch (e) {
-    if (e.message.includes("identity mapping already exists")) {
-    } else {
+    if (!e.message.includes("identity mapping already exists")) {
       console.error(e);
     }
     client.disconnect();

@@ -20,13 +20,11 @@ exports[`Enemy should render the component 1`] = `
       gainIfWin={
         BigNumber {
           "_hex": "0x4563918244f3ff06",
-          "_isBigNumber": true,
         }
       }
       value={
         BigNumber {
           "_hex": "0x05",
-          "_isBigNumber": true,
         }
       }
     />
@@ -37,7 +35,6 @@ exports[`Enemy should render the component 1`] = `
       value={
         BigNumber {
           "_hex": "0x32",
-          "_isBigNumber": true,
         }
       }
     />
@@ -48,7 +45,6 @@ exports[`Enemy should render the component 1`] = `
       value={
         BigNumber {
           "_hex": "0x4563918244f3ff06",
-          "_isBigNumber": true,
         }
       }
     />
@@ -59,7 +55,6 @@ exports[`Enemy should render the component 1`] = `
       value={
         BigNumber {
           "_hex": "-0xfa",
-          "_isBigNumber": true,
         }
       }
     />
@@ -69,13 +64,12 @@ exports[`Enemy should render the component 1`] = `
     enemyId={
       BigNumber {
         "_hex": "0x02",
-        "_isBigNumber": true,
       }
     }
   />
   <p />
   <Alert
-    message="Enemy with insufficient funds."
+    message="Your fyghter with insufficient funds."
     type="warning"
   />
 </Card>

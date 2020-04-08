@@ -29,17 +29,14 @@ exports[`MyFyghterContainer after loading 1`] = `
           Object {
             "balance": BigNumber {
               "_hex": "0x05",
-              "_isBigNumber": true,
             },
             "id": BigNumber {
               "_hex": "0x01",
-              "_isBigNumber": true,
             },
             "name": "John",
             "skin": "normal_guy",
             "xp": BigNumber {
               "_hex": "0x05",
-              "_isBigNumber": true,
             },
           }
         }

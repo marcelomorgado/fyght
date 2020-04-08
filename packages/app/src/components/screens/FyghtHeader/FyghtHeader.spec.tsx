@@ -4,7 +4,7 @@ import * as FyghtState from "../../../state";
 import { FyghtHeader } from "./FyghtHeader";
 import { BigNumber } from "ethers/utils";
 
-describe("FyghtScreen", () => {
+describe("FyghtHeader", () => {
   test("should render the component", () => {
     jest
       .spyOn(FyghtState, "useFyghtState")
