@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 import { StoreActionApi } from "react-sweet-state";
 import { ethers } from "ethers";
@@ -13,10 +14,10 @@ import Web3 from "web3";
 // https://en.parceljs.org/env.html
 //
 const NETWORK = process.env.NETWORK;
-const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
-const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
-const FYGHTERS_CONTRACT_ABI = require("../../contracts/Fyghters.json").abi;
-const DAI_CONTRACT_ABI = require("../../contracts/Dai.json").abi;
+const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
+
+const Fyghters = require("../../contracts/Fyghters.json");
+const Dai = require("../../contracts/Dai.json");
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -101,9 +102,25 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   const network = await ethereumProvider.getNetwork();
   const { chainId: networkId } = network;
 
-  const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signerOrProvider);
-  const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signerOrProvider);
+  const {
+    abi: fyghtersABI,
+    networks: {
+      [LOOM_NETWORK_ID]: { address: fyghtersAddress },
+    },
+  } = Fyghters;
+
+  const {
+    abi: daiABI,
+    networks: {
+      [LOOM_NETWORK_ID]: { address: daiAddress },
+    },
+  } = Dai;
+
+  const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, signerOrProvider);
+  const dai = new ethers.Contract(daiAddress, daiABI, signerOrProvider);
+
   dispatch(setMetamaskAccount(account));
+
   setState({
     metamask: {
       ...metamask,
