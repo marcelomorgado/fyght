@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 import { StoreActionApi } from "react-sweet-state";
 import { ethers } from "ethers";
@@ -13,10 +14,23 @@ import Web3 from "web3";
 // https://en.parceljs.org/env.html
 //
 const NETWORK = process.env.NETWORK;
-const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
-const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
-const FYGHTERS_CONTRACT_ABI = require("../../contracts/Fyghters.json").abi;
-const DAI_CONTRACT_ABI = require("../../contracts/Dai.json").abi;
+const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
+
+const Fyghters = require("../../contracts/Fyghters.json");
+const Dai = require("../../contracts/Dai.json");
+const {
+  abi: FYGHTERS_CONTRACT_ABI,
+  networks: {
+    [LOOM_NETWORK_ID]: { address: FYGHTERS_CONTRACT_ADDRESS },
+  },
+} = Fyghters;
+
+const {
+  abi: DAI_CONTRACT_ABI,
+  networks: {
+    [LOOM_NETWORK_ID]: { address: DAI_CONTRACT_ADDRESS },
+  },
+} = Dai;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
