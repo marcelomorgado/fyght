@@ -10,18 +10,18 @@ export const fetchBalance = () => async ({ setState, getState }: StoreApi): Prom
   const {
     metamask: {
       loomAccount: account,
-      contracts: { dai },
+      contracts: { loomDai },
     },
   } = getState();
 
-  const amount = await dai.balanceOf(account);
+  const amount = await loomDai.balanceOf(account);
   setState({ balance: { amount, loading: false } });
 };
 
 export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      contracts: { dai },
+      contracts: { loomDai: dai },
     },
     balance,
   } = getState();

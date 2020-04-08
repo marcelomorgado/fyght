@@ -13,11 +13,14 @@ import Web3 from "web3";
 // https://github.com/parcel-bundler/parcel/issues/2299#issuecomment-439768971
 // https://en.parceljs.org/env.html
 //
-const NETWORK = process.env.NETWORK;
+const ETHEREUM_NETWORK = process.env.ETHEREUM_NETWORK;
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
+const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
+
 const Fyghters = require("../../contracts/Fyghters.json");
-const Dai = require("../../contracts/Dai.json");
+const LoomDai = require("../../contracts/LoomDai.json");
+const EthereumDai = require("../../contracts/EthereumDai.json");
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -37,7 +40,7 @@ const setMetamaskNetworkId = (networkId: number) => ({ setState, getState }: Sto
 
 export const setMetamaskAccount = (account: string) => ({ setState, getState }: StoreApi): void => {
   const { metamask } = getState();
-  setState({ metamask: { ...metamask, account } });
+  setState({ metamask: { ...metamask, ethereumAccount: account } });
 };
 
 export const initializeMetamask = () => async ({ setState, getState, dispatch }: StoreApi): Promise<void> => {
@@ -48,9 +51,8 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ethereum.autoRefreshOnNetworkChange = false;
   }
 
-  let ethereumProvider: any = ethers.getDefaultProvider(NETWORK);
-
-  let account = null;
+  let ethereumProvider: any = ethers.getDefaultProvider(ETHEREUM_NETWORK);
+  let ethereumAccount = null;
   let signerOrProvider = ethereumProvider;
   let loomProvider;
   let loomAccount;
@@ -71,9 +73,9 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
       dispatch(fetchBalance());
     });
 
-    ({ selectedAddress: account } = ethereum);
+    ({ selectedAddress: ethereumAccount } = ethereum);
 
-    if (account) {
+    if (ethereumAccount) {
       const client: any = LoomUtils.createClient();
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
@@ -103,6 +105,15 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   const { chainId: networkId } = network;
 
   const {
+    abi: ethereumDaiABI,
+    networks: {
+      [ETHEREUM_NETWORK_ID]: { address: ethereumDaiAddress },
+    },
+  } = EthereumDai;
+
+  const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, signerOrProvider);
+
+  const {
     abi: fyghtersABI,
     networks: {
       [LOOM_NETWORK_ID]: { address: fyghtersAddress },
@@ -110,22 +121,22 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   } = Fyghters;
 
   const {
-    abi: daiABI,
+    abi: loomDaiABI,
     networks: {
-      [LOOM_NETWORK_ID]: { address: daiAddress },
+      [LOOM_NETWORK_ID]: { address: loomDaiAddress },
     },
-  } = Dai;
+  } = LoomDai;
 
   const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, signerOrProvider);
-  const dai = new ethers.Contract(daiAddress, daiABI, signerOrProvider);
+  const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, signerOrProvider);
 
-  dispatch(setMetamaskAccount(account));
+  dispatch(setMetamaskAccount(ethereumAccount));
 
   setState({
     metamask: {
       ...metamask,
-      contracts: { fyghters, dai },
-      account,
+      contracts: { fyghters, loomDai, ethereumDai },
+      ethereumAccount,
       ethereum,
       loomAccount,
       provider: loomProvider,

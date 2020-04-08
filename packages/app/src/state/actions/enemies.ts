@@ -2,6 +2,11 @@ import { StoreActionApi } from "react-sweet-state";
 import { ethers, Event } from "ethers";
 import { BigNumber } from "ethers/utils";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Fyghters = require("../../contracts/Fyghters.json");
+// eslint-disable-next-line no-undef
+const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
+
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
 
@@ -34,9 +39,13 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
 
   const { getAddress } = ethers.utils;
 
-  // TODO: Get from JSON
-  const fyghtersDeploymentTransactionHash = "0x7f6c675b590605fd47684563f4f9c2c2bf480e8046906dae6a93743b475fb334";
-  const { blockNumber: from } = await provider.getTransactionReceipt(fyghtersDeploymentTransactionHash);
+  const {
+    networks: {
+      [LOOM_NETWORK_ID]: { transactionHash },
+    },
+  } = Fyghters;
+
+  const { blockNumber: from } = await provider.getTransactionReceipt(transactionHash);
   const to = await provider.getBlockNumber();
 
   const toScan = to - from;

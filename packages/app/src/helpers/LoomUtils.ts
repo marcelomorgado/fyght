@@ -14,7 +14,7 @@ import {
 
 import { AddressMapper } from "loom-js/dist/contracts";
 
-const LOOM_CHAIN_ID = process.env.LOOM_CHAIN_ID;
+const LOOM_NETWORK = process.env.LOOM_NETWORK;
 const LOOM_WRITE_URL = process.env.LOOM_WRITE_URL;
 const LOOM_READ_URL = process.env.LOOM_READ_URL;
 
@@ -50,7 +50,7 @@ export const setupSigner = async (loomClient: any, provider: any): Promise<Addre
   return callerAddress;
 };
 
-export const createClient = (): Client => new Client(LOOM_CHAIN_ID, LOOM_WRITE_URL, LOOM_READ_URL);
+export const createClient = (): Client => new Client(LOOM_NETWORK, LOOM_WRITE_URL, LOOM_READ_URL);
 
 export const createNewMapping = async (signer: any) => {
   const ethereumAccount = await signer.getAddress();
