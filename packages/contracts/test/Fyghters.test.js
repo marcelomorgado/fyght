@@ -1,6 +1,6 @@
 // TODO: Setup chain + BN
 const FyghtersMock = artifacts.require("mocks/FyghtersMock");
-const Dai = artifacts.require("Dai");
+const LoomDai = artifacts.require("LoomDai");
 const { BN, expectEvent, expectRevert } = require("./helpers");
 
 const ALICE_FYGHTER_ID = new BN("0");
@@ -12,7 +12,7 @@ const APPROVAL_AMOUNT = new BN("100").mul(ONE);
 
 contract("Fyghters", ([aliceAddress, bobAddress]) => {
   let fyghtersMock;
-  let dai;
+  let loomDai;
   let minDeposit;
   let betValue;
 
@@ -47,12 +47,12 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
   };
 
   beforeEach(async () => {
-    dai = await Dai.new();
-    fyghtersMock = await FyghtersMock.new(dai.address);
-    await dai.mint(APPROVAL_AMOUNT, { from: aliceAddress });
-    await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: aliceAddress });
-    await dai.mint(APPROVAL_AMOUNT, { from: bobAddress });
-    await dai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: bobAddress });
+    loomDai = await LoomDai.new();
+    fyghtersMock = await FyghtersMock.new(loomDai.address);
+    await loomDai.mint(APPROVAL_AMOUNT, { from: aliceAddress });
+    await loomDai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: aliceAddress });
+    await loomDai.mint(APPROVAL_AMOUNT, { from: bobAddress });
+    await loomDai.approve(fyghtersMock.address, APPROVAL_AMOUNT, { from: bobAddress });
   });
 
   beforeEach("should create fyghters", async () => {
@@ -106,7 +106,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
     it("should withdraw all fyghter balance", async () => {
       // given
       const fyghterId = ALICE_FYGHTER_ID;
-      const ownerBalanceBefore = await dai.balanceOf(aliceAddress);
+      const ownerBalanceBefore = await loomDai.balanceOf(aliceAddress);
       const { balance: fyghterBalanceBefore } = await fyghtersMock.fyghters(fyghterId);
 
       // when
@@ -114,7 +114,7 @@ contract("Fyghters", ([aliceAddress, bobAddress]) => {
 
       // then
       expectEvent(tx, "Withdrawn", { id: fyghterId, amount: fyghterBalanceBefore });
-      const ownerBalanceAfter = await dai.balanceOf(aliceAddress);
+      const ownerBalanceAfter = await loomDai.balanceOf(aliceAddress);
       const { balance: fyghterBalanceAfter } = await fyghtersMock.fyghters(fyghterId);
       expect(`${fyghterBalanceAfter}`).to.equal("0");
       expect(`${ownerBalanceAfter}`).to.equal(`${ownerBalanceBefore.add(fyghterBalanceBefore)}`);
