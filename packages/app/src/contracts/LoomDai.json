@@ -285,14 +285,14 @@
     "absolutePath": "/home/cmarcelo/git/fyght/packages/contracts/contracts/LoomDai.sol",
     "exportedSymbols": {
       "LoomDai": [
-        799
+        811
       ]
     },
-    "id": 800,
+    "id": 812,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 763,
+        "id": 775,
         "literals": [
           "solidity",
           "0.6",
@@ -304,10 +304,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/math/SafeMath.sol",
         "file": "@openzeppelin/contracts/math/SafeMath.sol",
-        "id": 764,
+        "id": 776,
         "nodeType": "ImportDirective",
-        "scope": 800,
-        "sourceUnit": 1198,
+        "scope": 812,
+        "sourceUnit": 1210,
         "src": "24:51:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -315,10 +315,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "id": 765,
+        "id": 777,
         "nodeType": "ImportDirective",
-        "scope": 800,
-        "sourceUnit": 1622,
+        "scope": 812,
+        "sourceUnit": 1634,
         "src": "76:55:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -330,35 +330,35 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 766,
+              "id": 778,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1621,
+              "referencedDeclaration": 1633,
               "src": "154:5:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$1621",
+                "typeIdentifier": "t_contract$_ERC20_$1633",
                 "typeString": "contract ERC20"
               }
             },
-            "id": 767,
+            "id": 779,
             "nodeType": "InheritanceSpecifier",
             "src": "154:5:2"
           }
         ],
         "contractDependencies": [
-          947,
-          1621,
-          1690
+          959,
+          1633,
+          1760
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 799,
+        "id": 811,
         "linearizedBaseContracts": [
-          799,
-          1621,
-          1690,
-          947
+          811,
+          1633,
+          1760,
+          959
         ],
         "name": "LoomDai",
         "nodeType": "ContractDefinition",
@@ -366,11 +366,11 @@
           {
             "constant": false,
             "functionSelector": "116191b6",
-            "id": 769,
+            "id": 781,
             "name": "gateway",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 799,
+            "scope": 811,
             "src": "207:22:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -379,7 +379,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 768,
+              "id": 780,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "207:7:2",
@@ -394,25 +394,25 @@
           },
           {
             "body": {
-              "id": 778,
+              "id": 790,
               "nodeType": "Block",
               "src": "273:35:2",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 776,
+                    "id": 788,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 774,
+                      "id": 786,
                       "name": "gateway",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 769,
+                      "referencedDeclaration": 781,
                       "src": "283:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -423,11 +423,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 775,
+                      "id": 787,
                       "name": "_gateway",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 771,
+                      "referencedDeclaration": 783,
                       "src": "293:8:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -440,14 +440,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 777,
+                  "id": 789,
                   "nodeType": "ExpressionStatement",
                   "src": "283:18:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 779,
+            "id": 791,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -455,16 +455,16 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 772,
+              "id": 784,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 771,
+                  "id": 783,
                   "name": "_gateway",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 779,
+                  "scope": 791,
                   "src": "248:16:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -473,7 +473,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 770,
+                    "id": 782,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "248:7:2",
@@ -490,12 +490,12 @@
               "src": "247:18:2"
             },
             "returnParameters": {
-              "id": 773,
+              "id": 785,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "273:0:2"
             },
-            "scope": 799,
+            "scope": 811,
             "src": "236:72:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -503,7 +503,7 @@
           },
           {
             "body": {
-              "id": 797,
+              "id": 809,
               "nodeType": "Block",
               "src": "462:119:2",
               "statements": [
@@ -517,7 +517,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 788,
+                        "id": 800,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -526,7 +526,7 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 785,
+                            "id": 797,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -537,7 +537,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 786,
+                          "id": 798,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -555,11 +555,11 @@
                         "operator": "==",
                         "rightExpression": {
                           "argumentTypes": null,
-                          "id": 787,
+                          "id": 799,
                           "name": "gateway",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 769,
+                          "referencedDeclaration": 781,
                           "src": "494:7:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -575,7 +575,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "6f6e6c7920746865206761746577617920697320616c6c6f77656420746f206d696e74",
-                        "id": 789,
+                        "id": 801,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -602,7 +602,7 @@
                           "typeString": "literal_string \"only the gateway is allowed to mint\""
                         }
                       ],
-                      "id": 784,
+                      "id": 796,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -616,7 +616,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 790,
+                    "id": 802,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -631,7 +631,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 791,
+                  "id": 803,
                   "nodeType": "ExpressionStatement",
                   "src": "472:69:2"
                 },
@@ -641,11 +641,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 793,
+                        "id": 805,
                         "name": "gateway",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 769,
+                        "referencedDeclaration": 781,
                         "src": "557:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -654,11 +654,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 794,
+                        "id": 806,
                         "name": "_amount",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 781,
+                        "referencedDeclaration": 793,
                         "src": "566:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -677,18 +677,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 792,
+                      "id": 804,
                       "name": "_mint",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1511,
+                      "referencedDeclaration": 1523,
                       "src": "551:5:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
                         "typeString": "function (address,uint256)"
                       }
                     },
-                    "id": 795,
+                    "id": 807,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -703,7 +703,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 796,
+                  "id": 808,
                   "nodeType": "ExpressionStatement",
                   "src": "551:23:2"
                 }
@@ -711,7 +711,7 @@
             },
             "documentation": null,
             "functionSelector": "544297f5",
-            "id": 798,
+            "id": 810,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -719,16 +719,16 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 782,
+              "id": 794,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 781,
+                  "id": 793,
                   "name": "_amount",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 798,
+                  "scope": 810,
                   "src": "438:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -737,7 +737,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 780,
+                    "id": 792,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "438:7:2",
@@ -753,19 +753,19 @@
               "src": "437:17:2"
             },
             "returnParameters": {
-              "id": 783,
+              "id": 795,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "462:0:2"
             },
-            "scope": 799,
+            "scope": 811,
             "src": "415:166:2",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 800,
+        "scope": 812,
         "src": "134:449:2"
       }
     ],
@@ -775,14 +775,14 @@
     "absolutePath": "/home/cmarcelo/git/fyght/packages/contracts/contracts/LoomDai.sol",
     "exportedSymbols": {
       "LoomDai": [
-        799
+        811
       ]
     },
-    "id": 800,
+    "id": 812,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 763,
+        "id": 775,
         "literals": [
           "solidity",
           "0.6",
@@ -794,10 +794,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/math/SafeMath.sol",
         "file": "@openzeppelin/contracts/math/SafeMath.sol",
-        "id": 764,
+        "id": 776,
         "nodeType": "ImportDirective",
-        "scope": 800,
-        "sourceUnit": 1198,
+        "scope": 812,
+        "sourceUnit": 1210,
         "src": "24:51:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -805,10 +805,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "id": 765,
+        "id": 777,
         "nodeType": "ImportDirective",
-        "scope": 800,
-        "sourceUnit": 1622,
+        "scope": 812,
+        "sourceUnit": 1634,
         "src": "76:55:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -820,35 +820,35 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 766,
+              "id": 778,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1621,
+              "referencedDeclaration": 1633,
               "src": "154:5:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$1621",
+                "typeIdentifier": "t_contract$_ERC20_$1633",
                 "typeString": "contract ERC20"
               }
             },
-            "id": 767,
+            "id": 779,
             "nodeType": "InheritanceSpecifier",
             "src": "154:5:2"
           }
         ],
         "contractDependencies": [
-          947,
-          1621,
-          1690
+          959,
+          1633,
+          1760
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 799,
+        "id": 811,
         "linearizedBaseContracts": [
-          799,
-          1621,
-          1690,
-          947
+          811,
+          1633,
+          1760,
+          959
         ],
         "name": "LoomDai",
         "nodeType": "ContractDefinition",
@@ -856,11 +856,11 @@
           {
             "constant": false,
             "functionSelector": "116191b6",
-            "id": 769,
+            "id": 781,
             "name": "gateway",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 799,
+            "scope": 811,
             "src": "207:22:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -869,7 +869,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 768,
+              "id": 780,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "207:7:2",
@@ -884,25 +884,25 @@
           },
           {
             "body": {
-              "id": 778,
+              "id": 790,
               "nodeType": "Block",
               "src": "273:35:2",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 776,
+                    "id": 788,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 774,
+                      "id": 786,
                       "name": "gateway",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 769,
+                      "referencedDeclaration": 781,
                       "src": "283:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -913,11 +913,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 775,
+                      "id": 787,
                       "name": "_gateway",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 771,
+                      "referencedDeclaration": 783,
                       "src": "293:8:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -930,14 +930,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 777,
+                  "id": 789,
                   "nodeType": "ExpressionStatement",
                   "src": "283:18:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 779,
+            "id": 791,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -945,16 +945,16 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 772,
+              "id": 784,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 771,
+                  "id": 783,
                   "name": "_gateway",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 779,
+                  "scope": 791,
                   "src": "248:16:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -963,7 +963,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 770,
+                    "id": 782,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "248:7:2",
@@ -980,12 +980,12 @@
               "src": "247:18:2"
             },
             "returnParameters": {
-              "id": 773,
+              "id": 785,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "273:0:2"
             },
-            "scope": 799,
+            "scope": 811,
             "src": "236:72:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -993,7 +993,7 @@
           },
           {
             "body": {
-              "id": 797,
+              "id": 809,
               "nodeType": "Block",
               "src": "462:119:2",
               "statements": [
@@ -1007,7 +1007,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 788,
+                        "id": 800,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1016,7 +1016,7 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 785,
+                            "id": 797,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -1027,7 +1027,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 786,
+                          "id": 798,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1045,11 +1045,11 @@
                         "operator": "==",
                         "rightExpression": {
                           "argumentTypes": null,
-                          "id": 787,
+                          "id": 799,
                           "name": "gateway",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 769,
+                          "referencedDeclaration": 781,
                           "src": "494:7:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -1065,7 +1065,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "6f6e6c7920746865206761746577617920697320616c6c6f77656420746f206d696e74",
-                        "id": 789,
+                        "id": 801,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1092,7 +1092,7 @@
                           "typeString": "literal_string \"only the gateway is allowed to mint\""
                         }
                       ],
-                      "id": 784,
+                      "id": 796,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1106,7 +1106,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 790,
+                    "id": 802,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1121,7 +1121,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 791,
+                  "id": 803,
                   "nodeType": "ExpressionStatement",
                   "src": "472:69:2"
                 },
@@ -1131,11 +1131,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 793,
+                        "id": 805,
                         "name": "gateway",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 769,
+                        "referencedDeclaration": 781,
                         "src": "557:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1144,11 +1144,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 794,
+                        "id": 806,
                         "name": "_amount",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 781,
+                        "referencedDeclaration": 793,
                         "src": "566:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -1167,18 +1167,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 792,
+                      "id": 804,
                       "name": "_mint",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1511,
+                      "referencedDeclaration": 1523,
                       "src": "551:5:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
                         "typeString": "function (address,uint256)"
                       }
                     },
-                    "id": 795,
+                    "id": 807,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1193,7 +1193,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 796,
+                  "id": 808,
                   "nodeType": "ExpressionStatement",
                   "src": "551:23:2"
                 }
@@ -1201,7 +1201,7 @@
             },
             "documentation": null,
             "functionSelector": "544297f5",
-            "id": 798,
+            "id": 810,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1209,16 +1209,16 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 782,
+              "id": 794,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 781,
+                  "id": 793,
                   "name": "_amount",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 798,
+                  "scope": 810,
                   "src": "438:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1227,7 +1227,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 780,
+                    "id": 792,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "438:7:2",
@@ -1243,19 +1243,19 @@
               "src": "437:17:2"
             },
             "returnParameters": {
-              "id": 783,
+              "id": 795,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "462:0:2"
             },
-            "scope": 799,
+            "scope": 811,
             "src": "415:166:2",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 800,
+        "scope": 812,
         "src": "134:449:2"
       }
     ],
@@ -1320,12 +1320,12 @@
         }
       },
       "links": {},
-      "address": "0xcE25Fc7b2850423549d5C6e7C330c48AcC9B62Db",
-      "transactionHash": "0x1fae25cb1173b4d1c35dfab2b3bc497b453a34be546747d0137019bfd2e8c71a"
+      "address": "0x1fe4D802E629f0a20b853e01c3d446aB456BEa11",
+      "transactionHash": "0xe1cd158ebc6faecac3e2f5abb265b8b3cb5a33c2ddf36f9884361ce8f897e3f8"
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-08T19:05:15.126Z",
+  "updatedAt": "2020-04-08T20:36:44.360Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {
