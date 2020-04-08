@@ -24,13 +24,7 @@ const dotenv = require("dotenv");
 const HDWalletProvider = require("truffle-hdwallet-provider");
 const LoomTruffleProvider = require("loom-truffle-provider");
 
-// Note: This check is breaking CI
-//
-// const dotenvResult = dotenv.config();
-//
-// if (dotenvResult.error) {
-//   throw dotenvResult.error;
-// }
+dotenv.config();
 
 const { INFURA_KEY, MNEMONIC } = process.env;
 
@@ -76,7 +70,7 @@ module.exports = {
 
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
-    rinkeby: {
+    ethereum_rinkeby: {
       provider: () => new HDWalletProvider(MNEMONIC, `https://rinkeby.infura.io/v3/${INFURA_KEY}`),
       network_id: 4, // Ropsten's id
       gas: 5500000, // Ropsten has a lower block limit than mainnet
@@ -84,7 +78,7 @@ module.exports = {
       timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: false, // Skip dry run before migrations? (default: false for public nets )
     },
-    extdev: {
+    loom_extdev: {
       provider() {
         const privateKey = readFileSync(path.join(__dirname, "loom_private_key"), "utf-8");
         const chainId = "extdev-plasma-us1";

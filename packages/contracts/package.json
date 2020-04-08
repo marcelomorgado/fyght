@@ -20,8 +20,11 @@
     "prettier": "npx prettier -c './test/{*.js,**/*.js}'",
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
-    "deploy:extdev": "npx truffle deploy --network extdev",
-    "postdeploy:extdev": "cp ./build/contracts/* ../app/src/contracts"
+    "deploy:loom_extdev": "npx truffle deploy --network loom_extdev",
+    "deploy:ethereum_rinkeby": "npx truffle deploy --network ethereum_rinkeby",
+    "predeploy:testnet": "npm run clean",
+    "deploy:testnet": "npm run deploy:ethereum_rinkeby && npm run deploy:loom_extdev",
+    "postdeploy:testnet": "cp ./build/contracts/* ../app/src/contracts"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
