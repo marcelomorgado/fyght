@@ -18,19 +18,6 @@ const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
 const Fyghters = require("../../contracts/Fyghters.json");
 const Dai = require("../../contracts/Dai.json");
-const {
-  abi: FYGHTERS_CONTRACT_ABI,
-  networks: {
-    [LOOM_NETWORK_ID]: { address: FYGHTERS_CONTRACT_ADDRESS },
-  },
-} = Fyghters;
-
-const {
-  abi: DAI_CONTRACT_ABI,
-  networks: {
-    [LOOM_NETWORK_ID]: { address: DAI_CONTRACT_ADDRESS },
-  },
-} = Dai;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -115,9 +102,25 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   const network = await ethereumProvider.getNetwork();
   const { chainId: networkId } = network;
 
-  const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signerOrProvider);
-  const dai = new ethers.Contract(DAI_CONTRACT_ADDRESS, DAI_CONTRACT_ABI, signerOrProvider);
+  const {
+    abi: fyghtersABI,
+    networks: {
+      [LOOM_NETWORK_ID]: { address: fyghtersAddress },
+    },
+  } = Fyghters;
+
+  const {
+    abi: daiABI,
+    networks: {
+      [LOOM_NETWORK_ID]: { address: daiAddress },
+    },
+  } = Dai;
+
+  const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, signerOrProvider);
+  const dai = new ethers.Contract(daiAddress, daiABI, signerOrProvider);
+
   dispatch(setMetamaskAccount(account));
+
   setState({
     metamask: {
       ...metamask,
