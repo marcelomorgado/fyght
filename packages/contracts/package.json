@@ -24,7 +24,7 @@
     "deploy:ethereum_rinkeby": "npx truffle deploy --network ethereum_rinkeby",
     "predeploy:testnet": "npm run clean",
     "deploy:testnet": "npm run deploy:ethereum_rinkeby && npm run deploy:loom_extdev",
-    "postdeploy:testnet": "cp ./build/contracts/* ../app/src/contracts"
+    "postdeploy:testnet": "npx rimraf ../app/src/contracts/* && cp ./build/contracts/* ../app/src/contracts"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
