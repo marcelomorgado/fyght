@@ -1,6 +1,9 @@
+/* eslint-disable no-undef */
 import { StoreActionApi } from "react-sweet-state";
 import { ethers } from "ethers";
 import { fetchBalance } from "./balance";
+import LoomUtils from "../../helpers/LoomUtils";
+import Web3 from "web3";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -9,11 +12,8 @@ import { fetchBalance } from "./balance";
 // https://github.com/parcel-bundler/parcel/issues/2299#issuecomment-439768971
 // https://en.parceljs.org/env.html
 //
-// eslint-disable-next-line no-undef
 const NETWORK = process.env.NETWORK;
-// eslint-disable-next-line no-undef
 const FYGHTERS_CONTRACT_ADDRESS = process.env.FYGHTERS_CONTRACT_ADDRESS;
-// eslint-disable-next-line no-undef
 const DAI_CONTRACT_ADDRESS = process.env.DAI_CONTRACT_ADDRESS;
 const FYGHTERS_CONTRACT_ABI = require("../../contracts/Fyghters.json").abi;
 const DAI_CONTRACT_ABI = require("../../contracts/Dai.json").abi;
@@ -47,14 +47,17 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ethereum.autoRefreshOnNetworkChange = false;
   }
 
-  let provider: any =
-    NETWORK === "ganache" ? new ethers.providers.JsonRpcProvider() : ethers.providers.getDefaultProvider(NETWORK);
+  let ethereumProvider: any = ethers.getDefaultProvider(NETWORK);
 
   let account = null;
-  let signerOrProvider = provider;
+  let signerOrProvider = ethereumProvider;
+  let loomProvider;
+  let loomAccount;
 
   // Metamask installed
   if (ethereum) {
+    ethereumProvider = new ethers.providers.Web3Provider(ethereum);
+
     // Note: The metamask docs recommends to use the 'chainChanged' event instead but it isn't working
     // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
     ethereum.on("networkChanged", (networkId: number) => {
@@ -70,12 +73,32 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ({ selectedAddress: account } = ethereum);
 
     if (account) {
-      provider = new ethers.providers.Web3Provider(ethereum);
-      signerOrProvider = provider.getSigner();
+      const client: any = LoomUtils.createClient();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      client.on("error", console.error);
+      const callerAddress = await LoomUtils.setupSigner(client, ethereum);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      const web3loom = new Web3(await LoomUtils.createLoomProvider(client, callerAddress));
+      loomProvider = new ethers.providers.Web3Provider(web3loom.currentProvider);
+
+      let accountMapping = await LoomUtils.loadMapping(callerAddress, client);
+      if (accountMapping === null) {
+        const signer = LoomUtils.getMetamaskSigner(ethereum);
+        await LoomUtils.createNewMapping(signer);
+        accountMapping = await LoomUtils.loadMapping(callerAddress, client);
+      }
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      loomAccount = accountMapping.loom.local.toString();
+
+      signerOrProvider = loomProvider.getSigner();
     }
   }
 
-  const network = await provider.getNetwork();
+  const network = await ethereumProvider.getNetwork();
   const { chainId: networkId } = network;
 
   const fyghters = new ethers.Contract(FYGHTERS_CONTRACT_ADDRESS, FYGHTERS_CONTRACT_ABI, signerOrProvider);
@@ -85,9 +108,10 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     metamask: {
       ...metamask,
       contracts: { fyghters, dai },
-      ethereum,
       account,
-      provider,
+      ethereum,
+      loomAccount,
+      provider: loomProvider,
       networkId,
       loading: false,
     },

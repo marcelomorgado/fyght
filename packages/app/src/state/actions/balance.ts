@@ -2,7 +2,6 @@ import { StoreActionApi } from "react-sweet-state";
 import { optimisticUpdate } from "../utils";
 import { MINT_AMOUNT } from "../../constants";
 import { setErrorMessage } from "./messages";
-import { BigNumber } from "ethers";
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -10,7 +9,7 @@ type StoreApi = StoreActionApi<FyghtState>;
 export const fetchBalance = () => async ({ setState, getState }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      account,
+      loomAccount: account,
       contracts: { dai },
     },
   } = getState();
@@ -30,7 +29,7 @@ export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi):
   setState({ balance: { ...balance, loading: true } });
 
   optimisticUpdate({
-    doTransaction: async () => dai.mint(MINT_AMOUNT),
+    doTransaction: async () => dai.mint(MINT_AMOUNT, { gasLimit: 0 }),
 
     onSuccess: async () => {
       dispatch(fetchBalance());

@@ -4,7 +4,7 @@ import { useFyghtState } from "../../../state";
 
 // Note: https://en.parceljs.org/module_resolution.html#glob-file-paths
 import gifs from "../../assets/img/*.gif";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 
 interface ChallengeViewProps {
   visible: boolean;

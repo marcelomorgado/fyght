@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Row, Col, Button, Typography } from "antd";
 import { useFyghtState } from "../../../state";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 import { formatDai } from "../../../helpers";
 
 const { Header } = Layout;
@@ -14,7 +14,7 @@ type Props = {
 export const FyghtHeader: React.FC<Props> = ({ balanceInWei }: Props) => {
   const [
     {
-      metamask: { ethereum, account },
+      metamask: { ethereum, loomAccount: account },
       balance: { loading },
     },
     { setMetamaskAccount, setErrorMessage, mintDai },

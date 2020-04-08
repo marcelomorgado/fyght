@@ -1,5 +1,6 @@
 import { Skin, ONE, BET_VALUE } from "../constants";
-import { ethers, BigNumber } from "ethers";
+import { ethers } from "ethers";
+import { BigNumber } from "ethers/utils";
 import numeral from "numeral";
 
 export const skins = [
@@ -73,8 +74,8 @@ export const formatDai = (wei: BigNumber): string => numeral(formatWei(wei)).for
 export const formatPercent = (value: BigNumber): string => numeral(formatWei(value)).format("0.00%");
 
 export const calculateGainAndLoss = (winProbability: BigNumber): { gainIfWin: BigNumber; lossIfLose: BigNumber } => {
-  const probability = winProbability ? winProbability : BigNumber.from("0");
-  const gainIfWin = BigNumber.from(BET_VALUE).mul(BigNumber.from(ONE).sub(probability)).div(ONE);
-  const lossIfLose = BigNumber.from(BET_VALUE).mul(probability).div(BigNumber.from(ONE)).mul(BigNumber.from(-1));
+  const probability = winProbability ? winProbability : new BigNumber("0");
+  const gainIfWin = new BigNumber(BET_VALUE).mul(new BigNumber(ONE).sub(probability)).div(ONE);
+  const lossIfLose = new BigNumber(BET_VALUE).mul(probability).div(new BigNumber(ONE)).mul(new BigNumber(-1));
   return { gainIfWin, lossIfLose };
 };

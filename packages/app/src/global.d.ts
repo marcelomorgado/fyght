@@ -21,6 +21,7 @@ interface Messages {
 
 interface MetamaskState {
   networkId: number;
+  loomAccount: string;
   account: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;

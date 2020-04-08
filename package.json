@@ -7,11 +7,8 @@
     "lerna": "3.20.2"
   },
   "scripts": {
-    "stop:blockchain": "npx --no-install lerna run ganache:stop --scope contracts",
-    "start:blockchain": "npm run stop:blockchain && npx --no-install lerna run start --scope contracts",
     "start:app": "npx --no-install lerna run start --scope app --stream",
-    "start": "npm run start:blockchain && npm run start:app",
-    "start:testnet": "npx --no-install lerna run start:testnet --scope app --stream",
+    "start": "npm run start:app",
     "postinstall": "npx --no-install lerna bootstrap",
     "test": "npx --no-install lerna run test --stream --concurrency 1",
     "lint": "npx --no-install lerna run lint --stream --concurrency 1"
