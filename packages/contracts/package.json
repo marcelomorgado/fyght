@@ -14,11 +14,13 @@
     "url": "git+https://github.com/marcelomorgado/fyght.git"
   },
   "scripts": {
-    "clean": "npx --no-install rimraf build",
-    "test": "npm run clean && npx --no-install truffle test",
-    "lint": "npx --no-install eslint './test/{*.js,**/*.js}' && npx --no-install prettier -c './test/{*.js,**/*.js}'",
-    "lint:fix": "npx --no-install eslint --fix './test/{*.js,**/*.js}' && npx --no-install prettier --write -c './test/{*.js,**/*.js}'",
-    "deploy:extdev": "npx --no-install truffle deploy --network extdev",
+    "clean": "npx rimraf build",
+    "test": "npm run clean && npx truffle test",
+    "eslint": "npx eslint './test/{*.js,**/*.js}'",
+    "prettier": "npx prettier -c './test/{*.js,**/*.js}'",
+    "lint": "npm run eslint && npm run prettier",
+    "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
+    "deploy:extdev": "npx truffle deploy --network extdev",
     "postdeploy:extdev": "cp ./build/contracts/* ../app/src/contracts"
   },
   "bugs": {

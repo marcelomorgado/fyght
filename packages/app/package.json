@@ -17,13 +17,13 @@
     "url": "git+https://github.com/marcelomorgado/fyght.git"
   },
   "scripts": {
-    "test": "npx --no-install jest",
-    "eslint": "npx --no-install eslint '{src/**/**/*.tsx,src/**/**/*.ts}'",
-    "prettier": "npx --no-install prettier -c '{src/**/**/*.tsx,src/**/**/*.ts}'",
+    "test": "npx jest",
+    "eslint": "npx eslint '{src/**/**/*.tsx,src/**/**/*.ts}'",
+    "prettier": "npx prettier -c '{src/**/**/*.tsx,src/**/**/*.ts}'",
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "start": "npm run start:testnet",
-    "start:testnet": "NODE_ENV=testnet npx --no-install parcel serve src/index.html -p 8080 --open"
+    "start:testnet": "NODE_ENV=testnet npx parcel serve src/index.html -p 8080 --open"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
