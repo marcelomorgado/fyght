@@ -23,7 +23,8 @@
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "start": "npm run start:testnet",
-    "start:testnet": "NODE_ENV=testnet npx parcel serve src/index.html -p 8080 --open"
+    "start:testnet": "NODE_ENV=testnet npx parcel serve src/index.html -p 8080 --open",
+    "build": "npx parcel build src/index.html"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
@@ -41,9 +42,9 @@
   "devDependencies": {
     "@types/enzyme": "3.10.5",
     "@types/jest": "25.2.1",
-    "@types/node": "13.11.0",
+    "@types/node": "13.11.1",
     "@types/numeral": "0.0.26",
-    "@types/react": "16.9.32",
+    "@types/react": "16.9.33",
     "@types/react-dom": "16.9.6",
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
@@ -59,7 +60,7 @@
     "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "3.0.0",
-    "jest": "25.2.7",
+    "jest": "25.3.0",
     "less": "^3.11.1",
     "parcel-bundler": "1.12.4",
     "prettier": "2.0.4",
