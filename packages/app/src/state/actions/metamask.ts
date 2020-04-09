@@ -5,6 +5,9 @@ import { ethers } from "ethers";
 import { fetchBalance } from "./balance";
 import LoomUtils from "../../helpers/LoomUtils";
 import Web3 from "web3";
+import Fyghters from "../../contracts/Fyghters.json";
+import LoomDai from "../../contracts/LoomDai.json";
+import EthereumDai from "../../contracts/EthereumDai.json";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -17,10 +20,6 @@ const ETHEREUM_NETWORK = process.env.ETHEREUM_NETWORK;
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
 const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
-
-const Fyghters = require("../../contracts/Fyghters.json");
-const LoomDai = require("../../contracts/LoomDai.json");
-const EthereumDai = require("../../contracts/EthereumDai.json");
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
