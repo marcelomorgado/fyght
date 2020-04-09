@@ -83,8 +83,8 @@ async function mapContracts({
   const foreignContractCreatorTxHash = Buffer.from(rinkebyTxHash.slice(2), "hex");
 
   await gatewayContract.addContractMappingAsync({
-    localContract,
     foreignContract,
+    localContract,
     foreignContractCreatorSig,
     foreignContractCreatorTxHash,
   });
@@ -114,6 +114,9 @@ const main = async () => {
     ownerExtdevAddress,
     rinkebyTxHash: ethereumDaiDeployTxHash,
   });
+
+  console.log(`EthereumDai: ${ethereumDaiAddress}`);
+  console.log(`LoomDai: ${loomDaiAddress}`);
 
   client.disconnect();
   console.log("Mapping contracts... done!");
