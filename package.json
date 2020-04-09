@@ -8,6 +8,7 @@
   },
   "scripts": {
     "postinstall": "npx lerna bootstrap",
+    "build:app": "npx lerna run build --scope app --stream",
     "start": "npx lerna run start --scope app --stream",
     "test": "npx lerna run test --stream --concurrency 1",
     "lint": "npx lerna run lint --stream --concurrency 1"
