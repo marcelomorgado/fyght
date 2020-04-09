@@ -20,8 +20,13 @@
     "prettier": "npx prettier -c './test/{*.js,**/*.js}'",
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
-    "deploy:extdev": "npx truffle deploy --network extdev",
-    "postdeploy:extdev": "cp ./build/contracts/* ../app/src/contracts"
+    "deploy:loom_extdev": "npx truffle deploy --network loom_extdev",
+    "deploy:ethereum_rinkeby": "npx truffle deploy --network ethereum_rinkeby",
+    "predeploy:testnet": "npm run clean",
+    "deploy:testnet": "npm run deploy:ethereum_rinkeby && npm run deploy:loom_extdev",
+    "update:app:contracts": "npx rimraf ../app/src/contracts/* && cp ./build/contracts/* ../app/src/contracts",
+    "contracts:mapping": "node utils/contractsMapping.js",
+    "postdeploy:testnet": "npm run contracts:mapping && npm run update:app:contracts"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
@@ -29,9 +34,11 @@
   "dependencies": {
     "dotenv": "8.2.0",
     "ganache-cli": "6.9.1",
+    "loom-js": "1.55.0",
     "loom-truffle-provider": "0.13.0",
     "truffle": "5.1.20",
-    "truffle-hdwallet-provider": "1.0.17"
+    "truffle-hdwallet-provider": "1.0.17",
+    "web3": "1.2.6"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "3.0.0-rc.0",

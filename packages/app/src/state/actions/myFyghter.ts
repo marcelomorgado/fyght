@@ -8,6 +8,11 @@ import { fetchBalance } from "./balance";
 import { TransactionReceipt } from "ethers/providers";
 import { BigNumber } from "ethers/utils";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Fyghters = require("../../contracts/Fyghters.json");
+// eslint-disable-next-line no-undef
+const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
+
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
 
@@ -53,9 +58,13 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
     return;
   }
 
-  // TODO: Get from JSON
-  const fyghtersDeploymentTransactionHash = "0x7f6c675b590605fd47684563f4f9c2c2bf480e8046906dae6a93743b475fb334";
-  const { blockNumber: from } = await provider.getTransactionReceipt(fyghtersDeploymentTransactionHash);
+  const {
+    networks: {
+      [LOOM_NETWORK_ID]: { transactionHash },
+    },
+  } = Fyghters;
+
+  const { blockNumber: from } = await provider.getTransactionReceipt(transactionHash);
   const to = await provider.getBlockNumber();
 
   const toScan = to - from;
@@ -197,15 +206,15 @@ export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
   const {
     metamask: {
       loomAccount: account,
-      contracts: { fyghters, dai },
+      contracts: { fyghters, loomDai },
     },
   } = getState();
 
   optimisticUpdate({
     doTransaction: async () => {
-      const allowance = await dai.allowance(account, fyghters.address);
+      const allowance = await loomDai.allowance(account, fyghters.address);
       if (allowance.lt(amount)) {
-        await dai.approve(fyghters.address, amount, { gasLimit: 0 });
+        await loomDai.approve(fyghters.address, amount, { gasLimit: 0 });
       }
 
       return fyghters.deposit(fyghterId, amount, { gasLimit: 0 });

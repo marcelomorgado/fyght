@@ -10,18 +10,18 @@ export const fetchBalance = () => async ({ setState, getState }: StoreApi): Prom
   const {
     metamask: {
       loomAccount: account,
-      contracts: { dai },
+      contracts: { loomDai },
     },
   } = getState();
 
-  const amount = await dai.balanceOf(account);
+  const amount = await loomDai.balanceOf(account);
   setState({ balance: { amount, loading: false } });
 };
 
 export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      contracts: { dai },
+      contracts: { loomDai, ethereumDai },
     },
     balance,
   } = getState();
@@ -29,8 +29,14 @@ export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi):
   setState({ balance: { ...balance, loading: true } });
 
   optimisticUpdate({
-    doTransaction: async () => dai.mint(MINT_AMOUNT, { gasLimit: 0 }),
+    doTransaction: async () => {
+      return loomDai.mint(MINT_AMOUNT, { gasLimit: 0 });
 
+      // WIP
+      // return await ethereumDai.mint(MINT_AMOUNT);
+      // const rinkebyGatewayAddress = "0x9c67fD4eAF0497f9820A3FBf782f81D6b6dC4Baa";
+      // return await ethereumDai.transfer(rinkebyGatewayAddress, MINT_AMOUNT);
+    },
     onSuccess: async () => {
       dispatch(fetchBalance());
       setState({ balance: { ...balance, loading: false } });

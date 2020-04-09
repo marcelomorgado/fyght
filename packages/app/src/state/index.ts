@@ -11,9 +11,10 @@ const initialState: State = {
   messages: { errorMessage: null, infoMessage: null },
   metamask: {
     networkId: null,
+    ethereumAccount: null,
     loomAccount: null,
     ethereum: null,
-    contracts: { fyghters: null, dai: null },
+    contracts: { fyghters: null, loomDai: null, ethereumDai: null },
     provider: null,
     loading: true,
   },

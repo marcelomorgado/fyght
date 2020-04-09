@@ -22,11 +22,11 @@ interface Messages {
 interface MetamaskState {
   networkId: number;
   loomAccount: string;
-  account: string;
+  ethereumAccount: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
   provider: Provider;
-  contracts: { fyghters: Contract; dai: Contract };
+  contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract };
   loading: boolean;
 }
 
