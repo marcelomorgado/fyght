@@ -1,4 +1,4 @@
-# FyGHT &middot; ![](https://github.com/marcelomorgado/fyght/workflows/Node.js%20CI/badge.svg) [![dependabot](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)
+# FyGHT &middot; ![](https://github.com/marcelomorgado/fyght/workflows/Node.js%20CI/badge.svg) [![dependabot](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot)](https://badgen.net/dependabot/marcelomorgado/fyght/?icon=dependabot) [![Netlify Status](https://api.netlify.com/api/v1/badges/90df1145-af9d-495d-89b1-cf6ac6307dcd/deploy-status)](https://app.netlify.com/sites/fyght/deploys)
 
 A karate crypto game
 
