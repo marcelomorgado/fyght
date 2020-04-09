@@ -23,7 +23,8 @@
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "start": "npm run start:testnet",
-    "start:testnet": "NODE_ENV=testnet npx parcel serve src/index.html -p 8080 --open"
+    "start:testnet": "NODE_ENV=testnet npx parcel serve src/index.html -p 8080 --open",
+    "build": "npx parcel build src/index.html"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
