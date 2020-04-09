@@ -1,9 +1,8 @@
 import { StoreActionApi } from "react-sweet-state";
 import { ethers, Event } from "ethers";
 import { BigNumber } from "ethers/utils";
+import Fyghters from "../../contracts/Fyghters.json";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Fyghters = require("../../contracts/Fyghters.json");
 // eslint-disable-next-line no-undef
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
