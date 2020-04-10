@@ -5,7 +5,7 @@
   "author": "Marcelo Morgado <cmarcelom@gmail.com>",
   "homepage": "https://github.com/marcelomorgado/fyght/tree/master/packages/app#readme",
   "license": "MIT",
-  "main": "index.js",
+  "main": "src/index.html",
   "directories": {
     "test": "test"
   },

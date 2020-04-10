@@ -7,7 +7,7 @@ import { fetchAllEnemies } from "./enemies";
 import { fetchBalance } from "./balance";
 import { TransactionReceipt } from "ethers/providers";
 import { BigNumber } from "ethers/utils";
-import Fyghters from "../../contracts/Fyghters.json";
+import { Fyghters, LoomDai, EthereumDai } from "../../contracts";
 
 // eslint-disable-next-line no-undef
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
@@ -61,7 +61,7 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
     networks: {
       [LOOM_NETWORK_ID]: { transactionHash },
     },
-  } = Fyghters;
+  } = Fyghters as ContractJson;
 
   const { blockNumber: from } = await provider.getTransactionReceipt(transactionHash);
   const to = await provider.getBlockNumber();
