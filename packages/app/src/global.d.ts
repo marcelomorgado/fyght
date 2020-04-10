@@ -54,3 +54,8 @@ interface FyghterCreated {
   id: BigNumber;
   name: string;
 }
+
+interface ContractJson {
+  abi: any;
+  networks: { [key: string]: any };
+}

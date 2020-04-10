@@ -5,9 +5,7 @@ import { ethers } from "ethers";
 import { fetchBalance } from "./balance";
 import LoomUtils from "../../helpers/LoomUtils";
 import Web3 from "web3";
-import Fyghters from "../../contracts/Fyghters.json";
-import LoomDai from "../../contracts/LoomDai.json";
-import EthereumDai from "../../contracts/EthereumDai.json";
+import { Fyghters, LoomDai, EthereumDai } from "../../contracts";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -103,12 +101,15 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   const network = await ethereumProvider.getNetwork();
   const { chainId: networkId } = network;
 
+  console.log(EthereumDai);
+  console.log(`ETHEREUM_NETWORK_ID = ${ETHEREUM_NETWORK_ID}`);
+
   const {
     abi: ethereumDaiABI,
     networks: {
       [ETHEREUM_NETWORK_ID]: { address: ethereumDaiAddress },
     },
-  } = EthereumDai;
+  } = EthereumDai as ContractJson;
 
   const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumProvider.getSigner());
 
@@ -117,14 +118,14 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     networks: {
       [LOOM_NETWORK_ID]: { address: fyghtersAddress },
     },
-  } = Fyghters;
+  } = Fyghters as ContractJson;
 
   const {
     abi: loomDaiABI,
     networks: {
       [LOOM_NETWORK_ID]: { address: loomDaiAddress },
     },
-  } = LoomDai;
+  } = LoomDai as ContractJson;
 
   const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, signerOrProvider);
   const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, signerOrProvider);
