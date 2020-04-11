@@ -1,7 +1,7 @@
 import { StoreActionApi } from "react-sweet-state";
 import { ethers, Event } from "ethers";
 import { BigNumber } from "ethers/utils";
-import { Fyghters, LoomDai, EthereumDai } from "../../contracts";
+import Fyghters from "../../contracts/Fyghters.json";
 
 // eslint-disable-next-line no-undef
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;

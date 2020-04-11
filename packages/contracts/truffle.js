@@ -17,16 +17,22 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-const { readFileSync } = require("fs");
-const path = require("path");
-
 const dotenv = require("dotenv");
 const HDWalletProvider = require("truffle-hdwallet-provider");
 const LoomTruffleProvider = require("loom-truffle-provider");
 
 dotenv.config();
 
-const { INFURA_KEY, MNEMONIC } = process.env;
+const {
+  ETHEREUM_NETWORK_ID,
+  INFURA_PROVIDER_URL,
+  MNEMONIC,
+  LOOM_PRIVATE_KEY,
+  LOOM_NETWORK_ID,
+  LOOM_NETWORK,
+  LOOM_WRITE_URL,
+  LOOM_READ_URL,
+} = process.env;
 
 module.exports = {
   /**
@@ -71,27 +77,16 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     ethereum_rinkeby: {
-      provider: () => new HDWalletProvider(MNEMONIC, `https://rinkeby.infura.io/v3/${INFURA_KEY}`),
-      network_id: 4, // Ropsten's id
+      provider: () => new HDWalletProvider(MNEMONIC, INFURA_PROVIDER_URL),
+      network_id: ETHEREUM_NETWORK_ID, // Rinkeby's id
       gas: 5500000, // Ropsten has a lower block limit than mainnet
       confirmations: 1, // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: false, // Skip dry run before migrations? (default: false for public nets )
     },
     loom_extdev: {
-      provider() {
-        const privateKey = readFileSync(path.join(__dirname, "loom_private_key"), "utf-8");
-        const chainId = "extdev-plasma-us1";
-        const writeUrl = "wss://extdev-plasma-us1.dappchains.com/websocket";
-        const readUrl = "wss://extdev-plasma-us1.dappchains.com/queryws";
-        const loomTruffleProvider = new LoomTruffleProvider(chainId, writeUrl, readUrl, privateKey);
-        // loomTruffleProvider.createExtraAccountsFromMnemonic(
-        //   "gravity top burden flip student usage spell purchase hundred improve check genre",
-        //   10,
-        // );
-        return loomTruffleProvider;
-      },
-      network_id: "9545242630824",
+      provider: () => new LoomTruffleProvider(LOOM_NETWORK, LOOM_WRITE_URL, LOOM_READ_URL, LOOM_PRIVATE_KEY),
+      network_id: LOOM_NETWORK_ID,
     },
 
     // Useful for private networks
