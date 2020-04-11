@@ -5,7 +5,9 @@ import { ethers } from "ethers";
 import { fetchBalance } from "./balance";
 import LoomUtils from "../../helpers/LoomUtils";
 import Web3 from "web3";
-import { Fyghters, LoomDai, EthereumDai } from "../../contracts";
+import Fyghters from "../../contracts/Fyghters.json";
+import LoomDai from "../../contracts/LoomDai.json";
+import EthereumDai from "../../contracts/EthereumDai.json";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -100,9 +102,6 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
 
   const network = await ethereumProvider.getNetwork();
   const { chainId: networkId } = network;
-
-  console.log(EthereumDai);
-  console.log(`ETHEREUM_NETWORK_ID = ${ETHEREUM_NETWORK_ID}`);
 
   const {
     abi: ethereumDaiABI,

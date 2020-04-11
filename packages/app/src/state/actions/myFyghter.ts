@@ -7,7 +7,7 @@ import { fetchAllEnemies } from "./enemies";
 import { fetchBalance } from "./balance";
 import { TransactionReceipt } from "ethers/providers";
 import { BigNumber } from "ethers/utils";
-import { Fyghters, LoomDai, EthereumDai } from "../../contracts";
+import Fyghters from "../../contracts/Fyghters.json";
 
 // eslint-disable-next-line no-undef
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
