@@ -182,8 +182,8 @@ export const createFyghter = (name: string) => async ({ getState, setState, disp
         id: null,
         skin: Skin.NAKED,
         name,
-        xp: "1",
-        balance: "0",
+        xp: new BigNumber("1"),
+        balance: new BigNumber("0"),
       };
       setState({ myFyghter });
     },

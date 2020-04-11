@@ -78,7 +78,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
       const client: any = LoomUtils.createClient();
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
-      client.on("error", console.error);
+      // client.on("error", console.error);
       const callerAddress = await LoomUtils.setupSigner(client, ethereum);
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
