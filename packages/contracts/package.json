@@ -36,7 +36,7 @@
     "ganache-cli": "6.9.1",
     "loom-js": "1.55.0",
     "loom-truffle-provider": "0.13.0",
-    "truffle": "5.1.20",
+    "truffle": "5.1.21",
     "truffle-hdwallet-provider": "1.0.17",
     "web3": "1.2.6"
   },
