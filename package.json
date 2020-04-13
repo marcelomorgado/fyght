@@ -10,7 +10,8 @@
     "postinstall": "npx lerna bootstrap",
     "start": "npx lerna run start --scope app --stream",
     "test": "npx lerna run test --stream --concurrency 1",
-    "lint": "npx lerna run lint --stream --concurrency 1"
+    "lint": "npx lerna run lint --stream --concurrency 1",
+    "clean": "npx lerna clean -y"
   },
   "repository": {
     "type": "git",

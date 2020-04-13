@@ -15,7 +15,7 @@ export const optimisticUpdate = async ({
   getState: () => FyghtState;
 }): Promise<void> => {
   const {
-    metamask: { provider },
+    metamask: { loomProvider },
   } = getState();
 
   if (onOptimistic) {
@@ -25,7 +25,7 @@ export const optimisticUpdate = async ({
   try {
     const tx = await doTransaction();
     console.log(tx);
-    provider.once(tx.hash, (receipt: TransactionReceipt) => {
+    loomProvider.once(tx.hash, (receipt: TransactionReceipt) => {
       const { status } = receipt;
       if (!status) {
         onError("", receipt);

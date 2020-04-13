@@ -2,6 +2,7 @@ import { StoreActionApi } from "react-sweet-state";
 import { optimisticUpdate } from "../utils";
 import { MINT_AMOUNT } from "../../constants";
 import { setErrorMessage } from "./messages";
+import { BigNumber } from "ethers/utils";
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -9,12 +10,12 @@ type StoreApi = StoreActionApi<FyghtState>;
 export const fetchBalance = () => async ({ setState, getState }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      loomAccount: account,
+      loomAccount,
       contracts: { loomDai },
     },
   } = getState();
 
-  const amount = await loomDai.balanceOf(account);
+  const amount = loomAccount ? await loomDai.balanceOf(loomAccount) : new BigNumber(0);
   setState({ balance: { amount, loading: false } });
 };
 
