@@ -13,13 +13,13 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
   const {
     metamask: {
       contracts: { fyghters },
-      provider,
+      loomProvider,
       loomAccount: account,
     },
     myFyghter,
   } = getState();
 
-  if (!fyghters || !provider) {
+  if (!fyghters || !loomProvider) {
     setState({ enemies: [] });
     return;
   }
@@ -44,8 +44,8 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
     },
   } = Fyghters as ContractJson;
 
-  const { blockNumber: from } = await provider.getTransactionReceipt(transactionHash);
-  const to = await provider.getBlockNumber();
+  const { blockNumber: from } = await loomProvider.getTransactionReceipt(transactionHash);
+  const to = await loomProvider.getBlockNumber();
 
   const toScan = to - from;
   const maxBlocksPerQuery = 100;
@@ -77,7 +77,7 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
     await Promise.all(
       queries.map(
         async ([from, to]) =>
-          await provider.getLogs({
+          await loomProvider.getLogs({
             address: fyghters.address,
             fromBlock: from,
             toBlock: to,
@@ -88,7 +88,7 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
   ).reduce((a, b) => [...a, ...b], []);
   const enemiesIds = logs
     .map((log: Event) => event.decode(log.data, log.topics))
-    .filter(({ owner }: { owner: string }) => getAddress(owner) !== getAddress(account))
+    .filter(({ owner }: { owner: string }) => (account ? getAddress(owner) !== getAddress(account) : true))
     .map(({ id }: { id: BigNumber }) => id);
 
   const enemiesPromises = enemiesIds.map((id: BigNumber) => loadEnemy(id));

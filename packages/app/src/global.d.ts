@@ -25,7 +25,8 @@ interface MetamaskState {
   ethereumAccount: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
-  provider: Provider;
+  loomProvider: Provider;
+  ethereumProvider: Provider;
   contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract };
   loading: boolean;
 }

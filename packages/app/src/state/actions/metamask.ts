@@ -52,9 +52,11 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
 
   let ethereumProvider: any = ethers.getDefaultProvider(ETHEREUM_NETWORK);
   let ethereumAccount = null;
-  let signerOrProvider = ethereumProvider;
-  let loomProvider;
-  let loomAccount;
+  let ethereumSignerOrProvider = ethereumProvider;
+
+  let { loomProvider } = await LoomUtils.setupLoom(null);
+  let loomAccount = null;
+  let loomSignerOrProvider: any = loomProvider.getSigner();
 
   // Metamask installed
   if (ethereum) {
@@ -75,28 +77,10 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ({ selectedAddress: ethereumAccount } = ethereum);
 
     if (ethereumAccount) {
-      const client: any = LoomUtils.createClient();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      // client.on("error", console.error);
-      const callerAddress = await LoomUtils.setupSigner(client, ethereum);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      const web3loom = new Web3(await LoomUtils.createLoomProvider(client, callerAddress));
-      loomProvider = new ethers.providers.Web3Provider(web3loom.currentProvider);
+      ({ loomProvider, loomAccount } = await LoomUtils.setupLoom(ethereum));
 
-      let accountMapping = await LoomUtils.loadMapping(callerAddress, client);
-      if (accountMapping === null) {
-        const signer = LoomUtils.getMetamaskSigner(ethereum);
-        await LoomUtils.createNewMapping(signer);
-        accountMapping = await LoomUtils.loadMapping(callerAddress, client);
-      }
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      loomAccount = accountMapping.loom.local.toString();
-
-      signerOrProvider = loomProvider.getSigner();
+      loomSignerOrProvider = loomProvider.getSigner();
+      ethereumSignerOrProvider = ethereumProvider.getSigner();
     }
   }
 
@@ -110,7 +94,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = EthereumDai as ContractJson;
 
-  const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumProvider.getSigner());
+  const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumSignerOrProvider);
 
   const {
     abi: fyghtersABI,
@@ -126,8 +110,8 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = LoomDai as ContractJson;
 
-  const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, signerOrProvider);
-  const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, signerOrProvider);
+  const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, loomSignerOrProvider);
+  const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, loomSignerOrProvider);
 
   dispatch(setMetamaskAccount(ethereumAccount));
 
@@ -138,7 +122,8 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
       ethereumAccount,
       ethereum,
       loomAccount,
-      provider: loomProvider,
+      loomProvider,
+      ethereumProvider,
       networkId,
       loading: false,
     },

@@ -46,7 +46,7 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
     metamask: {
       contracts: { fyghters },
       loomAccount: account,
-      provider,
+      loomProvider,
     },
   } = getState();
 
@@ -63,8 +63,8 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
     },
   } = Fyghters as ContractJson;
 
-  const { blockNumber: from } = await provider.getTransactionReceipt(transactionHash);
-  const to = await provider.getBlockNumber();
+  const { blockNumber: from } = await loomProvider.getTransactionReceipt(transactionHash);
+  const to = await loomProvider.getBlockNumber();
 
   const toScan = to - from;
   const maxBlocksPerQuery = 100;
@@ -92,7 +92,7 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
     await Promise.all(
       queries.map(
         async ([from, to]) =>
-          await provider.getLogs({
+          await loomProvider.getLogs({
             address: fyghters.address,
             fromBlock: from,
             toBlock: to,
