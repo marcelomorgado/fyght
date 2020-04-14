@@ -12,7 +12,7 @@ describe("FyghtHeader", () => {
       .mockImplementation((): any => [
         {
           metamask: { account: "0x", ethereum: { isMetaMask: true }, networkId: 1234, loading: false },
-          balance: { loading: false },
+          daiBalances: { ethereumBalance: { loading: false }, loomBalance: { loading: false } },
         },
         { setMetamaskAccount: jest.fn(), setErrorMessage: jest.fn() },
       ]);

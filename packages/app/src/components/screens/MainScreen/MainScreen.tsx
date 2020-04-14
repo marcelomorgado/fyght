@@ -17,7 +17,9 @@ export const MainScreen: React.FC = () => {
     {
       messages: { errorMessage, infoMessage },
       metamask: { ethereumAccount, networkId, loading },
-      balance: { amount: balanceInWei },
+      daiBalances: {
+        ethereumBalance: { amount: balanceInWei },
+      },
     },
     { initializeMetamask },
   ] = useFyghtState();

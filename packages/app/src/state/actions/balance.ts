@@ -13,10 +13,11 @@ export const fetchBalance = () => async ({ setState, getState }: StoreApi): Prom
       loomAccount,
       contracts: { loomDai },
     },
+    daiBalances: { loomBalance },
   } = getState();
 
   const amount = loomAccount ? await loomDai.balanceOf(loomAccount) : new BigNumber(0);
-  setState({ balance: { amount, loading: false } });
+  setState({ daiBalances: { ethereumBalance: { amount, loading: false }, loomBalance } });
 };
 
 export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi): Promise<void> => {
@@ -24,10 +25,10 @@ export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi):
     metamask: {
       contracts: { loomDai, ethereumDai },
     },
-    balance,
+    daiBalances: { ethereumBalance, loomBalance },
   } = getState();
 
-  setState({ balance: { ...balance, loading: true } });
+  setState({ daiBalances: { ethereumBalance: { ...ethereumBalance, loading: true }, loomBalance } });
 
   optimisticUpdate({
     doTransaction: async () => {
@@ -40,7 +41,7 @@ export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi):
     },
     onSuccess: async () => {
       dispatch(fetchBalance());
-      setState({ balance: { ...balance, loading: false } });
+      setState({ daiBalances: { ethereumBalance: { ...ethereumBalance, loading: false }, loomBalance } });
     },
     onError: (errorMessage: string) => {
       dispatch(setErrorMessage(errorMessage));

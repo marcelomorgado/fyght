@@ -15,7 +15,9 @@ export const FyghtHeader: React.FC<Props> = ({ balanceInWei }: Props) => {
   const [
     {
       metamask: { ethereum, loomAccount: account },
-      balance: { loading },
+      daiBalances: {
+        ethereumBalance: { loading },
+      },
     },
     { setMetamaskAccount, setErrorMessage, mintDai },
   ] = useFyghtState();

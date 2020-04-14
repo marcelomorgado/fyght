@@ -41,7 +41,7 @@ interface FyghtState {
   enemies: Array<Enemy>;
   messages: Messages;
   metamask: MetamaskState;
-  balance: BalanceState;
+  daiBalances: { ethereumBalance: BalanceState; loomBalance: BalanceState };
 }
 
 interface Action {
