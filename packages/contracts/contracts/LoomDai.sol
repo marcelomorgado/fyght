@@ -2,13 +2,13 @@ pragma solidity 0.6.2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 
-contract LoomDai is ERC20, ERC20Detailed {
+
+contract LoomDai is ERC20 {
     // Transfer Gateway contract address
     address public gateway;
 
-    constructor(address _gateway) public ERC20Detailed("Dai", "DAI", 18) {
+    constructor(address _gateway) public ERC20("Dai", "DAI") {
         gateway = _gateway;
     }
 
