@@ -43,7 +43,7 @@ contract Fyghters is ERC721 {
         _;
     }
 
-    constructor(LoomDai _dai) public {
+    constructor(LoomDai _dai) public ERC721("Fyghter", "FYGHTER") {
         dai = _dai;
 
         // Skins table
