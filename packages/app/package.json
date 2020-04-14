@@ -36,7 +36,7 @@
     "numeral": "2.0.6",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-sweet-state": "2.0.2",
+    "react-sweet-state": "2.1.1",
     "web3": "1.2.6"
   },
   "devDependencies": {
