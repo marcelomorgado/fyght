@@ -10,7 +10,7 @@ export const MyFyghterContainer: React.FC = () => {
   const [
     {
       myFyghter,
-      metamask: { account, networkId },
+      metamask: { ethereumAccount, networkId, loomProvider },
     },
     { fetchMyFyghter },
   ] = useFyghtState();
@@ -22,12 +22,12 @@ export const MyFyghterContainer: React.FC = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, networkId]);
+  }, [ethereumAccount, networkId, loomProvider]);
 
   const hasFyghter = !isLoading && myFyghter !== null;
 
   let warningMessage = null;
-  if (!account) {
+  if (!ethereumAccount) {
     warningMessage = "You have to sign in first!";
   } else if (!hasFyghter) {
     warningMessage = "You have to create your fyghter!";
@@ -43,7 +43,7 @@ export const MyFyghterContainer: React.FC = () => {
           {isLoading ? (
             <>{`Loading...`}</>
           ) : !hasFyghter ? (
-            <CreateFyghterButton disabled={!account} />
+            <CreateFyghterButton disabled={!ethereumAccount} />
           ) : (
             <MyFyghter fyghter={myFyghter} />
           )}

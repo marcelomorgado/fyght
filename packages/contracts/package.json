@@ -14,16 +14,19 @@
     "url": "git+https://github.com/marcelomorgado/fyght.git"
   },
   "scripts": {
-    "clean": "npx --no-install rimraf build",
-    "start": "npm run clean && npm run stop && npm run ganache:start && npm run truffle:migrate",
-    "stop": "npm run ganache:stop",
-    "test": "npm run clean && npx --no-install truffle test",
-    "ganache:start": "npx --no-install ganache-cli --mnemonic 'during page myth behave wish detail fantasy immune west release legend deliver' --networkId 1337 --noVMErrorsOnRPCResponse > ganache.log 2>&1 &",
-    "ganache:stop": "kill `ps ax | grep ganache-cli | grep -v grep | awk '{print $1}'` 2> /dev/null; exit 0",
-    "truffle:migrate": "npx --no-install truffle migrate --network local",
-    "lint": "npx --no-install eslint './test/{*.js,**/*.js}' && npx --no-install prettier -c './test/{*.js,**/*.js}'",
-    "lint:fix": "npx --no-install eslint --fix './test/{*.js,**/*.js}' && npx --no-install prettier --write -c './test/{*.js,**/*.js}'",
-    "poststart": "npx --no-install truffle exec utils/createEnemies.js  --network local && npx --no-install truffle compile"
+    "clean": "npx rimraf build",
+    "test": "npm run clean && npx truffle test",
+    "eslint": "npx eslint './test/{*.js,**/*.js}'",
+    "prettier": "npx prettier -c './test/{*.js,**/*.js}'",
+    "lint": "npm run eslint && npm run prettier",
+    "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
+    "deploy:loom_extdev": "npx truffle deploy --network loom_extdev",
+    "deploy:ethereum_rinkeby": "npx truffle deploy --network ethereum_rinkeby",
+    "predeploy:testnet": "npm run clean",
+    "deploy:testnet": "npm run deploy:ethereum_rinkeby && npm run deploy:loom_extdev",
+    "update:app:contracts": "npx rimraf ../app/src/contracts/* && cp ./build/contracts/* ../app/src/contracts",
+    "contracts:mapping": "node utils/contractsMapping.js",
+    "postdeploy:testnet": "npm run contracts:mapping && npm run update:app:contracts"
   },
   "bugs": {
     "url": "https://github.com/marcelomorgado/fyght/issues"
@@ -31,8 +34,11 @@
   "dependencies": {
     "dotenv": "8.2.0",
     "ganache-cli": "6.9.1",
-    "truffle": "5.1.20",
-    "truffle-hdwallet-provider": "1.0.17"
+    "loom-js": "1.55.0",
+    "loom-truffle-provider": "0.13.0",
+    "truffle": "5.1.21",
+    "truffle-hdwallet-provider": "1.0.17",
+    "web3": "1.2.6"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "3.0.0-rc.1",

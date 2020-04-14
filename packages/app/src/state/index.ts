@@ -1,6 +1,6 @@
 import { createStore, createHook } from "react-sweet-state";
 import * as actions from "./actions";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 
 type State = FyghtState;
 type Actions = typeof actions;
@@ -11,13 +11,15 @@ const initialState: State = {
   messages: { errorMessage: null, infoMessage: null },
   metamask: {
     networkId: null,
-    account: null,
+    ethereumAccount: null,
+    loomAccount: null,
     ethereum: null,
-    contracts: { fyghters: null, dai: null },
-    provider: null,
+    contracts: { fyghters: null, loomDai: null, ethereumDai: null },
+    loomProvider: null,
+    ethereumProvider: null,
     loading: true,
   },
-  balance: { amount: BigNumber.from(0), loading: false },
+  balance: { amount: new BigNumber(0), loading: false },
 };
 
 const Store = createStore<State, Actions>({

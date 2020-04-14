@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FyghtScreen should render the component 1`] = `
+exports[`FyghtHeader should render the component 1`] = `
 <Header>
   <Row
     gutter={0}
@@ -36,7 +36,18 @@ exports[`FyghtScreen should render the component 1`] = `
     <Col
       offset={18}
       span={2}
-    />
+    >
+      <Button
+        block={false}
+        ghost={false}
+        htmlType="button"
+        loading={false}
+        onClick={[Function]}
+        type="primary"
+      >
+        Sign in
+      </Button>
+    </Col>
   </Row>
 </Header>
 `;

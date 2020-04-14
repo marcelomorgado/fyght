@@ -2,7 +2,7 @@ import { StoreActionApi } from "react-sweet-state";
 import { optimisticUpdate } from "../utils";
 import { MINT_AMOUNT } from "../../constants";
 import { setErrorMessage } from "./messages";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -10,19 +10,19 @@ type StoreApi = StoreActionApi<FyghtState>;
 export const fetchBalance = () => async ({ setState, getState }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      account,
-      contracts: { dai },
+      loomAccount,
+      contracts: { loomDai },
     },
   } = getState();
 
-  const amount = await dai.balanceOf(account);
+  const amount = loomAccount ? await loomDai.balanceOf(loomAccount) : new BigNumber(0);
   setState({ balance: { amount, loading: false } });
 };
 
 export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      contracts: { dai },
+      contracts: { loomDai, ethereumDai },
     },
     balance,
   } = getState();
@@ -30,8 +30,14 @@ export const mintDai = () => async ({ setState, getState, dispatch }: StoreApi):
   setState({ balance: { ...balance, loading: true } });
 
   optimisticUpdate({
-    doTransaction: async () => dai.mint(MINT_AMOUNT),
+    doTransaction: async () => {
+      return loomDai.mint(MINT_AMOUNT, { gasLimit: 0 });
 
+      // WIP
+      // return await ethereumDai.mint(MINT_AMOUNT);
+      // const rinkebyGatewayAddress = "0x9c67fD4eAF0497f9820A3FBf782f81D6b6dC4Baa";
+      // return await ethereumDai.transfer(rinkebyGatewayAddress, MINT_AMOUNT);
+    },
     onSuccess: async () => {
       dispatch(fetchBalance());
       setState({ balance: { ...balance, loading: false } });

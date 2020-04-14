@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 import { useFyghtState } from "../../../state";
-import { BigNumber } from "ethers";
+import { BigNumber } from "ethers/utils";
 
 type Props = {
   fyghterId: BigNumber;

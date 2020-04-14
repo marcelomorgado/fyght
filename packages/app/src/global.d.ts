@@ -21,11 +21,13 @@ interface Messages {
 
 interface MetamaskState {
   networkId: number;
-  account: string;
+  loomAccount: string;
+  ethereumAccount: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
-  provider: Provider;
-  contracts: { fyghters: Contract; dai: Contract };
+  loomProvider: Provider;
+  ethereumProvider: Provider;
+  contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract };
   loading: boolean;
 }
 
@@ -52,4 +54,9 @@ interface FyghterCreated {
   owner: string;
   id: BigNumber;
   name: string;
+}
+
+interface ContractJson {
+  abi: any;
+  networks: { [key: string]: any };
 }

@@ -1,10 +1,16 @@
 import { StoreActionApi } from "react-sweet-state";
-import { ethers, Event, BigNumber, ContractReceipt } from "ethers";
+import { ethers, Event } from "ethers";
 import { optimisticUpdate } from "../utils";
 import { Skin } from "../../constants";
 import { setErrorMessage, setInfoMessage } from "./messages";
 import { fetchAllEnemies } from "./enemies";
 import { fetchBalance } from "./balance";
+import { TransactionReceipt } from "ethers/providers";
+import { BigNumber } from "ethers/utils";
+import Fyghters from "../../contracts/Fyghters.json";
+
+// eslint-disable-next-line no-undef
+const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -23,7 +29,7 @@ export const renameMyFyghter = (newName: string) => async ({
   const { id: myFyghterId, name: oldName } = myFyghter;
 
   optimisticUpdate({
-    doTransaction: () => fyghters.rename(myFyghterId, newName),
+    doTransaction: () => fyghters.rename(myFyghterId, newName, { gasLimit: 0 }),
     onOptimistic: () => {
       setState({ myFyghter: { ...myFyghter, name: newName } });
     },
@@ -39,7 +45,8 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
   const {
     metamask: {
       contracts: { fyghters },
-      account,
+      loomAccount: account,
+      loomProvider,
     },
   } = getState();
 
@@ -50,9 +57,54 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
     return;
   }
 
-  const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
-  const logs = await fyghters.queryFilter(filter, 0, "latest");
-  const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: FyghterCreated) => id);
+  const {
+    networks: {
+      [LOOM_NETWORK_ID]: { transactionHash },
+    },
+  } = Fyghters as ContractJson;
+
+  const { blockNumber: from } = await loomProvider.getTransactionReceipt(transactionHash);
+  const to = await loomProvider.getBlockNumber();
+
+  const toScan = to - from;
+  const maxBlocksPerQuery = 100;
+  const numberOfQueries = Math.ceil(toScan / maxBlocksPerQuery);
+  const queries = [...Array(numberOfQueries)].map((k, i) => [
+    from + i * maxBlocksPerQuery,
+    from + (i + 1) * maxBlocksPerQuery - 1,
+  ]);
+
+  //
+  // Ethers v5
+  //
+  // const filter = fyghters.filters.FyghterCreated(getAddress(account), null, null);
+  // const logs = (
+  //   await Promise.all(queries.map(async ([from, to]) => await fyghters.queryFilter(filter, from, to)))
+  // ).reduce((a, b) => [...a, ...b], []);
+  // const [myFyghterId] = logs.map((l: Event) => l.args).map(({ id }: FyghterCreated) => id);
+
+  //
+  // Ethers v4
+  //
+  const event = fyghters.interface.events["FyghterCreated"];
+  const topic = event.topic;
+  const logs = (
+    await Promise.all(
+      queries.map(
+        async ([from, to]) =>
+          await loomProvider.getLogs({
+            address: fyghters.address,
+            fromBlock: from,
+            toBlock: to,
+            topics: [topic],
+          })
+      )
+    )
+  ).reduce((a, b) => [...a, ...b], []);
+  const [myFyghterId] = logs
+    .map((log: Event) => event.decode(log.data, log.topics))
+    .filter(({ owner }: { owner: string }) => getAddress(owner) === getAddress(account))
+    .map(({ id }: { id: BigNumber }) => id);
 
   if (!myFyghterId) {
     setState({ myFyghter: null });
@@ -75,13 +127,27 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
   } = getState();
 
   optimisticUpdate({
-    doTransaction: () => fyghters.challenge(myFyghterId, enemyId),
-    onSuccess: (receipt: ContractReceipt) => {
-      const [log] = receipt.logs
-        .map((log: Event) => fyghters.interface.parseLog(log))
-        .filter(({ name }) => name == "ChallengeOccurred")
-        .map(({ args }) => args);
-      const [myFyghterId, , winnerId] = log;
+    doTransaction: () => fyghters.challenge(myFyghterId, enemyId, { gasLimit: 0 }),
+    onSuccess: (receipt: TransactionReceipt) => {
+      console.log(receipt);
+
+      //
+      // Ethers v5
+      //
+      // const [log] = receipt.logs
+      //   .map((log: Event) => fyghters.interface.parseLog(log))
+      //   .filter(({ name }) => name == "ChallengeOccurred")
+      //   .map(({ args }) => args);
+      // const [myFyghterId, , winnerId] = log;
+
+      //
+      // Ethers v4
+      //
+      const event = fyghters.interface.events["ChallengeOccurred"];
+      const logs = receipt.logs.map((log: Event) => event.decode(log.data, log.topics));
+      const [challengeOcurred] = logs;
+      const { winnerId, challengerId: myFyghterId } = challengeOcurred;
+
       if (winnerId.eq(myFyghterId)) {
         dispatch(setInfoMessage("You won!"));
       } else {
@@ -89,7 +155,7 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
       }
 
       dispatch(fetchMyFyghter());
-      // TODO: fetch only the enemy
+      // TODO: fetch only the target enemy
       dispatch(fetchAllEnemies());
       dispatch(fetchBalance());
       whenFinish();
@@ -110,14 +176,14 @@ export const createFyghter = (name: string) => async ({ getState, setState, disp
   } = getState();
 
   optimisticUpdate({
-    doTransaction: async () => fyghters.create(name),
+    doTransaction: async () => fyghters.create(name, { gasLimit: 0 }),
     onOptimistic: () => {
       const myFyghter: Fyghter = {
         id: null,
         skin: Skin.NAKED,
         name,
-        xp: BigNumber.from("1"),
-        balance: BigNumber.from("0"),
+        xp: new BigNumber("1"),
+        balance: new BigNumber("0"),
       };
       setState({ myFyghter });
     },
@@ -138,19 +204,19 @@ export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
 }: StoreApi): Promise<void> => {
   const {
     metamask: {
-      account,
-      contracts: { fyghters, dai },
+      loomAccount: account,
+      contracts: { fyghters, loomDai },
     },
   } = getState();
 
   optimisticUpdate({
     doTransaction: async () => {
-      const allowance = await dai.allowance(account, fyghters.address);
+      const allowance = await loomDai.allowance(account, fyghters.address);
       if (allowance.lt(amount)) {
-        await dai.approve(fyghters.address, amount);
+        await loomDai.approve(fyghters.address, amount, { gasLimit: 0 });
       }
 
-      return fyghters.deposit(fyghterId, amount);
+      return fyghters.deposit(fyghterId, amount, { gasLimit: 0 });
     },
     onSuccess: async () => {
       dispatch(fetchMyFyghter());
@@ -171,7 +237,7 @@ export const withdrawAll = (fyghterId: BigNumber) => async ({ getState, dispatch
   } = getState();
 
   optimisticUpdate({
-    doTransaction: async () => fyghters.withdrawAll(fyghterId),
+    doTransaction: async () => fyghters.withdrawAll(fyghterId, { gasLimit: 0 }),
 
     onSuccess: async () => {
       dispatch(fetchMyFyghter());
@@ -198,7 +264,7 @@ export const changeMyFyghterSkin = (newSkin: string) => async ({
   const { id: myFyghterId, skin: oldSkin } = myFyghter;
 
   optimisticUpdate({
-    doTransaction: () => fyghters.changeSkin(myFyghterId, newSkin),
+    doTransaction: () => fyghters.changeSkin(myFyghterId, newSkin, { gasLimit: 0 }),
     onOptimistic: () => {
       setState({ myFyghter: { ...myFyghter, skin: newSkin } });
     },

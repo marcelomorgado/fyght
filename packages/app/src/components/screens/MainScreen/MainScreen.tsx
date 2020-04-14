@@ -8,15 +8,15 @@ import { useFyghtState } from "../../../state";
 const { Content, Footer } = Layout;
 
 // eslint-disable-next-line no-undef
-const NETWORK = process.env.NETWORK;
+const ETHEREUM_NETWORK = process.env.ETHEREUM_NETWORK;
 // eslint-disable-next-line no-undef
-const NETWORK_ID = process.env.NETWORK_ID;
+const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
 
 export const MainScreen: React.FC = () => {
   const [
     {
       messages: { errorMessage, infoMessage },
-      metamask: { account, networkId, loading },
+      metamask: { ethereumAccount, networkId, loading },
       balance: { amount: balanceInWei },
     },
     { initializeMetamask },
@@ -25,14 +25,14 @@ export const MainScreen: React.FC = () => {
   useEffect(() => {
     initializeMetamask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, networkId]);
+  }, [ethereumAccount, networkId]);
 
   if (loading) {
     return <Spin />;
   }
 
-  if (networkId.toString() != NETWORK_ID) {
-    return <Alert message={`Please, connect to the ${NETWORK} network`} type="error" showIcon />;
+  if (networkId.toString() != ETHEREUM_NETWORK_ID) {
+    return <Alert message={`Please, connect to the ${ETHEREUM_NETWORK} network`} type="error" showIcon />;
   }
 
   // TODO: Add visutal effect when updating messages
