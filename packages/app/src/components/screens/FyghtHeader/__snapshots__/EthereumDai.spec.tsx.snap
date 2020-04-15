@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EthereumDai should render the component 1`] = `
+<Fragment>
+  <Col
+    span={2}
+  >
+    <Text
+      code={true}
+      style={
+        Object {
+          "color": "#fff",
+        }
+      }
+    >
+      Dai Balance $NaN
+    </Text>
+  </Col>
+  <Col
+    span={2}
+  >
+    <Button
+      block={false}
+      ghost={false}
+      htmlType="button"
+      loading={false}
+      onClick={[MockFunction]}
+      type="primary"
+    >
+      Mint $50
+    </Button>
+  </Col>
+</Fragment>
+`;

@@ -6,48 +6,12 @@ exports[`FyghtHeader should render the component 1`] = `
     gutter={0}
     justify="end"
   >
+    <Component />
+    <Component />
     <Col
+      offset={11}
       span={2}
-    >
-      <Text
-        code={true}
-        style={
-          Object {
-            "color": "#fff",
-          }
-        }
-      >
-        Your Balance $NaN
-      </Text>
-    </Col>
-    <Col
-      span={2}
-    >
-      <Button
-        block={false}
-        ghost={false}
-        htmlType="button"
-        loading={false}
-        type="primary"
-      >
-        Get Dai
-      </Button>
-    </Col>
-    <Col
-      offset={18}
-      span={2}
-    >
-      <Button
-        block={false}
-        ghost={false}
-        htmlType="button"
-        loading={false}
-        onClick={[Function]}
-        type="primary"
-      >
-        Sign in
-      </Button>
-    </Col>
+    />
   </Row>
 </Header>
 `;

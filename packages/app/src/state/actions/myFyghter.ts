@@ -4,7 +4,7 @@ import { optimisticUpdate } from "../utils";
 import { Skin } from "../../constants";
 import { setErrorMessage, setInfoMessage } from "./messages";
 import { fetchAllEnemies } from "./enemies";
-import { fetchBalance } from "./balance";
+import { fetchBalances } from "./daiBalances";
 import { TransactionReceipt } from "ethers/providers";
 import { BigNumber } from "ethers/utils";
 import Fyghters from "../../contracts/Fyghters.json";
@@ -157,7 +157,7 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
       dispatch(fetchMyFyghter());
       // TODO: fetch only the target enemy
       dispatch(fetchAllEnemies());
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
       whenFinish();
     },
     onError: (errorMessage: string) => {
@@ -220,7 +220,7 @@ export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
     },
     onSuccess: async () => {
       dispatch(fetchMyFyghter());
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
     },
     onError: (errorMessage: string) => {
       dispatch(setErrorMessage(errorMessage));
@@ -241,7 +241,7 @@ export const withdrawAll = (fyghterId: BigNumber) => async ({ getState, dispatch
 
     onSuccess: async () => {
       dispatch(fetchMyFyghter());
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
     },
     onError: (errorMessage: string) => {
       dispatch(setErrorMessage(errorMessage));
