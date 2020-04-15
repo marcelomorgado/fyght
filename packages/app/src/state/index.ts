@@ -19,7 +19,10 @@ const initialState: State = {
     ethereumProvider: null,
     loading: true,
   },
-  balance: { amount: new BigNumber(0), loading: false },
+  daiBalances: {
+    ethereumBalance: { amount: new BigNumber(0), loading: false },
+    loomBalance: { amount: new BigNumber(0), loading: false },
+  },
 };
 
 const Store = createStore<State, Actions>({

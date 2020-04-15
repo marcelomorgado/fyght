@@ -27,7 +27,7 @@ interface MetamaskState {
   ethereum: any;
   loomProvider: Provider;
   ethereumProvider: Provider;
-  contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract };
+  contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract; ethereumGateway: Contract };
   loading: boolean;
 }
 
@@ -41,7 +41,7 @@ interface FyghtState {
   enemies: Array<Enemy>;
   messages: Messages;
   metamask: MetamaskState;
-  balance: BalanceState;
+  daiBalances: { ethereumBalance: BalanceState; loomBalance: BalanceState };
 }
 
 interface Action {

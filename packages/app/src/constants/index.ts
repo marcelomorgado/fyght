@@ -25,4 +25,8 @@ export const BET_VALUE = `${5e18}`;
 // TODO: Read the betValue from the smart contract
 export const MIN_DEPOSIT = `${5e18}`;
 
-export const MINT_AMOUNT = `${10e18}`;
+export const MINT_AMOUNT = new BigNumber("50").mul(ONE);
+
+export const DEPOSIT_TO_LOOM_AMOUNT = `${10e18}`;
+
+export const APPROVAL_AMOUNT = new BigNumber("100").pow(new BigNumber("18"));

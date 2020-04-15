@@ -2,12 +2,13 @@
 /* eslint-disable no-undef */
 import { StoreActionApi } from "react-sweet-state";
 import { ethers } from "ethers";
-import { fetchBalance } from "./balance";
+import { fetchBalances } from "./daiBalances";
 import LoomUtils from "../../helpers/LoomUtils";
-import Web3 from "web3";
 import Fyghters from "../../contracts/Fyghters.json";
 import LoomDai from "../../contracts/LoomDai.json";
 import EthereumDai from "../../contracts/EthereumDai.json";
+import EthereumGateway from "../../helpers/Gateway.json";
+import { BigNumber } from "ethers/utils";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -18,7 +19,6 @@ import EthereumDai from "../../contracts/EthereumDai.json";
 //
 const ETHEREUM_NETWORK = process.env.ETHEREUM_NETWORK;
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
-
 const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
 
 // TODO: Dry
@@ -66,12 +66,12 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
     ethereum.on("networkChanged", (networkId: number) => {
       dispatch(setMetamaskNetworkId(networkId));
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
     });
 
     ethereum.on("accountsChanged", ([account]: string[]) => {
       dispatch(setMetamaskAccount(account));
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
     });
 
     ({ selectedAddress: ethereumAccount } = ethereum);
@@ -94,6 +94,11 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = EthereumDai as ContractJson;
 
+  const { abi: ethereumGatewayABI } = EthereumGateway as ContractJson;
+
+  // TODO: From .env
+  const ethereumGatewayAddress = "0x9c67fD4eAF0497f9820A3FBf782f81D6b6dC4Baa";
+  const ethereumGateway = new ethers.Contract(ethereumGatewayAddress, ethereumGatewayABI, ethereumSignerOrProvider);
   const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumSignerOrProvider);
 
   const {
@@ -118,7 +123,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   setState({
     metamask: {
       ...metamask,
-      contracts: { fyghters, loomDai, ethereumDai },
+      contracts: { fyghters, loomDai, ethereumDai, ethereumGateway },
       ethereumAccount,
       ethereum,
       loomAccount,
@@ -128,5 +133,5 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
       loading: false,
     },
   });
-  dispatch(fetchBalance());
+  dispatch(fetchBalances());
 };

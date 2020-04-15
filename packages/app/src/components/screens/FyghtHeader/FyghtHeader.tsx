@@ -1,23 +1,17 @@
 import React from "react";
-import { Layout, Row, Col, Button, Typography } from "antd";
+import { Layout, Row, Col, Button } from "antd";
 import { useFyghtState } from "../../../state";
-import { BigNumber } from "ethers/utils";
-import { formatDai } from "../../../helpers";
+import { EthereumDai } from "./EthereumDai";
+import { LoomDai } from "./LoomDai";
 
 const { Header } = Layout;
-const { Text } = Typography;
 
-type Props = {
-  balanceInWei: BigNumber;
-};
-
-export const FyghtHeader: React.FC<Props> = ({ balanceInWei }: Props) => {
+export const FyghtHeader: React.FC = () => {
   const [
     {
-      metamask: { ethereum, loomAccount: account },
-      balance: { loading },
+      metamask: { ethereum, ethereumAccount: account },
     },
-    { setMetamaskAccount, setErrorMessage, mintDai },
+    { setMetamaskAccount, setErrorMessage },
   ] = useFyghtState();
 
   const onConnect = async (): Promise<void> => {
@@ -32,17 +26,9 @@ export const FyghtHeader: React.FC<Props> = ({ balanceInWei }: Props) => {
   return (
     <Header>
       <Row justify={"end"}>
-        <Col span={2}>
-          <Text code style={{ color: "#fff" }}>
-            {`Your Balance ${formatDai(balanceInWei)}`}
-          </Text>
-        </Col>
-        <Col span={2}>
-          <Button type="primary" onClick={mintDai} loading={loading}>
-            Get Dai
-          </Button>
-        </Col>
-        <Col span={2} offset={18}>
+        <EthereumDai />
+        <LoomDai />
+        <Col span={2} offset={11}>
           {!account ? (
             <Button type="primary" onClick={onConnect}>
               Sign in
