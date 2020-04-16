@@ -54,8 +54,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   let ethereumAccount = null;
   let ethereumSignerOrProvider = ethereumProvider;
 
-  let { loomProvider } = await LoomUtils.setupLoom(null);
-  let loomAccount = null;
+  let { loomProvider, loomAccount, loomClient } = await LoomUtils.setupLoom(null);
   let loomSignerOrProvider: any = loomProvider.getSigner();
 
   // Metamask installed
@@ -77,7 +76,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     ({ selectedAddress: ethereumAccount } = ethereum);
 
     if (ethereumAccount) {
-      ({ loomProvider, loomAccount } = await LoomUtils.setupLoom(ethereum));
+      ({ loomProvider, loomAccount, loomClient } = await LoomUtils.setupLoom(ethereum));
 
       loomSignerOrProvider = loomProvider.getSigner();
       ethereumSignerOrProvider = ethereumProvider.getSigner();
@@ -94,11 +93,11 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = EthereumDai as ContractJson;
 
-  const { abi: ethereumGatewayABI } = EthereumGateway as ContractJson;
+  const { abi: transferGatewayABI } = EthereumGateway as ContractJson;
 
   // TODO: From .env
   const ethereumGatewayAddress = "0x9c67fD4eAF0497f9820A3FBf782f81D6b6dC4Baa";
-  const ethereumGateway = new ethers.Contract(ethereumGatewayAddress, ethereumGatewayABI, ethereumSignerOrProvider);
+  const ethereumGateway = new ethers.Contract(ethereumGatewayAddress, transferGatewayABI, ethereumSignerOrProvider);
   const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumSignerOrProvider);
 
   const {
@@ -115,6 +114,9 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = LoomDai as ContractJson;
 
+  // TODO: From .env
+  const loomGatewayAddress = "0xe754d9518bf4a9c63476891ef9AA7d91C8236A5D";
+  const loomGateway = new ethers.Contract(loomGatewayAddress, transferGatewayABI, loomSignerOrProvider);
   const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, loomSignerOrProvider);
   const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, loomSignerOrProvider);
 
@@ -123,11 +125,12 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   setState({
     metamask: {
       ...metamask,
-      contracts: { fyghters, loomDai, ethereumDai, ethereumGateway },
+      contracts: { fyghters, loomDai, ethereumDai, ethereumGateway, loomGateway },
       ethereumAccount,
       ethereum,
       loomAccount,
       loomProvider,
+      loomClient,
       ethereumProvider,
       networkId,
       loading: false,

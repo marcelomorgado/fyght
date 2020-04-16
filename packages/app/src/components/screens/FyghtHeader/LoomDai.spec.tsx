@@ -15,7 +15,7 @@ describe("LoomDai", () => {
             loomBalance: { amount: new BigNumber(10), loading: false },
           },
         },
-        { depositToLoom: jest.fn() },
+        { depositToLoom: jest.fn(), withdrawFromLoom: jest.fn() },
       ]);
 
     expect(shallow(<LoomDai />)).toMatchSnapshot();

@@ -38,7 +38,7 @@ exports[`LoomDai should render the component 1`] = `
       ghost={false}
       htmlType="button"
       loading={false}
-      onClick={[Function]}
+      onClick={[MockFunction]}
       type="primary"
     >
       Withdraw All

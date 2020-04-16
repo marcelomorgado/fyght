@@ -26,8 +26,15 @@ interface MetamaskState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
   loomProvider: Provider;
+  loomClient: any;
   ethereumProvider: Provider;
-  contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract; ethereumGateway: Contract };
+  contracts: {
+    fyghters: Contract;
+    loomDai: Contract;
+    ethereumDai: Contract;
+    ethereumGateway: Contract;
+    loomGateway: Contract;
+  };
   loading: boolean;
 }
 
