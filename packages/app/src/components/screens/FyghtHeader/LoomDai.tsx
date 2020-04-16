@@ -12,11 +12,8 @@ export const LoomDai: React.FC = () => {
         loomBalance: { loading, amount: balanceInWei },
       },
     },
-    { depositToLoom },
+    { depositToLoom, withdrawFromLoom },
   ] = useFyghtState();
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const withdrawAll = (): void => {};
 
   return (
     <>
@@ -31,7 +28,7 @@ export const LoomDai: React.FC = () => {
         </Button>
       </Col>
       <Col span={2}>
-        <Button type="primary" onClick={withdrawAll} loading={loading}>
+        <Button type="primary" onClick={withdrawFromLoom} loading={loading}>
           Withdraw All
         </Button>
       </Col>
