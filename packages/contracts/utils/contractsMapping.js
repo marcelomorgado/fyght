@@ -44,7 +44,6 @@ const {
 } = LoomDai;
 
 function loadExtdevAccount() {
-  //   const privateKeyStr = fs.readFileSync(path.join(__dirname, "./extdev_private_key"), "utf-8");
   const privateKeyStr = LOOM_PRIVATE_KEY;
   const privateKey = CryptoUtils.B64ToUint8Array(privateKeyStr);
   const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
@@ -91,7 +90,6 @@ async function mapContracts({
 }
 
 function loadRinkebyAccount() {
-  // const privateKey = fs.readFileSync(path.join(__dirname, "./rinkeby_private_key"), "utf-8");
   const privateKey = ETHEREUM_PRIVATE_KEY;
   const web3js = new Web3(INFURA_PROVIDER_URL);
   const ownerAccount = web3js.eth.accounts.privateKeyToAccount(privateKey);
