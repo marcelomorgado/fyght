@@ -8,18 +8,21 @@ type Actions = typeof actions;
 const initialState: State = {
   myFyghter: null,
   enemies: [],
-  messages: { errorMessage: null, infoMessage: null },
   metamask: {
     networkId: null,
     ethereumAccount: null,
     loomAccount: null,
     ethereum: null,
-    contracts: { fyghters: null, loomDai: null, ethereumDai: null },
+    contracts: { fyghters: null, loomDai: null, ethereumDai: null, ethereumGateway: null, loomGateway: null },
     loomProvider: null,
+    loomClient: null,
     ethereumProvider: null,
     loading: true,
   },
-  balance: { amount: new BigNumber(0), loading: false },
+  daiBalances: {
+    ethereumBalance: { amount: new BigNumber(0), loading: false },
+    loomBalance: { amount: new BigNumber(0), loading: false },
+  },
 };
 
 const Store = createStore<State, Actions>({

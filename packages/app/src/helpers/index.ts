@@ -1,4 +1,4 @@
-import { Skin, ONE, BET_VALUE } from "../constants";
+import { Skin, ONE } from "../constants";
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils";
 import numeral from "numeral";
@@ -73,7 +73,9 @@ export const formatWei = (wei: BigNumber): string => ethers.utils.formatEther(we
 export const formatDai = (wei: BigNumber): string => numeral(formatWei(wei)).format("$0,0.00");
 export const formatPercent = (value: BigNumber): string => numeral(formatWei(value)).format("0.00%");
 
+// Note: This function should be sync with the same from smart-contract
 export const calculateGainAndLoss = (winProbability: BigNumber): { gainIfWin: BigNumber; lossIfLose: BigNumber } => {
+  const BET_VALUE = `${5e18}`;
   const probability = winProbability ? winProbability : new BigNumber("0");
   const gainIfWin = new BigNumber(BET_VALUE).mul(new BigNumber(ONE).sub(probability)).div(ONE);
   const lossIfLose = new BigNumber(BET_VALUE).mul(probability).div(new BigNumber(ONE)).mul(new BigNumber(-1));

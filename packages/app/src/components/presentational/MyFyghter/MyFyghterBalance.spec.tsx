@@ -5,6 +5,7 @@ import { ONE } from "../../../constants";
 
 describe("MyFyghterBalance", () => {
   test("should render the component", () => {
-    expect(shallow(<MyFyghterBalance value={ONE} />)).toMatchSnapshot();
+    const balance: BalanceState = { amount: ONE, loading: false };
+    expect(shallow(<MyFyghterBalance balance={balance} />)).toMatchSnapshot();
   });
 });

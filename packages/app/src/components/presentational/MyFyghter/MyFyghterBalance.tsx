@@ -1,11 +1,21 @@
 import React from "react";
+import { Spin } from "antd";
 import { formatDai } from "../../../helpers";
-import { BigNumber } from "ethers/utils";
 
 interface Props {
-  value: BigNumber;
+  balance: BalanceState;
 }
 
-export const MyFyghterBalance: React.FC<Props> = ({ value }: Props) => {
-  return <span style={{ color: "blue" }}>{`${formatDai(value)}`}</span>;
+export const MyFyghterBalance: React.FC<Props> = ({ balance: { amount, loading } }: Props) => {
+  return (
+    <>
+      <span style={{ color: "blue" }}>{`${formatDai(amount)}`}</span>{" "}
+      {loading ? (
+        <>
+          {" "}
+          <Spin size="small" />
+        </>
+      ) : null}
+    </>
+  );
 };

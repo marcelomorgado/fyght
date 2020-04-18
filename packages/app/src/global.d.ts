@@ -6,17 +6,13 @@ interface Fyghter {
   skin: string;
   name: string;
   xp: import("ethers").BigNumber;
-  balance: import("ethers").BigNumber;
+  // balance: import("ethers").BigNumber;
+  balance: BalanceState;
 }
 
 interface Enemy {
   fyghter: Fyghter;
   winProbability: import("ethers").BigNumber;
-}
-
-interface Messages {
-  errorMessage: string;
-  infoMessage: string;
 }
 
 interface MetamaskState {
@@ -26,8 +22,15 @@ interface MetamaskState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ethereum: any;
   loomProvider: Provider;
+  loomClient: any;
   ethereumProvider: Provider;
-  contracts: { fyghters: Contract; loomDai: Contract; ethereumDai: Contract };
+  contracts: {
+    fyghters: Contract;
+    loomDai: Contract;
+    ethereumDai: Contract;
+    ethereumGateway: Contract;
+    loomGateway: Contract;
+  };
   loading: boolean;
 }
 
@@ -39,9 +42,8 @@ interface BalanceState {
 interface FyghtState {
   myFyghter: Fyghter;
   enemies: Array<Enemy>;
-  messages: Messages;
   metamask: MetamaskState;
-  balance: BalanceState;
+  daiBalances: { ethereumBalance: BalanceState; loomBalance: BalanceState };
 }
 
 interface Action {

@@ -22,7 +22,7 @@ export const MyFyghter: React.FC<Props> = ({ fyghter: { id: fyghterId, skin, nam
       <p>{`XP: ${xp}`}</p>
       <p>
         {`Balance: `}
-        <MyFyghterBalance value={balance} />
+        <MyFyghterBalance balance={balance} />
       </p>
       <RenameFyghterButton isLoading={isLoading} />
       <p></p>

@@ -2,12 +2,12 @@
 /* eslint-disable no-undef */
 import { StoreActionApi } from "react-sweet-state";
 import { ethers } from "ethers";
-import { fetchBalance } from "./balance";
+import { fetchBalances } from "./daiBalances";
 import LoomUtils from "../../helpers/LoomUtils";
-import Web3 from "web3";
 import Fyghters from "../../contracts/Fyghters.json";
 import LoomDai from "../../contracts/LoomDai.json";
 import EthereumDai from "../../contracts/EthereumDai.json";
+import EthereumGateway from "../../helpers/Gateway.json";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -18,8 +18,9 @@ import EthereumDai from "../../contracts/EthereumDai.json";
 //
 const ETHEREUM_NETWORK = process.env.ETHEREUM_NETWORK;
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
-
 const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
+const ETHEREUM_TRANSFER_GATEWAY_ADDRESS = process.env.ETHEREUM_TRANSFER_GATEWAY_ADDRESS;
+const LOOM_TRANSFER_GATEWAY_ADDRESS = process.env.LOOM_TRANSFER_GATEWAY_ADDRESS;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -54,8 +55,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   let ethereumAccount = null;
   let ethereumSignerOrProvider = ethereumProvider;
 
-  let { loomProvider } = await LoomUtils.setupLoom(null);
-  let loomAccount = null;
+  let { loomProvider, loomAccount, loomClient } = await LoomUtils.setupLoom(null);
   let loomSignerOrProvider: any = loomProvider.getSigner();
 
   // Metamask installed
@@ -66,18 +66,18 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     // See more: https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
     ethereum.on("networkChanged", (networkId: number) => {
       dispatch(setMetamaskNetworkId(networkId));
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
     });
 
     ethereum.on("accountsChanged", ([account]: string[]) => {
       dispatch(setMetamaskAccount(account));
-      dispatch(fetchBalance());
+      dispatch(fetchBalances());
     });
 
     ({ selectedAddress: ethereumAccount } = ethereum);
 
     if (ethereumAccount) {
-      ({ loomProvider, loomAccount } = await LoomUtils.setupLoom(ethereum));
+      ({ loomProvider, loomAccount, loomClient } = await LoomUtils.setupLoom(ethereum));
 
       loomSignerOrProvider = loomProvider.getSigner();
       ethereumSignerOrProvider = ethereumProvider.getSigner();
@@ -94,6 +94,13 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = EthereumDai as ContractJson;
 
+  const { abi: transferGatewayABI } = EthereumGateway as ContractJson;
+
+  const ethereumGateway = new ethers.Contract(
+    ETHEREUM_TRANSFER_GATEWAY_ADDRESS,
+    transferGatewayABI,
+    ethereumSignerOrProvider
+  );
   const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumSignerOrProvider);
 
   const {
@@ -110,6 +117,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = LoomDai as ContractJson;
 
+  const loomGateway = new ethers.Contract(LOOM_TRANSFER_GATEWAY_ADDRESS, transferGatewayABI, loomSignerOrProvider);
   const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, loomSignerOrProvider);
   const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, loomSignerOrProvider);
 
@@ -118,15 +126,16 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
   setState({
     metamask: {
       ...metamask,
-      contracts: { fyghters, loomDai, ethereumDai },
+      contracts: { fyghters, loomDai, ethereumDai, ethereumGateway, loomGateway },
       ethereumAccount,
       ethereum,
       loomAccount,
       loomProvider,
+      loomClient,
       ethereumProvider,
       networkId,
       loading: false,
     },
   });
-  dispatch(fetchBalance());
+  dispatch(fetchBalances());
 };

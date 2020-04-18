@@ -11,9 +11,8 @@ describe("MainScreen", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .mockImplementation((): any => [
         {
-          messages: { errorMessage: null, infoMessage: null },
           metamask: { account: "0x", ethereum: { isMetaMask: true }, networkId: 1234, loading: false },
-          balance: { amount: new BigNumber(10) },
+          daiBalances: { ethereumBalanec: { amount: new BigNumber(10) } },
         },
         { setMetamaskAccount: jest.fn(), initializeMetamask: jest.fn() },
       ]);

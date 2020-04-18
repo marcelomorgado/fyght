@@ -1,6 +1,10 @@
+/* eslint-disable no-undef */
 import { TransactionReceipt } from "ethers/providers";
 import { Transaction } from "ethers/utils";
 
+const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
+
+// TODO: onFinally or just finally function
 export const optimisticUpdate = async ({
   doTransaction,
   onOptimistic,
@@ -15,7 +19,7 @@ export const optimisticUpdate = async ({
   getState: () => FyghtState;
 }): Promise<void> => {
   const {
-    metamask: { loomProvider },
+    metamask: { loomProvider, ethereumProvider },
   } = getState();
 
   if (onOptimistic) {
@@ -24,8 +28,13 @@ export const optimisticUpdate = async ({
 
   try {
     const tx = await doTransaction();
+    const { chainId } = tx;
+
     console.log(tx);
-    loomProvider.once(tx.hash, (receipt: TransactionReceipt) => {
+
+    const provider = `${chainId}` === ETHEREUM_NETWORK_ID ? ethereumProvider : loomProvider;
+
+    provider.once(tx.hash, (receipt: TransactionReceipt) => {
       const { status } = receipt;
       if (!status) {
         onError("", receipt);

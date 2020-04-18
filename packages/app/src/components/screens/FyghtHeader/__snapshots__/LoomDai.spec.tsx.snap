@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoomDai should render the component 1`] = `
+<Space>
+  <Text
+    code={true}
+    style={
+      Object {
+        "color": "#fff",
+      }
+    }
+  >
+    FyGHT Balance $NaN
+  </Text>
+  <Button
+    block={false}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    onClick={[MockFunction]}
+    type="primary"
+  >
+    Deposit $10.00
+  </Button>
+  <Button
+    block={false}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    onClick={[MockFunction]}
+    type="primary"
+  >
+    Withdraw All
+  </Button>
+</Space>
+`;
