@@ -30,8 +30,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x02",
@@ -58,8 +61,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x03",
@@ -86,8 +92,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x04",
@@ -114,8 +123,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x05",
@@ -142,8 +154,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x06",
@@ -170,8 +185,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x07",
@@ -198,8 +216,11 @@ exports[`EnemiesContainer after loading loading 1`] = `
         enemy={
           Object {
             "fyghter": Object {
-              "balance": BigNumber {
-                "_hex": "0x05",
+              "balance": Object {
+                "amount": BigNumber {
+                  "_hex": "0x05",
+                },
+                "loading": false,
               },
               "id": BigNumber {
                 "_hex": "0x08",

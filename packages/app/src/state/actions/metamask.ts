@@ -8,7 +8,6 @@ import Fyghters from "../../contracts/Fyghters.json";
 import LoomDai from "../../contracts/LoomDai.json";
 import EthereumDai from "../../contracts/EthereumDai.json";
 import EthereumGateway from "../../helpers/Gateway.json";
-import { BigNumber } from "ethers/utils";
 
 //
 // Note: Parcel doesn't support process.env es6 destructuring
@@ -20,6 +19,8 @@ import { BigNumber } from "ethers/utils";
 const ETHEREUM_NETWORK = process.env.ETHEREUM_NETWORK;
 const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
+const ETHEREUM_TRANSFER_GATEWAY_ADDRESS = process.env.ETHEREUM_TRANSFER_GATEWAY_ADDRESS;
+const LOOM_TRANSFER_GATEWAY_ADDRESS = process.env.LOOM_TRANSFER_GATEWAY_ADDRESS;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
@@ -95,9 +96,11 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
 
   const { abi: transferGatewayABI } = EthereumGateway as ContractJson;
 
-  // TODO: From .env
-  const ethereumGatewayAddress = "0x9c67fD4eAF0497f9820A3FBf782f81D6b6dC4Baa";
-  const ethereumGateway = new ethers.Contract(ethereumGatewayAddress, transferGatewayABI, ethereumSignerOrProvider);
+  const ethereumGateway = new ethers.Contract(
+    ETHEREUM_TRANSFER_GATEWAY_ADDRESS,
+    transferGatewayABI,
+    ethereumSignerOrProvider
+  );
   const ethereumDai = new ethers.Contract(ethereumDaiAddress, ethereumDaiABI, ethereumSignerOrProvider);
 
   const {
@@ -114,9 +117,7 @@ export const initializeMetamask = () => async ({ setState, getState, dispatch }:
     },
   } = LoomDai as ContractJson;
 
-  // TODO: From .env
-  const loomGatewayAddress = "0xe754d9518bf4a9c63476891ef9AA7d91C8236A5D";
-  const loomGateway = new ethers.Contract(loomGatewayAddress, transferGatewayABI, loomSignerOrProvider);
+  const loomGateway = new ethers.Contract(LOOM_TRANSFER_GATEWAY_ADDRESS, transferGatewayABI, loomSignerOrProvider);
   const fyghters = new ethers.Contract(fyghtersAddress, fyghtersABI, loomSignerOrProvider);
   const loomDai = new ethers.Contract(loomDaiAddress, loomDaiABI, loomSignerOrProvider);
 

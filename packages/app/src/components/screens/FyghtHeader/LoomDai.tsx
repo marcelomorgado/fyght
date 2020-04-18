@@ -1,7 +1,8 @@
 import React from "react";
-import { Col, Button, Typography } from "antd";
+import { Space, Button, Typography, Spin } from "antd";
 import { useFyghtState } from "../../../state";
 import { formatDai } from "../../../helpers";
+import { DEPOSIT_TO_LOOM_AMOUNT } from "../../../constants";
 
 const { Text } = Typography;
 
@@ -16,22 +17,24 @@ export const LoomDai: React.FC = () => {
   ] = useFyghtState();
 
   return (
-    <>
-      <Col span={3}>
-        <Text code style={{ color: "#fff" }}>
-          {`FyGHT Balance ${formatDai(balanceInWei)}`}
-        </Text>
-      </Col>
-      <Col span={2}>
-        <Button type="primary" onClick={depositToLoom} loading={loading}>
-          Deposit $10
-        </Button>
-      </Col>
-      <Col span={2}>
-        <Button type="primary" onClick={withdrawFromLoom} loading={loading}>
-          Withdraw All
-        </Button>
-      </Col>
-    </>
+    <Space>
+      <Text code style={{ color: "#fff" }}>
+        {`FyGHT Balance ${formatDai(balanceInWei)}`}
+        {loading ? (
+          <>
+            {` `}
+            <Spin size="small" />
+          </>
+        ) : null}
+      </Text>
+
+      <Button type="primary" onClick={depositToLoom}>
+        {`Deposit ${formatDai(DEPOSIT_TO_LOOM_AMOUNT)}`}
+      </Button>
+
+      <Button type="primary" onClick={withdrawFromLoom}>
+        Withdraw All
+      </Button>
+    </Space>
   );
 };

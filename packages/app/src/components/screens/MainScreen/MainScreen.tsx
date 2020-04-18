@@ -15,7 +15,6 @@ const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
 export const MainScreen: React.FC = () => {
   const [
     {
-      messages: { errorMessage, infoMessage },
       metamask: { ethereumAccount, networkId, loading },
     },
     { initializeMetamask },
@@ -41,9 +40,6 @@ export const MainScreen: React.FC = () => {
       <Content style={{ padding: "0 50px", margin: "16px 0" }}>
         <div className="site-layout-content">
           <div style={{ margin: "16px 0" }}></div>
-          {errorMessage ? <Alert message={errorMessage} type="error" closable showIcon /> : null}
-          {infoMessage ? <Alert message={infoMessage} type="info" closable showIcon /> : null}
-          <div style={{ margin: "16px 0" }}></div>
           <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
             <Row gutter={16}>
               <Col span={3}>
@@ -56,7 +52,6 @@ export const MainScreen: React.FC = () => {
           </div>
         </div>
       </Content>
-      {/* TODO: Include github link and roadmap */}
       <Footer style={{ textAlign: "center" }}>
         <a href="https://github.com/marcelomorgado/fyght" rel="noopener noreferrer" target="_blank">
           FyGHT

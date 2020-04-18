@@ -98,6 +98,7 @@ contract Fyghters is ERC721 {
         emit FyghterRenamed(_fyghterId, _newName);
     }
 
+    // Note: This function should be sync with the same from app
     function calculateGainAndLoss(uint256 _winProbability) public pure returns (uint256 gainIfWin, uint256 lossIfLose) {
         gainIfWin = BET_VALUE.mul(ONE.sub(_winProbability)).div(ONE);
         lossIfLose = BET_VALUE.mul(_winProbability).div(ONE);

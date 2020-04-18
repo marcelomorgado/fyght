@@ -7,7 +7,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
     name: "John",
     skin: Skin.NORMAL_GUY,
     xp: new BigNumber("5"),
-    balance: new BigNumber("5"),
+    balance: { amount: new BigNumber("5"), loading: false },
   },
   enemies: [
     {
@@ -17,7 +17,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Charlie",
         skin: Skin.NAKED,
         xp: new BigNumber("1"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
     {
@@ -27,7 +27,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Saul",
         skin: Skin.NINJA,
         xp: new BigNumber("10"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
     {
@@ -37,7 +37,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Julian",
         skin: Skin.NAKED,
         xp: new BigNumber("1"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
     {
@@ -47,7 +47,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Brad",
         skin: Skin.MASTER,
         xp: new BigNumber("89"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
     {
@@ -57,7 +57,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Frank",
         skin: Skin.NO_ONE,
         xp: new BigNumber("71"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
     {
@@ -67,7 +67,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Brian",
         skin: Skin.MONK,
         xp: new BigNumber("30"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
     {
@@ -77,7 +77,7 @@ export const storeMocks: { myFyghter: Fyghter; enemies: Enemy[] } = {
         name: "Fred",
         skin: Skin.KARATE_KID,
         xp: new BigNumber("10"),
-        balance: new BigNumber("5"),
+        balance: { amount: new BigNumber("5"), loading: false },
       },
     },
   ],

@@ -17,9 +17,12 @@ exports[`MyFyghter should render the component 1`] = `
   <p>
     Balance: 
     <Component
-      value={
-        BigNumber {
-          "_hex": "0x05",
+      balance={
+        Object {
+          "amount": BigNumber {
+            "_hex": "0x05",
+          },
+          "loading": false,
         }
       }
     />

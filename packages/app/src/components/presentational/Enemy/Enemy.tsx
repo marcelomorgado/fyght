@@ -25,7 +25,13 @@ const WinProbability: React.FC<{ value: BigNumber }> = ({ value }: { value: BigN
 export const Enemy: React.FC<Props> = ({
   myFyghter,
   enemy: {
-    fyghter: { id, skin, name, xp, balance },
+    fyghter: {
+      id,
+      skin,
+      name,
+      xp,
+      balance: { amount: balance, loading },
+    },
     winProbability,
   },
 }: Props) => {
@@ -36,7 +42,7 @@ export const Enemy: React.FC<Props> = ({
   let warningMessage = null;
   if (!myFyghter) {
     warningMessage = "You have to create your fyghter to be able to do challenges.";
-  } else if (myFyghter.balance.add(lossIfLose).lt(new BigNumber(0))) {
+  } else if (myFyghter.balance.amount.add(lossIfLose).lt(new BigNumber(0))) {
     warningMessage = "Your fyghter with insufficient funds.";
   } else if (!enemyHasEnoughBalance) {
     warningMessage = "Enemy with insufficient funds.";

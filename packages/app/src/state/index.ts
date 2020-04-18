@@ -8,7 +8,6 @@ type Actions = typeof actions;
 const initialState: State = {
   myFyghter: null,
   enemies: [],
-  messages: { errorMessage: null, infoMessage: null },
   metamask: {
     networkId: null,
     ethereumAccount: null,

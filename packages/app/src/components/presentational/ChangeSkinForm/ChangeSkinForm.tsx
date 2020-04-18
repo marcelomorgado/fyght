@@ -20,7 +20,6 @@ interface Props {
 
 export const ChangeSkinForm: React.FC<Props> = ({ visible, onCancel, onSave, errorMessage }) => {
   const [form] = Form.useForm();
-  // TODO: Move to ChangeSkinButton
   const [
     {
       myFyghter: { skin: currentSkin },

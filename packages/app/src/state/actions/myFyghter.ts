@@ -1,10 +1,10 @@
 import { StoreActionApi } from "react-sweet-state";
 import { ethers, Event } from "ethers";
 import { optimisticUpdate } from "../utils";
-import { Skin } from "../../constants";
+import { Skin, APPROVAL_AMOUNT } from "../../constants";
 import { setErrorMessage, setInfoMessage } from "./messages";
-import { fetchAllEnemies } from "./enemies";
-import { fetchBalances } from "./daiBalances";
+import { fetchEnemy } from "./enemies";
+import { fetchBalances, setDaiBalancesLoading } from "./daiBalances";
 import { TransactionReceipt } from "ethers/providers";
 import { BigNumber } from "ethers/utils";
 import Fyghters from "../../contracts/Fyghters.json";
@@ -14,6 +14,15 @@ const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
+
+export const setMyFyghterBalanceLoading = (loading: boolean) => async ({
+  getState,
+  setState,
+}: StoreApi): Promise<void> => {
+  const { myFyghter } = getState();
+  const { balance } = myFyghter;
+  setState({ myFyghter: { ...myFyghter, balance: { ...balance, loading } } });
+};
 
 export const renameMyFyghter = (newName: string) => async ({
   getState,
@@ -112,7 +121,8 @@ export const fetchMyFyghter = () => async ({ setState, getState }: StoreApi): Pr
   }
 
   const myFyghter = await fyghters.fyghters(myFyghterId);
-  setState({ myFyghter });
+  const { balance: amount } = myFyghter;
+  setState({ myFyghter: { ...myFyghter, balance: { amount, loading: false } } });
 };
 
 export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => async ({
@@ -126,11 +136,12 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
     },
   } = getState();
 
+  dispatch(setMyFyghterBalanceLoading(true));
+
   optimisticUpdate({
     doTransaction: () => fyghters.challenge(myFyghterId, enemyId, { gasLimit: 0 }),
     onSuccess: (receipt: TransactionReceipt) => {
-      console.log(receipt);
-
+      dispatch(setMyFyghterBalanceLoading(false));
       //
       // Ethers v5
       //
@@ -155,12 +166,12 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
       }
 
       dispatch(fetchMyFyghter());
-      // TODO: fetch only the target enemy
-      dispatch(fetchAllEnemies());
+      dispatch(fetchEnemy(enemyId));
       dispatch(fetchBalances());
       whenFinish();
     },
     onError: (errorMessage: string) => {
+      dispatch(setMyFyghterBalanceLoading(false));
       dispatch(setErrorMessage(errorMessage));
       whenFinish();
     },
@@ -183,7 +194,7 @@ export const createFyghter = (name: string) => async ({ getState, setState, disp
         skin: Skin.NAKED,
         name,
         xp: new BigNumber("1"),
-        balance: new BigNumber("0"),
+        balance: { amount: new BigNumber("0"), loading: false },
       };
       setState({ myFyghter });
     },
@@ -209,21 +220,31 @@ export const doDeposit = (fyghterId: BigNumber, amount: BigNumber) => async ({
     },
   } = getState();
 
+  dispatch(setMyFyghterBalanceLoading(true));
+  dispatch(setDaiBalancesLoading({ loomDaiLoading: true }));
+
   optimisticUpdate({
     doTransaction: async () => {
-      const allowance = await loomDai.allowance(account, fyghters.address);
-      if (allowance.lt(amount)) {
-        await loomDai.approve(fyghters.address, amount, { gasLimit: 0 });
+      const allowed: BigNumber = await loomDai.allowance(account, fyghters.address);
+
+      if (allowed.lt(amount)) {
+        await loomDai.approve(fyghters.address, APPROVAL_AMOUNT, { gasLimit: 0 });
       }
 
       return fyghters.deposit(fyghterId, amount, { gasLimit: 0 });
     },
     onSuccess: async () => {
+      dispatch(setMyFyghterBalanceLoading(false));
+      dispatch(setDaiBalancesLoading({ loomDaiLoading: false }));
+
       dispatch(fetchMyFyghter());
       dispatch(fetchBalances());
     },
     onError: (errorMessage: string) => {
       dispatch(setErrorMessage(errorMessage));
+
+      dispatch(setMyFyghterBalanceLoading(false));
+      dispatch(setDaiBalancesLoading({ loomDaiLoading: false }));
     },
     getState,
   });
@@ -236,15 +257,24 @@ export const withdrawAll = (fyghterId: BigNumber) => async ({ getState, dispatch
     },
   } = getState();
 
+  dispatch(setMyFyghterBalanceLoading(true));
+  dispatch(setDaiBalancesLoading({ loomDaiLoading: true }));
+
   optimisticUpdate({
     doTransaction: async () => fyghters.withdrawAll(fyghterId, { gasLimit: 0 }),
 
     onSuccess: async () => {
+      dispatch(setMyFyghterBalanceLoading(false));
+      dispatch(setDaiBalancesLoading({ loomDaiLoading: false }));
+
       dispatch(fetchMyFyghter());
       dispatch(fetchBalances());
     },
     onError: (errorMessage: string) => {
       dispatch(setErrorMessage(errorMessage));
+
+      dispatch(setMyFyghterBalanceLoading(false));
+      dispatch(setDaiBalancesLoading({ loomDaiLoading: false }));
     },
     getState,
   });

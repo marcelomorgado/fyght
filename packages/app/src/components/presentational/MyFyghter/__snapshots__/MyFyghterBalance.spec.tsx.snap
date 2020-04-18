@@ -1,13 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MyFyghterBalance should render the component 1`] = `
-<span
-  style={
-    Object {
-      "color": "blue",
+<Fragment>
+  <span
+    style={
+      Object {
+        "color": "blue",
+      }
     }
-  }
->
-  $1.00
-</span>
+  >
+    $1.00
+  </span>
+   
+</Fragment>
 `;

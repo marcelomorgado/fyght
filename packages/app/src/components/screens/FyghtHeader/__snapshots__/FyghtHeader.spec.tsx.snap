@@ -6,12 +6,25 @@ exports[`FyghtHeader should render the component 1`] = `
     gutter={0}
     justify="end"
   >
-    <Component />
-    <Component />
     <Col
-      offset={11}
-      span={2}
-    />
+      span={12}
+    >
+      <Component />
+    </Col>
+    <Col
+      offset={6}
+      span={6}
+    >
+      <Space
+        style={
+          Object {
+            "float": "right",
+          }
+        }
+      >
+        <Component />
+      </Space>
+    </Col>
   </Row>
 </Header>
 `;
