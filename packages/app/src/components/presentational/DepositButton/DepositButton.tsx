@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "antd";
 import { useFyghtState } from "../../../state";
-import { MIN_DEPOSIT } from "../../../constants";
 import { BigNumber } from "ethers/utils";
 
 type Props = {
@@ -10,15 +9,24 @@ type Props = {
 };
 
 export const DepositButton: React.FC<Props> = ({ fyghterId, isLoading }: Props) => {
-  const [, { doDeposit }] = useFyghtState();
+  const [
+    {
+      metamask: {
+        contracts: { fyghters },
+      },
+    },
+    { doDeposit },
+  ] = useFyghtState();
 
-  const onClick = (): void => {
-    doDeposit(fyghterId, new BigNumber(MIN_DEPOSIT));
+  const onClick = async (): Promise<void> => {
+    const amount = await fyghters.getMinimumDeposit();
+    doDeposit(fyghterId, amount);
   };
 
   return (
     <Button type="primary" block={true} onClick={onClick} loading={isLoading}>
-      Deposit $5
+      {/* TODO: Get from a global var (contract?) - typechain constant or set to the state at start */}
+      Deposit $5.00
     </Button>
   );
 };

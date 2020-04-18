@@ -1,5 +1,5 @@
 import { StoreActionApi } from "react-sweet-state";
-import { ethers, Event } from "ethers";
+import { ethers, Event, Contract } from "ethers";
 import { BigNumber } from "ethers/utils";
 import Fyghters from "../../contracts/Fyghters.json";
 
@@ -8,6 +8,26 @@ const LOOM_NETWORK_ID = process.env.LOOM_NETWORK_ID;
 
 // TODO: Dry
 type StoreApi = StoreActionApi<FyghtState>;
+
+const loadEnemy = async ({
+  enemyId,
+  fyghtersContract,
+  myFyghter,
+}: {
+  enemyId: BigNumber;
+  fyghtersContract: Contract;
+  myFyghter: Fyghter;
+}): Promise<Enemy> => {
+  const fyghter: Fyghter = await fyghtersContract.fyghters(enemyId);
+
+  let winProbability = null;
+
+  if (myFyghter && myFyghter.id) {
+    const { id: myFyghterId } = myFyghter;
+    winProbability = await fyghtersContract.calculateWinProbability(myFyghterId, enemyId);
+  }
+  return { fyghter, winProbability };
+};
 
 export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): Promise<void> => {
   const {
@@ -23,18 +43,6 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
     setState({ enemies: [] });
     return;
   }
-
-  const loadEnemy = async (id: BigNumber): Promise<Enemy> => {
-    const fyghter: Fyghter = await fyghters.fyghters(id);
-
-    let winProbability = null;
-
-    if (myFyghter && myFyghter.id) {
-      const { id: myFyghterId } = myFyghter;
-      winProbability = await fyghters.calculateWinProbability(myFyghterId, id);
-    }
-    return { fyghter, winProbability };
-  };
 
   const { getAddress } = ethers.utils;
 
@@ -91,8 +99,35 @@ export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): P
     .filter(({ owner }: { owner: string }) => (account ? getAddress(owner) !== getAddress(account) : true))
     .map(({ id }: { id: BigNumber }) => id);
 
-  const enemiesPromises = enemiesIds.map((id: BigNumber) => loadEnemy(id));
+  const enemiesPromises = enemiesIds.map((enemyId: BigNumber) =>
+    loadEnemy({ enemyId, fyghtersContract: fyghters, myFyghter })
+  );
   const enemies: Enemy[] = await Promise.all(enemiesPromises);
 
   setState({ enemies });
+};
+
+export const fetchEnemy = (enemyId: BigNumber) => async ({ setState, getState }: StoreApi): Promise<void> => {
+  const {
+    metamask: {
+      contracts: { fyghters },
+      loomProvider,
+    },
+    enemies,
+    myFyghter,
+  } = getState();
+
+  if (!fyghters || !loomProvider) {
+    setState({ enemies: [] });
+    return;
+  }
+
+  const enemy = await loadEnemy({ enemyId, fyghtersContract: fyghters, myFyghter });
+
+  const updatedEnemies = enemies.map((e: Enemy) => {
+    if (e.fyghter.id === enemyId) return enemy;
+    else return e;
+  });
+
+  setState({ enemies: updatedEnemies });
 };

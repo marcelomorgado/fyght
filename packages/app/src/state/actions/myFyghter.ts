@@ -3,7 +3,7 @@ import { ethers, Event } from "ethers";
 import { optimisticUpdate } from "../utils";
 import { Skin } from "../../constants";
 import { setErrorMessage, setInfoMessage } from "./messages";
-import { fetchAllEnemies } from "./enemies";
+import { fetchAllEnemies, fetchEnemy } from "./enemies";
 import { fetchBalances } from "./daiBalances";
 import { TransactionReceipt } from "ethers/providers";
 import { BigNumber } from "ethers/utils";
@@ -155,8 +155,7 @@ export const challengeAnEnemy = (enemyId: BigNumber, whenFinish: () => void) => 
       }
 
       dispatch(fetchMyFyghter());
-      // TODO: fetch only the target enemy
-      dispatch(fetchAllEnemies());
+      dispatch(fetchEnemy(enemyId));
       dispatch(fetchBalances());
       whenFinish();
     },

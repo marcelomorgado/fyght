@@ -25,8 +25,7 @@ export const EthereumDai: React.FC = () => {
       </Col>
       <Col span={2}>
         <Button type="primary" onClick={mintDai} loading={loading}>
-          {/* TODO: Display MINT_AMOUNT here */}
-          {`Mint $50`}
+          {`Mint ${formatDai(MINT_AMOUNT)}`}
         </Button>
       </Col>
     </>

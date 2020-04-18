@@ -56,7 +56,6 @@ export const MainScreen: React.FC = () => {
           </div>
         </div>
       </Content>
-      {/* TODO: Include github link and roadmap */}
       <Footer style={{ textAlign: "center" }}>
         <a href="https://github.com/marcelomorgado/fyght" rel="noopener noreferrer" target="_blank">
           FyGHT
