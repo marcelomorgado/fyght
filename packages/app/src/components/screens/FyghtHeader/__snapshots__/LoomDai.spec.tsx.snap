@@ -1,48 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoomDai should render the component 1`] = `
-<Fragment>
-  <Col
-    span={3}
-  >
-    <Text
-      code={true}
-      style={
-        Object {
-          "color": "#fff",
-        }
+<Space>
+  <Text
+    code={true}
+    style={
+      Object {
+        "color": "#fff",
       }
-    >
-      FyGHT Balance $NaN
-    </Text>
-  </Col>
-  <Col
-    span={2}
+    }
   >
-    <Button
-      block={false}
-      ghost={false}
-      htmlType="button"
-      loading={false}
-      onClick={[MockFunction]}
-      type="primary"
-    >
-      Deposit $10
-    </Button>
-  </Col>
-  <Col
-    span={2}
+    FyGHT Balance $NaN
+  </Text>
+  <Button
+    block={false}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    onClick={[MockFunction]}
+    type="primary"
   >
-    <Button
-      block={false}
-      ghost={false}
-      htmlType="button"
-      loading={false}
-      onClick={[MockFunction]}
-      type="primary"
-    >
-      Withdraw All
-    </Button>
-  </Col>
-</Fragment>
+    Deposit $10.00
+  </Button>
+  <Button
+    block={false}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    onClick={[MockFunction]}
+    type="primary"
+  >
+    Withdraw All
+  </Button>
+</Space>
 `;

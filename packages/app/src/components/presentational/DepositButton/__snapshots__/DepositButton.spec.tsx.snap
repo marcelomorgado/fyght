@@ -9,6 +9,6 @@ exports[`DepositButton should render the component 1`] = `
   onClick={[Function]}
   type="primary"
 >
-  Deposit $5
+  Deposit $5.00
 </Button>
 `;

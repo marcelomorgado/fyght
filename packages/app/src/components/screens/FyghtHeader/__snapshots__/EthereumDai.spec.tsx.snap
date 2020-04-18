@@ -2,33 +2,25 @@
 
 exports[`EthereumDai should render the component 1`] = `
 <Fragment>
-  <Col
-    span={2}
-  >
-    <Text
-      code={true}
-      style={
-        Object {
-          "color": "#fff",
-        }
+  <Text
+    code={true}
+    style={
+      Object {
+        "color": "#fff",
       }
-    >
-      Dai Balance $NaN
-    </Text>
-  </Col>
-  <Col
-    span={2}
+    }
   >
-    <Button
-      block={false}
-      ghost={false}
-      htmlType="button"
-      loading={false}
-      onClick={[MockFunction]}
-      type="primary"
-    >
-      Mint $50
-    </Button>
-  </Col>
+    Dai Balance $NaN
+  </Text>
+  <Button
+    block={false}
+    ghost={false}
+    htmlType="button"
+    loading={false}
+    onClick={[MockFunction]}
+    type="primary"
+  >
+    Mint $50.00
+  </Button>
 </Fragment>
 `;
