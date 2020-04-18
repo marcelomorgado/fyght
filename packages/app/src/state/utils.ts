@@ -4,6 +4,7 @@ import { Transaction } from "ethers/utils";
 
 const ETHEREUM_NETWORK_ID = process.env.ETHEREUM_NETWORK_ID;
 
+// TODO: onFinally or just finally function
 export const optimisticUpdate = async ({
   doTransaction,
   onOptimistic,

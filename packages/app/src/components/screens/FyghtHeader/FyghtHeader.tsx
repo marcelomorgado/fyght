@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Row, Col, Button } from "antd";
+import { Layout, Space, Row, Col, Button } from "antd";
 import { useFyghtState } from "../../../state";
 import { EthereumDai } from "./EthereumDai";
 import { LoomDai } from "./LoomDai";
@@ -26,14 +26,18 @@ export const FyghtHeader: React.FC = () => {
   return (
     <Header>
       <Row justify={"end"}>
-        <EthereumDai />
-        <LoomDai />
-        <Col span={2} offset={11}>
-          {!account ? (
-            <Button type="primary" onClick={onConnect}>
-              Sign in
-            </Button>
-          ) : null}
+        <Col span={12}>
+          <LoomDai />
+        </Col>
+        <Col span={6} offset={6}>
+          <Space style={{ float: "right" }}>
+            <EthereumDai />
+            {!account ? (
+              <Button type="primary" onClick={onConnect}>
+                Sign in
+              </Button>
+            ) : null}
+          </Space>
         </Col>
       </Row>
     </Header>

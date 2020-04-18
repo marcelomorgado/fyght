@@ -18,7 +18,8 @@ const loadEnemy = async ({
   fyghtersContract: Contract;
   myFyghter: Fyghter;
 }): Promise<Enemy> => {
-  const fyghter: Fyghter = await fyghtersContract.fyghters(enemyId);
+  const fyghter = await fyghtersContract.fyghters(enemyId);
+  const { balance: amount } = fyghter;
 
   let winProbability = null;
 
@@ -26,7 +27,8 @@ const loadEnemy = async ({
     const { id: myFyghterId } = myFyghter;
     winProbability = await fyghtersContract.calculateWinProbability(myFyghterId, enemyId);
   }
-  return { fyghter, winProbability };
+
+  return { fyghter: { ...fyghter, balance: { amount, loading: false } }, winProbability };
 };
 
 export const fetchAllEnemies = () => async ({ setState, getState }: StoreApi): Promise<void> => {

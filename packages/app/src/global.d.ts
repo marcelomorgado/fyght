@@ -6,17 +6,13 @@ interface Fyghter {
   skin: string;
   name: string;
   xp: import("ethers").BigNumber;
-  balance: import("ethers").BigNumber;
+  // balance: import("ethers").BigNumber;
+  balance: BalanceState;
 }
 
 interface Enemy {
   fyghter: Fyghter;
   winProbability: import("ethers").BigNumber;
-}
-
-interface Messages {
-  errorMessage: string;
-  infoMessage: string;
 }
 
 interface MetamaskState {
@@ -46,7 +42,6 @@ interface BalanceState {
 interface FyghtState {
   myFyghter: Fyghter;
   enemies: Array<Enemy>;
-  messages: Messages;
   metamask: MetamaskState;
   daiBalances: { ethereumBalance: BalanceState; loomBalance: BalanceState };
 }
